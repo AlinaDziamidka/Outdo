@@ -4,14 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity("challenges")
 data class Challenge(
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
+    @ColumnInfo("challenge_id")
+    val challengeId : Long,
     @ColumnInfo("challenge_name")
     val challengeName: String,
     @ColumnInfo("category_id")
-    val categoryId: Int,
-    @ColumnInfo("challenge_type")
-    val challengeType : Enum
+    val categoryId: Long
 )

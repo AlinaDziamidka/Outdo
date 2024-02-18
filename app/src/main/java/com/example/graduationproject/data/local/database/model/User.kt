@@ -5,10 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.nio.file.Path
 
-@Entity("User")
+@Entity("user")
 data class User(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @ColumnInfo("user_id")
+    val userId: Long,
     val login: String,
     @ColumnInfo(name = "nic_name")
     val nicName: String,

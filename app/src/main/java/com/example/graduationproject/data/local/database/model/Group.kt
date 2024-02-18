@@ -5,14 +5,15 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.nio.file.Path
 
-@Entity
+@Entity("groups")
 data class Group (
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @ColumnInfo("group_id")
+    val groupId:Long,
     @ColumnInfo("group_name")
     val groupName : String,
     @ColumnInfo("user_creator_id")
-    val creatorId : Int,
-    @ColumnInfo("user_creator_id")
+    val creatorId : Long,
+    @ColumnInfo("group_avatar")
     val groupAvatar : Path
 )
