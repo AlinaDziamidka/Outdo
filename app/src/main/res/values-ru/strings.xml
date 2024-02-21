@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">Graduation project</string>
+    <string name="sign_in">Вход</string>
+    <string name="have_not_had_account">Еще нет аккаунта?</string>
+    <string name="sign_up">Зарегистрируйтесь</string>
+    <string name="sign_in_hint">Логин, телефон или почта</string>
+    <string name="password_hint">Пароль</string>
+    <string name="sign_in_action">Войти</string>
+    <string name="forgot_password">Забыли пароль?</string>
+
+
+</resources>

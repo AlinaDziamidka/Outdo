@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Graduation project</string>
+    <string name="sign_in">Sign in</string>
+    <string name="have_not_had_account">tHave you had account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_in_hint">tLogin, phone, e-mail</string>
+    <string name="password_hint">Password</string>
+    <string name="sign_in_action">Sign in</string>
+    <string name="forgot_password">tForgot password</string>
+
 </resources>

@@ -14,26 +14,27 @@ import com.example.graduationproject.data.local.database.dao.CompetitionDao
 import com.example.graduationproject.data.local.database.dao.GroupChallengeDao
 import com.example.graduationproject.data.local.database.dao.GroupDao
 import com.example.graduationproject.data.local.database.dao.UserAwardDao
+import com.example.graduationproject.data.local.database.dao.UserCompetitionDao
 import com.example.graduationproject.data.local.database.dao.UserDao
 import com.example.graduationproject.data.local.database.dao.UserGroupDao
-import com.example.graduationproject.data.local.database.model.Achievement
-import com.example.graduationproject.data.local.database.model.Award
-import com.example.graduationproject.data.local.database.model.Category
-import com.example.graduationproject.data.local.database.model.Challenge
-import com.example.graduationproject.data.local.database.model.ChallengeAchievement
-import com.example.graduationproject.data.local.database.model.Competition
-import com.example.graduationproject.data.local.database.model.Group
-import com.example.graduationproject.data.local.database.model.GroupChallenge
-import com.example.graduationproject.data.local.database.model.User
-import com.example.graduationproject.data.local.database.model.UserAward
-import com.example.graduationproject.data.local.database.model.UserCompetition
-import com.example.graduationproject.data.local.database.model.UserGroup
+import com.example.graduationproject.data.local.database.model.AchievementModel
+import com.example.graduationproject.data.local.database.model.AwardModel
+import com.example.graduationproject.data.local.database.model.CategoryModel
+import com.example.graduationproject.data.local.database.model.ChallengeModel
+import com.example.graduationproject.data.local.database.model.ChallengeAchievementModel
+import com.example.graduationproject.data.local.database.model.CompetitionModel
+import com.example.graduationproject.data.local.database.model.GroupModel
+import com.example.graduationproject.data.local.database.model.GroupChallengeModel
+import com.example.graduationproject.data.local.database.model.UserModel
+import com.example.graduationproject.data.local.database.model.UserAwardModel
+import com.example.graduationproject.data.local.database.model.UserCompetitionModel
+import com.example.graduationproject.data.local.database.model.UserGroupModel
 
 @Database(
-    entities = [User::class, Group::class, Challenge::class,
-        Competition::class, Award::class, Achievement::class,
-        Category::class, GroupChallenge::class, UserGroup::class,
-        UserCompetition::class, ChallengeAchievement::class, UserAward::class],
+    entities = [UserModel::class, GroupModel::class, ChallengeModel::class,
+        CompetitionModel::class, AwardModel::class, AchievementModel::class,
+        CategoryModel::class, GroupChallengeModel::class, UserGroupModel::class,
+        UserCompetitionModel::class, ChallengeAchievementModel::class, UserAwardModel::class],
     version = 1
 )
 abstract class UserDatabase : RoomDatabase() {
@@ -46,7 +47,7 @@ abstract class UserDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun groupChallengeDao(): GroupChallengeDao
     abstract fun userGroupDao(): UserGroupDao
-    abstract fun userCompetitionDao(): UserCompetition
+    abstract fun userCompetitionDao(): UserCompetitionDao
     abstract fun challengeAchievementDao(): ChallengeAchievementDao
     abstract fun userAwardDao(): UserAwardDao
 

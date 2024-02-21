@@ -4,24 +4,23 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.graduationproject.data.local.database.model.Competition
-import com.example.graduationproject.data.local.database.model.Group
+import com.example.graduationproject.data.local.database.model.CompetitionModel
 
 @Dao
 interface CompetitionDao {
 
     @Query("SELECT * FROM competitions")
-    fun fetchAll(): List<Competition>
+    fun fetchAll(): List<CompetitionModel>
 
     @Query("SELECT * FROM competitions WHERE competition_id = :competitionId LIMIT 1")
-    fun fetchById(competitionId: Long): Competition
+    fun fetchById(competitionId: Long): CompetitionModel
 
     @Insert
-    fun insertOne(competition: Competition)
+    fun insertOne(competitionModel: CompetitionModel)
 
     @Query("DELETE FROM competitions WHERE competition_id = :competitionId")
     fun deleteById(competitionId: Long)
 
     @Update
-    fun updateOne(competition: Competition)
+    fun updateOne(competitionModel: CompetitionModel)
 }

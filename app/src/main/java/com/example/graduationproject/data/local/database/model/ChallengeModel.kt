@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity("challenges")
-data class Challenge(
+data class ChallengeModel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("challenge_id")
-    val challengeId : Long,
+    val challengeId: Long,
     @ColumnInfo("challenge_name")
     val challengeName: String,
     @ColumnInfo("category_id")

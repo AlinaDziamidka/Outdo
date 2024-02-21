@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity("achievements")
-data class Achievement(
+data class AchievementModel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("achievement_id")
     val achievementId : Long,

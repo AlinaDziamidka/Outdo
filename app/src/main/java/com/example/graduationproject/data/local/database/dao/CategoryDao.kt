@@ -4,23 +4,23 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.graduationproject.data.local.database.model.Category
+import com.example.graduationproject.data.local.database.model.CategoryModel
 
 @Dao
 interface CategoryDao {
 
     @Query("SELECT * FROM categories")
-    fun fetchAll(): List<Category>
+    fun fetchAll(): List<CategoryModel>
 
     @Query("SELECT * FROM categories WHERE category_id = :categoryId LIMIT 1")
-    fun fetchById(categoryId: Long): Category
+    fun fetchById(categoryId: Long): CategoryModel
 
     @Insert
-    fun insertOne(category: Category)
+    fun insertOne(categoryModel: CategoryModel)
 
     @Query("DELETE FROM categories WHERE category_id = :categoryId")
     fun deleteById(categoryId: Long)
 
     @Update
-    fun updateOne(category: Category)
+    fun updateOne(categoryModel: CategoryModel)
 }

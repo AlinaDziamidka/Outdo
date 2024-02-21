@@ -5,27 +5,27 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.graduationproject.data.local.database.model.UserCompetition
+import com.example.graduationproject.data.local.database.model.UserCompetitionModel
 
 @Dao
 interface UserCompetitionDao {
 
     @Query("SELECT * FROM user_competitions")
-    fun fetchAll(): List<UserCompetition>
+    fun fetchAll(): List<UserCompetitionModel>
 
     @Query("SELECT * FROM user_competitions WHERE  user_id = :userId")
-    fun fetchCompetitionByUserId(userId: Long): List<UserCompetition>
+    fun fetchCompetitionByUserId(userId: Long): List<UserCompetitionModel>
 
     @Query("SELECT * FROM user_competitions WHERE  competition_id = :competitionId")
-    fun fetchUsersByCompetitionId(competitionId: Long): List<UserCompetition>
+    fun fetchUsersByCompetitionId(competitionId: Long): List<UserCompetitionModel>
 
     @Insert
-    fun insertOne(userCompetition: UserCompetition)
+    fun insertOne(userCompetitionModel: UserCompetitionModel)
 
     @Delete
-    fun deleteOne(userCompetition: UserCompetition)
+    fun deleteOne(userCompetitionModel: UserCompetitionModel)
 
     @Update
-    fun updateOne(userCompetition: UserCompetition)
+    fun updateOne(userCompetitionModel: UserCompetitionModel)
 
 }

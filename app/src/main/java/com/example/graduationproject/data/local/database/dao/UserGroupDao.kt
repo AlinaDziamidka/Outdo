@@ -5,26 +5,26 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.graduationproject.data.local.database.model.UserGroup
+import com.example.graduationproject.data.local.database.model.UserGroupModel
 
 @Dao
 interface UserGroupDao {
 
     @Query("SELECT * FROM user_groups")
-    fun fetchAll(): List<UserGroup>
+    fun fetchAll(): List<UserGroupModel>
 
     @Query("SELECT * FROM user_groups WHERE  user_id = :userId")
-    fun fetchGroupsByUserId(userId: Long): List<UserGroup>
+    fun fetchGroupsByUserId(userId: Long): List<UserGroupModel>
 
     @Query("SELECT * FROM user_groups WHERE  group_id = :groupId")
-    fun fetchUsersByGroupId(groupId: Long): List<UserGroup>
+    fun fetchUsersByGroupId(groupId: Long): List<UserGroupModel>
 
     @Insert
-    fun insertOne(userGroup: UserGroup)
+    fun insertOne(userGroupModel: UserGroupModel)
 
     @Delete
-    fun deleteOne(userGroup: UserGroup)
+    fun deleteOne(userGroupModel: UserGroupModel)
 
     @Update
-    fun updateOne(userGroup: UserGroup)
+    fun updateOne(userGroupModel: UserGroupModel)
 }
