@@ -7,5 +7,12 @@
     <string name="password_hint">Password</string>
     <string name="sign_in_action">Sign in</string>
     <string name="forgot_password">tForgot password</string>
+    <string name="hello">Hello </string>
+    <string name="current_challenges">Current challenges</string>
+    <string name="show_all_action">tAll</string>
+    <string name="challenge">Challenge</string>
+    <string name="group">Group:</string>
+
+
 
 </resources>

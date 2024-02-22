@@ -9,6 +9,11 @@
     <string name="password_hint">Пароль</string>
     <string name="sign_in_action">Войти</string>
     <string name="forgot_password">Забыли пароль?</string>
+    <string name="hello">Привет, </string>
+    <string name="current_challenges">Текущие челленджи</string>
+    <string name="show_all_action">Все</string>
+    <string name="challenge">Челлендж</string>
+    <string name="group">Группа:</string>
 
 
 </resources>
