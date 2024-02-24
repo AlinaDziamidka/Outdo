@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+    android:id="@+id/homeView"
+    android:icon="@drawable/ic_main_bottom_nav"
+    android:title="@string/main_screen"
+    app:titleTextAppearance="@style/bottom_nav_text"
+    android:orderInCategory="1" />
+
+    <item
+        android:id="@+id/myGroupsView"
+        android:icon="@drawable/ic_my_groups_bottom_nav"
+        android:title="@string/my_groups"
+        app:titleTextAppearance="@style/bottom_nav_text"
+        android:orderInCategory="2" />
+
+    <item
+        android:id="@+id/competitionsView"
+        android:icon="@drawable/ic_competition_bottom_nav"
+        android:title="@string/competitions"
+        app:titleTextAppearance="@style/bottom_nav_text"
+        android:orderInCategory="3" />
+
+    <item
+        android:id="@+id/friendsView"
+        android:icon="@drawable/ic_friends_bottom_nav"
+        android:title="@string/friends"
+        app:titleTextAppearance="@style/bottom_nav_text"
+        android:orderInCategory="4" />
+
+    <item
+        android:id="@+id/accountView"
+        android:icon="@drawable/ic_settings_bottom_nav"
+        android:title="@string/account"
+        app:titleTextAppearance="@style/bottom_nav_text"
+        android:orderInCategory="5" />
+</menu>

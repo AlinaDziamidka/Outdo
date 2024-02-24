@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dailyAchievementViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="12dp"
+        android:paddingLeft="12dp">
+
+        <TextView
+            android:id="@+id/timeView"
+            style="@style/time_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="12dp"
+            android:text="21:07:24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/dailyAchievementNameView"
+            style="@style/challenges_name_home_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="«Эколог»"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/descriptionView"
+            style="@style/progress_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Получите несколько заданий на очищение нашей планеты от мусора"
+            android:maxLines="3"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@id/iconView"
+            app:layout_constraintStart_toStartOf="@id/dailyAchievementNameView"
+            app:layout_constraintTop_toBottomOf="@id/dailyAchievementNameView" />
+
+        <Button
+            android:id="@+id/participateAction"
+            style="@style/button_action"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_participate_action"
+            android:text="@string/participate_action"
+            android:padding="0dp"
+            app:layout_constraintStart_toStartOf="@id/descriptionView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iconView"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="12dp"/>
+
+        <ImageView
+            android:id="@+id/iconView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_grass"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/timeView"
+            android:layout_marginTop="12dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

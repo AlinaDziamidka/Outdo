@@ -12,7 +12,14 @@
     <string name="show_all_action">tAll</string>
     <string name="challenge">Challenge</string>
     <string name="group">Group:</string>
-
-
+    <string name="progress">Progress:</string>
+    <string name="daily_achievement">Daily achievement</string>
+    <string name="participate_action">Participate</string>
+    <string name="weekly_challenge">Weekly challenge</string>
+    <string name="main_screen">Main</string>
+    <string name="my_groups">My groups</string>
+    <string name="competitions">Competitions</string>
+    <string name="friends">Friends</string>
+    <string name="account">Account</string>
 
 </resources>

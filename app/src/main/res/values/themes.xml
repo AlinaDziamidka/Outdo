@@ -13,7 +13,7 @@
         <item name="android:windowBackground">@color/primary_background_color</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/color_primary</item>
-        <item name="android:navigationBarColor">@color/primary_background_color</item>
+        <item name="android:navigationBarColor">@color/white</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>

@@ -14,6 +14,14 @@
     <string name="show_all_action">Все</string>
     <string name="challenge">Челлендж</string>
     <string name="group">Группа:</string>
-
+    <string name="progress">Прогресс:</string>
+    <string name="daily_achievement">Ежедневное задание</string>
+    <string name="participate_action">Участвовать</string>
+    <string name="weekly_challenge">Еженедельное задание</string>
+    <string name="main_screen">Главный</string>
+    <string name="my_groups">Мои группы</string>
+    <string name="competitions">Турниры</string>
+    <string name="friends">Друзья</string>
+    <string name="account">Аккаунт</string>
 
 </resources>

@@ -15,5 +15,8 @@
     <color name="sign_in_pressed_darkened_color">#588EF7</color>
     <color name="notification_red_color">#FF4040</color>
     <color name="grey_darken_text_color">#565353</color>
+    <color name="grey_light_text_color">#AAA9A9</color>
+    <color name="progress_bar_color">#F0F0F0</color>
+    <color name="bottom_nav_text_color">#B5B6B8</color>
 
 </resources>

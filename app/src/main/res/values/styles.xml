@@ -25,7 +25,7 @@
         <item name="fontFamily">@font/gilroy_regular</item>
     </style>
 
-    <style name="sign_in_action" parent="have_not_had_account">
+    <style name="button_action" parent="have_not_had_account">
         <item name="fontFamily">@font/gilroy_semibold</item>
         <item name="android:letterSpacing">0.005</item>
         <item name="textAllCaps">false</item>
@@ -41,7 +41,7 @@
         <item name="android:textSize">22sp</item>
     </style>
 
-    <style name="current_challenges_text">
+    <style name="challenges_name_home_page">
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -61,7 +61,7 @@
         <item name="android:letterSpacing">0.005</item>
     </style>
 
-    <style name="challenge_name" parent="sign_in_action">
+    <style name="challenges_name" parent="button_action">
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -75,5 +75,17 @@
         <item name="android:letterSpacing">0.005</item>
     </style>
 
+    <style name="progress" parent="time_count">
+        <item name="android:textColor">@color/grey_light_text_color</item>
+    </style>
+
+    <style name="progress_count" parent="group_name">
+        <item name="android:textColor">@color/grey_text_color</item>
+    </style>
+
+    <style name="bottom_nav_text" parent="group_name">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/bottom_nav_text_color</item>
+    </style>
 
 </resources>

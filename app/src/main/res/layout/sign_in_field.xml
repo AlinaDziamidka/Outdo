@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/_639713_1" />
+        android:src="@drawable/ic_test_main" />
 
     <TextView
         android:id="@+id/signInView"
@@ -73,11 +73,11 @@
 
     <Button
         android:id="@+id/signInAction"
-        style="@style/sign_in_action"
+        style="@style/button_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_edit_text"
+        android:background="@drawable/bg_sign_in_action"
         android:text="@string/sign_in_action" />
 
     <TextView
