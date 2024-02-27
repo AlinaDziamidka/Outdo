@@ -1,4 +1,4 @@
-package com.example.graduationproject.data.remote.api.group.request
+package com.example.graduationproject.data.remote.api.request
 
 data class GroupsRequest (
     val groupId: Long,

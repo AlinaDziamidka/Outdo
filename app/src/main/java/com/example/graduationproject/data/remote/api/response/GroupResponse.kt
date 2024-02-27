@@ -1,4 +1,4 @@
-package com.example.graduationproject.data.remote.api.group.response
+package com.example.graduationproject.data.remote.api.response
 
 data class GroupResponse (
     val groupName: String,

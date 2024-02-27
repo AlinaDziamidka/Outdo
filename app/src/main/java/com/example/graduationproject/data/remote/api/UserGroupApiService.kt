@@ -1,6 +1,6 @@
-package com.example.graduationproject.data.remote.api.group
+package com.example.graduationproject.data.remote.api
 
-import com.example.graduationproject.data.remote.api.group.response.UserGroupsResponse
+import com.example.graduationproject.data.remote.api.response.UserGroupsResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
