@@ -6,6 +6,9 @@ import com.example.graduationproject.domain.entity.UserGroup
 public class UserGroupTransformer {
 
     fun fromResponse(response: UserGroupsResponse): UserGroup {
-        return UserGroup(response.groupId)
+        return UserGroup(
+            groupId = response.groupId,
+            userId = response.userId
+        )
     }
 }

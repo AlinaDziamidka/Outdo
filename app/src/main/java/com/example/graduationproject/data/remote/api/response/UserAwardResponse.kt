@@ -1,6 +1,6 @@
 package com.example.graduationproject.data.remote.api.response
 
-data class UserGroupsResponse(
+data class UserAwardResponse(
     val userId: Long,
-    val groupId: Long,
+    val awardId: Long
 )

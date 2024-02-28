@@ -5,6 +5,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface GroupApiService {
-    @GET("user_groups/{group_id}")
-    suspend fun fetchAllUserGroups(@Path("group_id") groupId: Long): GroupResponse
+    @GET("groups/{group_id}")
+    suspend fun fetchUserGroup(@Path("group_id") groupId: Long): GroupResponse
 }

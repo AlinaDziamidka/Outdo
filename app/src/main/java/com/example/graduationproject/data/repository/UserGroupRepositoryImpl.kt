@@ -15,7 +15,7 @@ class UserGroupRepositoryImpl(
     private val userGroupTransformer = UserGroupTransformer()
 
     override suspend fun fetchAllGroupsByUserId(userId: Long): Flow<List<UserGroup>> = flow {
-        val response = userGroupApiService.fetchAllUserGroupsId(userId)
+        val response = userGroupApiService.fetchAllGroupsByUserId(userId)
         emit(response)
     }.map { responses ->
         responses.map { response ->

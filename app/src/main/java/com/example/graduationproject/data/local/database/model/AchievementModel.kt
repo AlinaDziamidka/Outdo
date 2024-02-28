@@ -12,8 +12,6 @@ data class AchievementModel(
     @ColumnInfo("achievement_name")
     val achievementName: String,
     val description: String,
-    @ColumnInfo("challenge_id")
-    val challengeId: Long,
     @ColumnInfo("achievement_status")
     val achievementStatus: AchievementStatus
 )

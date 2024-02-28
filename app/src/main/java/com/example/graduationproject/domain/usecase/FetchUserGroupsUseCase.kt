@@ -19,8 +19,8 @@ class FetchUserGroupsUseCase(
             flow {
                 val groups = mutableListOf<Group>()
                 for (group in userGroup) {
-                    val fetchedGroups = groupRepository.fetchUserGroup(group.groupId)
-                    groups.add(fetchedGroups)
+                    val fetchedGroup = groupRepository.fetchUserGroup(group.groupId)
+                    groups.add(fetchedGroup)
                 }
                 emit(groups)
             }

@@ -9,7 +9,7 @@ class GroupRepositoryImpl(private val groupApiService: GroupApiService) : GroupR
 
     private val groupTransformer = GroupTransformer()
     override suspend fun fetchUserGroup(groupId: Long): Group {
-        val response = groupApiService.fetchAllUserGroups(groupId)
+        val response = groupApiService.fetchUserGroup(groupId)
         return groupTransformer.fromResponse(response)
     }
 }
