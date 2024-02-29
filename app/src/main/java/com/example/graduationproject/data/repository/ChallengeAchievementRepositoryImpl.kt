@@ -1,6 +1,6 @@
 package com.example.graduationproject.data.repository
 
-import com.example.graduationproject.data.remote.api.ChallengeAchievementApiService
+import com.example.graduationproject.data.remote.api.service.ChallengeAchievementApiService
 import com.example.graduationproject.data.transormer.ChallengeAchievementTransformer
 import com.example.graduationproject.domain.entity.ChallengeAchievement
 import com.example.graduationproject.domain.repository.ChallengeAchievementRepository
@@ -11,9 +11,6 @@ import kotlinx.coroutines.flow.map
 class ChallengeAchievementRepositoryImpl(private val challengeAchievementApiService: ChallengeAchievementApiService) :
     ChallengeAchievementRepository {
 
-
-    private val challengeAchievementTransformer = ChallengeAchievementTransformer()
-
     override suspend fun fetchAllAchievementsByChallengeId(challengeId: Long): Flow<List<ChallengeAchievement>> =
         flow {
             val response =
@@ -21,6 +18,7 @@ class ChallengeAchievementRepositoryImpl(private val challengeAchievementApiServ
             emit(response)
         }.map { responses ->
             responses.map { response ->
+                val challengeAchievementTransformer = ChallengeAchievementTransformer()
                 challengeAchievementTransformer.fromResponse(response)
             }
         }

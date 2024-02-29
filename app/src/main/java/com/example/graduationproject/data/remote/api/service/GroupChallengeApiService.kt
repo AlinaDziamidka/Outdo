@@ -1,4 +1,4 @@
-package com.example.graduationproject.data.remote.api
+package com.example.graduationproject.data.remote.api.service
 
 import com.example.graduationproject.data.remote.api.response.GroupChallengeResponse
 import retrofit2.http.GET
