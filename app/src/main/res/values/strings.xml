@@ -1,25 +1,25 @@
 <resources>
     <string name="app_name">Graduation project</string>
-    <string name="sign_in">Sign in</string>
-    <string name="have_not_had_account">tHave you had account?</string>
-    <string name="sign_up">Sign up</string>
-    <string name="sign_in_hint">tLogin, phone, e-mail</string>
-    <string name="password_hint">Password</string>
+    <string name="sign_in_header">Sign in</string>
+    <string name="sign_in_have_not_had_account">tHave you had account?</string>
+    <string name="sign_in_sign_up">Sign up</string>
+    <string name="sign_in_registration_data_hint">tLogin, phone, e-mail</string>
+    <string name="sign_in_password_hint">Password</string>
     <string name="sign_in_action">Sign in</string>
-    <string name="forgot_password">tForgot password</string>
-    <string name="hello">Hello </string>
-    <string name="current_challenges">Current challenges</string>
-    <string name="show_all_action">tAll</string>
-    <string name="challenge">Challenge</string>
-    <string name="group">Group:</string>
-    <string name="progress">Progress:</string>
-    <string name="daily_achievement">Daily achievement</string>
-    <string name="participate_action">Participate</string>
-    <string name="weekly_challenge">Weekly challenge</string>
-    <string name="main_screen">Main</string>
-    <string name="my_groups">My groups</string>
-    <string name="competitions">Competitions</string>
-    <string name="friends">Friends</string>
-    <string name="account">Account</string>
+    <string name="sign_in_forgot_password">tForgot password</string>
+    <string name="home_hello_title">Hello </string>
+    <string name="home_current_challenges_title">Current challenges</string>
+    <string name="home_show_all_action">tAll</string>
+    <string name="home_challenge_title">Challenge</string>
+    <string name="home_group_title">Group:</string>
+    <string name="home_progress_title">Progress:</string>
+    <string name="home_daily_achievement_title">Daily achievement</string>
+    <string name="home_participate_action">Participate</string>
+    <string name="home_weekly_challenge_title">Weekly challenge</string>
+    <string name="home_main_screen_header">Main</string>
+    <string name="home_my_groups_header">My groups</string>
+    <string name="home_competitions_header">Competitions</string>
+    <string name="home_friends_header">Friends</string>
+    <string name="home_account_header">Account</string>
 
 </resources>

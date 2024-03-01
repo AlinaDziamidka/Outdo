@@ -2,26 +2,26 @@
 
 <resources>
     <string name="app_name">Graduation project</string>
-    <string name="sign_in">Вход</string>
-    <string name="have_not_had_account">Еще нет аккаунта?</string>
-    <string name="sign_up">Зарегистрируйтесь</string>
-    <string name="sign_in_hint">Логин, телефон или почта</string>
-    <string name="password_hint">Пароль</string>
+    <string name="sign_in_header">Вход</string>
+    <string name="sign_in_have_not_had_account">Еще нет аккаунта?</string>
+    <string name="sign_in_sign_up">Зарегистрируйтесь</string>
+    <string name="sign_in_registration_data_hint">Логин, телефон или почта</string>
+    <string name="sign_in_password_hint">Пароль</string>
     <string name="sign_in_action">Войти</string>
-    <string name="forgot_password">Забыли пароль?</string>
-    <string name="hello">Привет, </string>
-    <string name="current_challenges">Текущие челленджи</string>
-    <string name="show_all_action">Все</string>
-    <string name="challenge">Челлендж</string>
-    <string name="group">Группа:</string>
-    <string name="progress">Прогресс:</string>
-    <string name="daily_achievement">Ежедневное задание</string>
-    <string name="participate_action">Участвовать</string>
-    <string name="weekly_challenge">Еженедельное задание</string>
-    <string name="main_screen">Главный</string>
-    <string name="my_groups">Мои группы</string>
-    <string name="competitions">Турниры</string>
-    <string name="friends">Друзья</string>
-    <string name="account">Аккаунт</string>
+    <string name="sign_in_forgot_password">Забыли пароль?</string>
+    <string name="home_hello_title">Привет, </string>
+    <string name="home_current_challenges_title">Текущие челленджи</string>
+    <string name="home_show_all_action">Все</string>
+    <string name="home_challenge_title">Челлендж</string>
+    <string name="home_group_title">Группа:</string>
+    <string name="home_progress_title">Прогресс:</string>
+    <string name="home_daily_achievement_title">Ежедневное задание</string>
+    <string name="home_participate_action">Участвовать</string>
+    <string name="home_weekly_challenge_title">Еженедельное задание</string>
+    <string name="home_main_screen_header">Главный</string>
+    <string name="home_my_groups_header">Мои группы</string>
+    <string name="home_competitions_header">Турниры</string>
+    <string name="home_friends_header">Друзья</string>
+    <string name="home_account_header">Аккаунт</string>
 
 </resources>

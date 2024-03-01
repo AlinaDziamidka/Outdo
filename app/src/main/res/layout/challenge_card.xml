@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    android:layout_marginEnd="16dp"
     android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="12dp"
     android:clickable="true"
     android:focusable="true"
     app:cardCornerRadius="16dp"
@@ -14,9 +15,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/challengeViewContainer"
-        android:padding="12dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/timeView"
@@ -24,16 +25,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="21:07:24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="21:07:24" />
 
         <TextView
             android:id="@+id/challengeView"
             style="@style/challenges_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/challenge"
+            android:text="@string/home_challenge_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,17 +46,17 @@
             android:layout_marginStart="5dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="«Разрывной»"
             app:layout_constraintEnd_toStartOf="@id/timeView"
             app:layout_constraintStart_toEndOf="@+id/challengeView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="«Разрывной»" />
 
         <TextView
             android:id="@+id/groupView"
             style="@style/group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/group"
+            android:text="@string/home_group_title"
             app:layout_constraintStart_toStartOf="@id/challengeView"
             app:layout_constraintTop_toBottomOf="@id/challengeView" />
 
@@ -67,17 +68,17 @@
             android:layout_marginStart="5dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="11A"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/groupView"
-            app:layout_constraintTop_toBottomOf="@id/challengeView" />
+            app:layout_constraintTop_toBottomOf="@id/challengeView"
+            tools:text="11A" />
 
         <TextView
             android:id="@+id/progressView"
             style="@style/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/progress"
+            android:text="@string/home_progress_title"
             app:layout_constraintStart_toStartOf="@id/groupView"
             app:layout_constraintTop_toBottomOf="@id/groupView" />
 
@@ -87,10 +88,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="12 из 20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/progressView"
-            app:layout_constraintTop_toBottomOf="@id/groupView" />
+            app:layout_constraintTop_toBottomOf="@id/groupView"
+            tools:text="12 из 20" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -100,9 +101,9 @@
             android:layout_marginTop="4dp"
             android:progress="60"
             android:progressDrawable="@drawable/bg_progress_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/progressView"
-            app:layout_constraintTop_toBottomOf="@id/progressView"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/progressView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,8 +17,8 @@
         android:id="@+id/dailyAchievementViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="12dp"
-        android:paddingLeft="12dp">
+        android:paddingLeft="12dp"
+        android:paddingTop="12dp">
 
         <TextView
             android:id="@+id/timeView"
@@ -26,18 +27,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="12dp"
-            android:text="21:07:24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="21:07:24" />
 
         <TextView
             android:id="@+id/dailyAchievementNameView"
             style="@style/challenges_name_home_page"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="«Эколог»"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="«Эколог»" />
 
         <TextView
             android:id="@+id/descriptionView"
@@ -45,12 +46,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Получите несколько заданий на очищение нашей планеты от мусора"
-            android:maxLines="3"
             android:ellipsize="end"
+            android:maxLines="3"
             app:layout_constraintEnd_toStartOf="@id/iconView"
             app:layout_constraintStart_toStartOf="@id/dailyAchievementNameView"
-            app:layout_constraintTop_toBottomOf="@id/dailyAchievementNameView" />
+            app:layout_constraintTop_toBottomOf="@id/dailyAchievementNameView"
+            tools:text="Получите несколько заданий на очищение нашей планеты от мусора" />
 
         <Button
             android:id="@+id/participateAction"
@@ -58,23 +59,23 @@
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/bg_participate_action"
-            android:text="@string/participate_action"
             android:padding="0dp"
-            app:layout_constraintStart_toStartOf="@id/descriptionView"
+            android:text="@string/home_participate_action"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iconView"
-            android:layout_marginEnd="50dp"
-            android:layout_marginBottom="12dp"/>
+            app:layout_constraintStart_toStartOf="@id/descriptionView" />
 
         <ImageView
             android:id="@+id/iconView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:background="@drawable/ic_grass"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timeView"
-            android:layout_marginTop="12dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/timeView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
