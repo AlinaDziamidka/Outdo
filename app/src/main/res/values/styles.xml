@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="sign_in">
+    <style name="sign_in_header">
         <item name="android:textSize">22sp</item>
         <item name="fontFamily">@font/gilroy_semibold</item>
     </style>
 
-    <style name="have_not_had_account">
-        <item name="android:textSize">13sp</item>
-    </style>
-
-    <style name="sign_up" parent="have_not_had_account">
+    <style name="sign_up">
         <item name="android:textColor">@color/blue_text_color</item>
         <item name="fontFamily">@font/gilroy_semibold</item>
     </style>
 
     <style name="edit_text">
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.005</item>
     </style>
 
     <style name="hint_text" parent="edit_text">
@@ -25,15 +20,13 @@
         <item name="fontFamily">@font/gilroy_regular</item>
     </style>
 
-    <style name="button_action" parent="have_not_had_account">
+    <style name="button_action">
         <item name="fontFamily">@font/gilroy_semibold</item>
-        <item name="android:letterSpacing">0.005</item>
         <item name="textAllCaps">false</item>
     </style>
 
     <style name="forgot_password" parent="sign_up">
         <item name="fontFamily">@font/gilroy_medium</item>
-        <item name="android:letterSpacing">0.005</item>
     </style>
 
     <style name="welcome_text">
@@ -47,7 +40,6 @@
 
     <style name="show_all_text" parent="sign_up">
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.005</item>
     </style>
 
     <style name="notification_count">
@@ -57,8 +49,6 @@
 
     <style name="time_count">
         <item name="android:textColor">@color/grey_text_color</item>
-        <item name="android:textSize">13sp</item>
-        <item name="android:letterSpacing">0.005</item>
     </style>
 
     <style name="challenges_name" parent="button_action">
@@ -69,23 +59,34 @@
         <item name="android:textColor">@color/grey_darken_text_color</item>
     </style>
 
-    <style name="group_name">
+<!--    <style name="group_name">-->
+<!--        <item name="fontFamily">@font/gilroy_semibold</item>-->
+<!--    </style>-->
+
+    <style name="default_semibold_text_style">
         <item name="fontFamily">@font/gilroy_semibold</item>
-        <item name="android:textSize">13sp</item>
-        <item name="android:letterSpacing">0.005</item>
     </style>
 
-    <style name="progress" parent="time_count">
+    <style name="progress">
         <item name="android:textColor">@color/grey_light_text_color</item>
     </style>
 
-    <style name="progress_count" parent="group_name">
+    <style name="progress_count" parent="default_semibold_text_style">
         <item name="android:textColor">@color/grey_text_color</item>
     </style>
 
-    <style name="bottom_nav_text" parent="group_name">
+    <style name="bottom_nav_text" parent="default_semibold_text_style">
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/bottom_nav_text_color</item>
     </style>
+
+    <style name="invalid_login_or_password_text">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/error_text_color_red</item>
+    </style>
+
+<!--    <style name="sign_in_with_google">-->
+<!--        <item name="fontFamily">@font/gilroy_semibold</item>-->
+<!--    </style>-->
 
 </resources>

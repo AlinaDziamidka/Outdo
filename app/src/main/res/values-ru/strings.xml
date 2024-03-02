@@ -23,5 +23,15 @@
     <string name="home_competitions_header">Турниры</string>
     <string name="home_friends_header">Друзья</string>
     <string name="home_account_header">Аккаунт</string>
+    <string name="sign_in_or_text">- или -</string>
+    <string name="sign_in_with_google_action">Вход с помощью Google</string>
+    <string name="sign_up_sign_up_header">Регистрация</string>
+    <string name="sign_up_had_account">Есть аккаунт?</string>
+    <string name="sign_up_enter_registration_data_hint">Введите почту или телефон</string>
+    <string name="sign_up_create_username_hint">Придумайте логин</string>
+    <string name="sign_up_create_password_hint">Введите пароль</string>
+    <string name="sign_up_confirm_the_password_hint">Подтвердите пароль</string>
+    <string name="sign_in_invalid_login_or_password">Неверный логин или пароль</string>
+    <string name="sign_up_sign_up_action">Зарегистрироваться</string>
 
 </resources>

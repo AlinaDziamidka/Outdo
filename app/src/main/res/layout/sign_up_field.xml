@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:anndroid="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/signInViewContainer"
+    android:id="@+id/signUpViewContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingStart="16dp"
     android:paddingEnd="16dp">
 
-    <ImageView
-        android:id="@+id/mainIcon"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_test_main" />
-
     <TextView
-        android:id="@+id/signInView"
+        android:id="@+id/signUpHeader"
         style="@style/sign_in_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
-        android:text="@string/sign_in_header" />
+        android:text="@string/sign_in_sign_up" />
 
     <LinearLayout
-        android:id="@+id/signUpContainer"
+        android:id="@+id/signInContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -37,102 +28,105 @@
             android:id="@+id/haveNotAccountView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sign_in_have_not_had_account" />
+            android:text="@string/sign_up_had_account" />
 
         <TextView
-            android:id="@+id/signUpView"
+            android:id="@+id/signInView"
             style="@style/sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="@string/sign_in_sign_up" />
+            android:text="@string/sign_in_action" />
     </LinearLayout>
 
     <EditText
-        android:id="@+id/signInContent"
+        android:id="@+id/signUpContent"
         style="@style/hint_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:background="@drawable/bg_edit_text"
-        android:hint="@string/sign_in_registration_data_hint"
+        android:hint="@string/sign_up_enter_registration_data_hint"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textAppearance="@style/edit_text" />
 
     <EditText
-        android:id="@+id/passwordContent"
+        android:id="@+id/userNameContent"
         style="@style/hint_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_edit_text"
-        android:drawableEnd="@drawable/ic_eye_visible"
-        android:hint="@string/sign_in_password_hint"
-        android:inputType="textPassword"
+        android:hint="@string/sign_up_create_username_hint"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textAppearance="@style/edit_text" />
 
-    <TextView
-        android:id="@+id/invalidLoginOrPasswordView"
-        style="@style/invalid_login_or_password_text"
+    <EditText
+        android:id="@+id/createPasswordContent"
+        style="@style/hint_text"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        anndroid:text="@string/sign_in_invalid_login_or_password" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_edit_text"
+        android:hint="@string/sign_up_create_password_hint"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textAppearance="@style/edit_text" />
+
+    <EditText
+        android:id="@+id/confirmPasswordContent"
+        style="@style/hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_edit_text"
+        android:hint="@string/sign_up_confirm_the_password_hint"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textAppearance="@style/edit_text" />
 
     <Button
-        android:id="@+id/signInAction"
+        android:id="@+id/signUpAction"
         style="@style/button_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_sign_in_action"
-        android:text="@string/sign_in_action" />
-
-    <TextView
-        android:id="@+id/forgotPasswordView"
-        style="@style/forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="@string/sign_in_forgot_password" />
+        android:text="@string/sign_up_sign_up_action" />
 
     <TextView
         android:id="@+id/orView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text = "@string/sign_in_or_text"
-        android:layout_gravity="center_horizontal"/>
+        android:text="@string/sign_in_or_text" />
 
     <LinearLayout
         android:id="@+id/signInWithGoogleContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_edit_text"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_marginTop="20dp"
-        android:stateListAnimator="@anim/nav_default_enter_anim"
-        android:clickable="true">
+        android:background="@drawable/bg_edit_text"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:stateListAnimator="@anim/nav_default_enter_anim">
 
         <ImageView
             android:id="@+id/googleView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_google"/>
+            android:background="@drawable/ic_google" />
 
         <TextView
             android:id="@+id/signInWithGoogleView"
+            style="@style/default_semibold_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            style="@style/default_semibold_text_style"
-            android:text="@string/sign_in_with_google_action"/>
+            android:text="@string/sign_in_with_google_action" />
     </LinearLayout>
 </LinearLayout>
-
