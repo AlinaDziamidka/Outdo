@@ -29,8 +29,13 @@
     <string name="sign_up_create_username_hint">Create username</string>
     <string name="sign_up_create_password_hint">Create password</string>
     <string name="sign_up_confirm_the_password_hint">Confirm the password</string>
-    <string name="sign_in_invalid_login_or_password">Invalid login or password</string>
+    <string name="sign_in_invalid_username_or_password">Invalid login or password</string>
     <string name="sign_up_sign_up_action">Sign up</string>
+    <string name="create_username_dialog_username_hint">Username</string>
+    <string name="create_username_dialog_confirm_action">Confirm</string>
+    <string name="create_username_dialog_invalid_username">This username already exists</string>
+    <string name="sign_up_password_requirements">The password must be at least 8 characters, including numbers and upper and lower case letters</string>
+    <string name="sign_up_invalid_password">Password does not match</string>
 
 
 

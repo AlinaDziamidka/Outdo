@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="sign_in_header">
+    <style name="header_text_style">
         <item name="android:textSize">22sp</item>
         <item name="fontFamily">@font/gilroy_semibold</item>
     </style>
@@ -59,9 +59,9 @@
         <item name="android:textColor">@color/grey_darken_text_color</item>
     </style>
 
-<!--    <style name="group_name">-->
-<!--        <item name="fontFamily">@font/gilroy_semibold</item>-->
-<!--    </style>-->
+    <!--    <style name="group_name">-->
+    <!--        <item name="fontFamily">@font/gilroy_semibold</item>-->
+    <!--    </style>-->
 
     <style name="default_semibold_text_style">
         <item name="fontFamily">@font/gilroy_semibold</item>
@@ -80,13 +80,18 @@
         <item name="android:textColor">@color/bottom_nav_text_color</item>
     </style>
 
-    <style name="invalid_login_or_password_text">
+    <style name="invalid_username_or_password_text">
         <item name="android:textSize">11sp</item>
         <item name="android:textColor">@color/error_text_color_red</item>
     </style>
 
-<!--    <style name="sign_in_with_google">-->
-<!--        <item name="fontFamily">@font/gilroy_semibold</item>-->
-<!--    </style>-->
+    <style name="password_requirements_text">
+        <item name="android:textSize">11sp</item>
+    </style>
+
+
+    <!--    <style name="sign_in_with_google">-->
+    <!--        <item name="fontFamily">@font/gilroy_semibold</item>-->
+    <!--    </style>-->
 
 </resources>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/bg_dialog_fragment"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/createUsernameView"
+        style="@style/header_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up_create_username_hint" />
+
+    <EditText
+        android:id="@+id/usernameContent"
+        style="@style/hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_edit_text"
+        android:hint="@string/create_username_dialog_username_hint"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textAppearance="@style/edit_text" />
+
+    <TextView
+        android:id="@+id/invalidLoginOrPasswordView"
+        style="@style/invalid_username_or_password_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/create_username_dialog_invalid_username" />
+
+    <Button
+        android:id="@+id/confirmAction"
+        style="@style/button_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_sign_in_action"
+        android:text="@string/create_username_dialog_confirm_action" />
+
+</LinearLayout>

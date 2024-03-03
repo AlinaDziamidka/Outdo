@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/signInView"
-        style="@style/sign_in_header"
+        style="@style/header_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -75,13 +75,15 @@
         android:textAppearance="@style/edit_text" />
 
     <TextView
-        android:id="@+id/invalidLoginOrPasswordView"
-        style="@style/invalid_login_or_password_text"
+        android:id="@+id/invalidUsernameOrPasswordView"
+        style="@style/invalid_username_or_password_text"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        anndroid:text="@string/sign_in_invalid_login_or_password" />
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/sign_in_invalid_username_or_password" />
 
     <Button
         android:id="@+id/signInAction"

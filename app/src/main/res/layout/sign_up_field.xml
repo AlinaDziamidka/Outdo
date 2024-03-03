@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/signUpHeader"
-        style="@style/sign_in_header"
+        style="@style/header_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -63,6 +63,16 @@
         android:paddingEnd="16dp"
         android:textAppearance="@style/edit_text" />
 
+    <TextView
+        android:id="@+id/invalidLoginOrPasswordView"
+        style="@style/invalid_username_or_password_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/create_username_dialog_invalid_username" />
+
     <EditText
         android:id="@+id/createPasswordContent"
         style="@style/hint_text"
@@ -75,6 +85,18 @@
         android:paddingEnd="16dp"
         android:textAppearance="@style/edit_text" />
 
+    <TextView
+        android:id="@+id/passwordRequirementsView"
+        style="@style/password_requirements_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="8dp"
+        android:lineSpacingExtra="5sp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/sign_up_password_requirements" />
+
     <EditText
         android:id="@+id/confirmPasswordContent"
         style="@style/hint_text"
@@ -86,6 +108,18 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textAppearance="@style/edit_text" />
+
+    <TextView
+        android:id="@+id/invalidPasswordView"
+        style="@style/invalid_username_or_password_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/sign_up_invalid_password" />
+
 
     <Button
         android:id="@+id/signUpAction"

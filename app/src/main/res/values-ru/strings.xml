@@ -31,7 +31,13 @@
     <string name="sign_up_create_username_hint">Придумайте логин</string>
     <string name="sign_up_create_password_hint">Введите пароль</string>
     <string name="sign_up_confirm_the_password_hint">Подтвердите пароль</string>
-    <string name="sign_in_invalid_login_or_password">Неверный логин или пароль</string>
+    <string name="sign_in_invalid_username_or_password">Неверный логин или пароль</string>
     <string name="sign_up_sign_up_action">Зарегистрироваться</string>
+    <string name="create_username_dialog_username_hint">Логин</string>
+    <string name="create_username_dialog_confirm_action">Подтвердить</string>
+    <string name="create_username_dialog_invalid_username">Такой логин уже существует</string>
+    <string name="sign_up_password_requirements">Пароль должен быть не менее 8 символов, включая цифры и буквы в верхнем и нижнем регистре</string>
+    <string name="sign_up_invalid_password">Пароль не совпадает</string>
+
 
 </resources>
