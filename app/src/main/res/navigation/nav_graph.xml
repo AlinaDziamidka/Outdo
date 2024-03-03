@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
-
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signInViewFragment">
+    <fragment
+        android:id="@+id/signInViewFragment"
+        android:name="com.example.graduationproject.presentation.signin.SignInViewFragment"
+        android:label="SignInViewFragment" >
+        <action
+            android:id="@+id/action_signInViewFragment_to_signUpViewFragment2"
+            app:destination="@id/signUpViewFragment" />
+        <action
+            android:id="@+id/action_signInViewFragment_to_dialogSignUpView"
+            app:destination="@id/dialogSignUpView" />
+        <action
+            android:id="@+id/action_signInViewFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+    </fragment>
+    <dialog
+        android:id="@+id/dialogSignUpView"
+        android:name="com.example.graduationproject.presentation.signup.DialogSignUpView"
+        android:label="DialogSignUpView" >
+        <action
+            android:id="@+id/action_dialogSignUpView_to_homeActivity"
+            app:destination="@id/homeActivity" />
+    </dialog>
+    <fragment
+        android:id="@+id/signUpViewFragment"
+        android:name="com.example.graduationproject.presentation.signup.SignUpViewFragment"
+        android:label="SignUpViewFragment" >
+        <action
+            android:id="@+id/action_signUpViewFragment_to_dialogSignUpView"
+            app:destination="@id/dialogSignUpView" />
+        <action
+            android:id="@+id/action_signUpViewFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="com.example.graduationproject.presentation.home.HomeActivity"
+        android:label="HomeActivity" />
 </navigation>

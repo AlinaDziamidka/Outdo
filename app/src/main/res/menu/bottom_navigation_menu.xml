@@ -4,35 +4,35 @@
 <item
     android:id="@+id/homeView"
     android:icon="@drawable/ic_main_bottom_nav"
-    android:title="@string/main_screen"
+    android:title="@string/home_main_screen_header"
     app:titleTextAppearance="@style/bottom_nav_text"
     android:orderInCategory="1" />
 
     <item
         android:id="@+id/myGroupsView"
         android:icon="@drawable/ic_my_groups_bottom_nav"
-        android:title="@string/my_groups"
+        android:title="@string/home_my_groups_header"
         app:titleTextAppearance="@style/bottom_nav_text"
         android:orderInCategory="2" />
 
     <item
         android:id="@+id/competitionsView"
         android:icon="@drawable/ic_competition_bottom_nav"
-        android:title="@string/competitions"
+        android:title="@string/home_competitions_header"
         app:titleTextAppearance="@style/bottom_nav_text"
         android:orderInCategory="3" />
 
     <item
         android:id="@+id/friendsView"
         android:icon="@drawable/ic_friends_bottom_nav"
-        android:title="@string/friends"
+        android:title="@string/home_friends_header"
         app:titleTextAppearance="@style/bottom_nav_text"
         android:orderInCategory="4" />
 
     <item
         android:id="@+id/accountView"
         android:icon="@drawable/ic_settings_bottom_nav"
-        android:title="@string/account"
+        android:title="@string/home_account_header"
         app:titleTextAppearance="@style/bottom_nav_text"
         android:orderInCategory="5" />
 </menu>

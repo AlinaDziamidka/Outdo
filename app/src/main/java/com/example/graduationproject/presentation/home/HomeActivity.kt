@@ -1,4 +1,4 @@
-package com.example.graduationproject.presentation
+package com.example.graduationproject.presentation.home
 
 import androidx.appcompat.app.AppCompatActivity
 import com.example.graduationproject.R
