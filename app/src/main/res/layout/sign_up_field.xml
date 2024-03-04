@@ -71,7 +71,8 @@
         android:layout_gravity="center_horizontal"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
-        android:text="@string/create_username_dialog_invalid_username" />
+        android:text="@string/create_username_dialog_invalid_username"
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/createPasswordContent"
@@ -118,7 +119,8 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="8dp"
-        android:text="@string/sign_up_invalid_password" />
+        android:text="@string/sign_up_invalid_password"
+        android:visibility="gone"/>
 
 
     <Button

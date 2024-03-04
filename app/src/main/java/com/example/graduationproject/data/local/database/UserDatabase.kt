@@ -67,7 +67,7 @@ abstract class UserDatabase : RoomDatabase() {
                     UserDatabase::class.java, "userdb"
                 )
 //                    .addMigrations(MIGRATION_1_2)
-//                    .allowMainThreadQueries()
+                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 return instance

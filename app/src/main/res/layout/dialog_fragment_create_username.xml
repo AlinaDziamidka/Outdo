@@ -38,7 +38,8 @@
         android:layout_gravity="center_horizontal"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
-        android:text="@string/create_username_dialog_invalid_username" />
+        android:text="@string/create_username_dialog_invalid_username"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/confirmAction"

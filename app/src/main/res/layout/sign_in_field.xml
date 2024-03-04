@@ -83,7 +83,8 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="8dp"
-        android:text="@string/sign_in_invalid_username_or_password" />
+        android:text="@string/sign_in_invalid_username_or_password"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/signInAction"

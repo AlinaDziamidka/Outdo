@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SessionRepository {
 
-    suspend fun signIn(email: String, password: String): Flow<Session>
+    suspend fun signIn(identityValue: String, password: String): Flow<Session>
 }
