@@ -18,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkClient {
 
-
     private const val BASE_URL = "https://goodlycattle.backendless.app/api/data/"
 
     private val logging = HttpLoggingInterceptor()

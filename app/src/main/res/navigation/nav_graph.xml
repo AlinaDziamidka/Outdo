@@ -8,7 +8,7 @@
         android:name="com.example.graduationproject.presentation.signin.SignInViewFragment"
         android:label="SignInViewFragment" >
         <action
-            android:id="@+id/action_signInViewFragment_to_signUpViewFragment2"
+            android:id="@+id/action_signInViewFragment_to_signUpViewFragment"
             app:destination="@id/signUpViewFragment" />
         <action
             android:id="@+id/action_signInViewFragment_to_dialogSignUpView"

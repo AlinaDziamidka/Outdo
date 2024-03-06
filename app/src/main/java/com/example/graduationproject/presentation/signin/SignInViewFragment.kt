@@ -49,6 +49,7 @@ class SignInViewFragment : Fragment() {
         initViews()
         setUpViews()
         observeEvents()
+        signUpAction()
     }
 
     private fun initViews() {
@@ -100,6 +101,16 @@ class SignInViewFragment : Fragment() {
         findNavController().navigate(action)
     }
 
+    private fun signUpAction() {
+        binding.signInContainer.signUpView.setOnClickListener {
+            moveToSignUpScreen()
+        }
+    }
+
+    private fun moveToSignUpScreen() {
+        val action = SignInViewFragmentDirections.actionSignInViewFragmentToSignUpViewFragment()
+        findNavController().navigate(action)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
