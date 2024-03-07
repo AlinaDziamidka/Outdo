@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="24dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/groupContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:id="@+id/myGroupsView"
+            style="@style/header_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@id/createGroupAction"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical"
+            android:text="@string/group_screen_header" />
+
+        <Button
+            android:id="@+id/createGroupAction"
+            style="@style/create_group_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_create_group_action"
+            android:text="@string/group_screen_create_group_action" />
+    </RelativeLayout>
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_edit_text"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@drawable/bg_edit_text"
+        android:queryHint="@string/group_screen_search_hint"
+        android:searchHintTextColor="@color/grey_text_color" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weeklyChallengeRecyclerView"
+        tools:listitem="@layout/group_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>

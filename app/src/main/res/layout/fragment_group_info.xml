@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="16dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/groupContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/myGroupsView"
+            style="@style/header_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@id/createGroupAction"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical"
+            android:text="@string/group_screen_header" />
+
+        <Button
+            android:id="@+id/createGroupAction"
+            style="@style/create_group_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_create_group_action"
+            android:text="@string/group_screen_create_group_action" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/groupNameView"
+        style="@style/group_screen_group_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/group_screen_group_name" />
+
+    <EditText
+        style="@style/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_edit_text"
+        android:hint="@string/group_screen_edit_text_enter_text"
+        android:paddingStart="16dp" />
+
+    <TextView
+        android:id="@+id/groupAvatarView"
+        style="@style/group_screen_group_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/group_screen_group_avatar" />
+
+    <LinearLayout
+        android:id="@+id/uploadAvatarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+
+        <TextView
+            android:id="@+id/fileNameView"
+            style="@style/edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_add_file_name"
+            android:paddingStart="16dp"
+            android:text="@string/group_screen_file_name" />
+
+        <Button
+            android:id="@+id/uploadAction"
+            style="@style/button_action"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_add_file_action"
+            android:paddingStart="16dp"
+            android:text="@string/group_screen_upload_action" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/participantsView"
+        style="@style/group_screen_group_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/group_screen_participants_title" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dropDownSelector="@drawable/ic_arrow_bottom"
+        android:background="@drawable/bg_edit_text"/>
+</LinearLayout>

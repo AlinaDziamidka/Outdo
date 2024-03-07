@@ -38,6 +38,17 @@
     <string name="create_username_dialog_invalid_username">Такой логин уже существует</string>
     <string name="sign_up_password_requirements">Пароль должен быть не менее 8 символов, включая цифры и буквы в верхнем и нижнем регистре</string>
     <string name="sign_up_invalid_password">Пароль не совпадает</string>
+    <string name="group_screen_header">Мои группы</string>
+    <string name="group_screen_create_group_action">Создать группу</string>
+    <string name="group_screen_search_hint">Поиск по группам</string>
+    <string name="group_screen_participants">Участников:</string>
+    <string name="group_screen_group_name">Название группы</string>
+    <string name="group_screen_edit_text_enter_text">Введите текст</string>
+    <string name="group_screen_group_avatar">Аватар группы</string>
+    <string name="group_screen_file_name">Название файла</string>
+    <string name="group_screen_upload_action">Загрузить</string>
+    <string name="group_screen_participants_title">Участники</string>
+    <string name="group_screen_add_friends_to_group">Добавить друзей</string>
 
 
 </resources>

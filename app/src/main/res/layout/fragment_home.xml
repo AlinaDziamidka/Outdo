@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true">
+
+    <LinearLayout
+        android:id="@+id/homeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/welcomeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:id="@+id/helloView"
+                style="@style/welcome_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_hello_title" />
+
+            <TextView
+                android:id="@+id/userNicNameView"
+                style="@style/welcome_text"
+                tools:text="Pandochka!"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/helloView" />
+
+            <ImageView
+                android:id="@+id/notificationView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/ic_bell" />
+
+            <TextView
+                android:id="@+id/notificationCountView"
+                style="@style/notification_count"
+                tools:text="9+"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_notification_count"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/currentChallengesView"
+                style="@style/challenges_name_home_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/helloView"
+                android:layout_marginTop="16dp"
+                android:text="@string/home_current_challenges_title" />
+
+            <TextView
+                android:id="@+id/showAllView"
+                style="@style/show_all_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/notificationView"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="22dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/home_show_all_action" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/challengeRecyclerView"
+            tools:listitem="@layout/challenge_card"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/dailyAchievementView"
+            style="@style/challenges_name_home_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/home_daily_achievement_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dailyAchievementRecyclerView"
+            tools:listitem="@layout/daily_achievement_card"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/weeklyChallengeView"
+            style="@style/challenges_name_home_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/home_daily_achievement_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/weeklyChallengeRecyclerView"
+            tools:listitem="@layout/weekly_challenge_card"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</ScrollView>

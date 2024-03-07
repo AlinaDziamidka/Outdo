@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/groupViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/avatarView"
+            style="@style/default_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_group_avatar"
+            android:gravity="center"
+            android:text="A"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:backgroundTint="@color/color_primary" />
+
+        <TextView
+            android:id="@+id/groupView"
+            style="@style/group_screen_group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/home_group_title"
+            app:layout_constraintStart_toEndOf="@id/avatarView"
+            app:layout_constraintTop_toTopOf="@id/avatarView" />
+
+        <TextView
+            android:id="@+id/groupNameView"
+            style="@style/group_screen_group_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/groupView"
+            app:layout_constraintTop_toTopOf="@id/groupView"
+            tools:text="«11A класс»" />
+
+        <TextView
+            android:id="@+id/participantsView"
+            style="@style/default_grey_darken_text_color_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/group_screen_participants"
+            app:layout_constraintBottom_toBottomOf="@id/avatarView"
+            app:layout_constraintStart_toStartOf="@id/groupView" />
+
+
+        <TextView
+            android:id="@+id/participantsCountView"
+            style="@style/default_semibold_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/avatarView"
+            app:layout_constraintStart_toEndOf="@id/participantsView"
+            tools:text="23" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

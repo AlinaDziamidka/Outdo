@@ -38,6 +38,6 @@
     </fragment>
     <activity
         android:id="@+id/homeActivity"
-        android:name="com.example.graduationproject.presentation.home.HomeActivity"
+        android:name="com.example.graduationproject.presentation.home.HomeView"
         android:label="HomeActivity" />
 </navigation>

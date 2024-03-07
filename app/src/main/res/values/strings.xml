@@ -36,8 +36,17 @@
     <string name="create_username_dialog_invalid_username">This username already exists</string>
     <string name="sign_up_password_requirements">The password must be at least 8 characters, including numbers and upper and lower case letters</string>
     <string name="sign_up_invalid_password">Password does not match</string>
-
-
+    <string name="group_screen_header">My groups</string>
+    <string name="group_screen_create_group_action">Create new group</string>
+    <string name="group_screen_search_hint">Search in groups</string>
+    <string name="group_screen_participants">Participants:</string>
+    <string name="group_screen_group_name">Group name</string>
+    <string name="group_screen_edit_text_enter_text">Enter text</string>
+    <string name="group_screen_group_avatar">Group avatar</string>
+    <string name="group_screen_file_name">File name</string>
+    <string name="group_screen_upload_action">Upload</string>
+    <string name="group_screen_participants_title">Participants</string>
+    <string name="group_screen_add_friends_to_group">Add friends</string>
 
 
 </resources>
