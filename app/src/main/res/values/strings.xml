@@ -36,6 +36,7 @@
     <string name="create_username_dialog_invalid_username">This username already exists</string>
     <string name="sign_up_password_requirements">The password must be at least 8 characters, including numbers and upper and lower case letters</string>
     <string name="sign_up_invalid_password">Password does not match</string>
+    <string name="sign_up_invalid_user_identity">Invalid user data</string>
     <string name="group_screen_header">My groups</string>
     <string name="group_screen_create_group_action">Create new group</string>
     <string name="group_screen_search_hint">Search in groups</string>

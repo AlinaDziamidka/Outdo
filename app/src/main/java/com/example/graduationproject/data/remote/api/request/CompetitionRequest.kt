@@ -1,8 +1,8 @@
 package com.example.graduationproject.data.remote.api.request
 
 data class CompetitionRequest(
-    val competitionId: Long,
+    val competitionId: String,
     val competitionName: String,
-    val creatorId: Long,
+    val creatorId: String,
     val competitionAvatarPath: String,
 )

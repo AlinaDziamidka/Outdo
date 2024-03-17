@@ -51,6 +51,17 @@
         android:paddingEnd="16dp"
         android:textAppearance="@style/edit_text" />
 
+    <TextView
+        android:id="@+id/invalidUserIdentityView"
+        style="@style/invalid_username_or_password_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/sign_up_invalid_user_identity"
+        android:visibility="gone"/>
+
     <EditText
         android:id="@+id/userNameContent"
         style="@style/hint_text"
@@ -64,7 +75,7 @@
         android:textAppearance="@style/edit_text" />
 
     <TextView
-        android:id="@+id/invalidLoginOrPasswordView"
+        android:id="@+id/invalidUsernameView"
         style="@style/invalid_username_or_password_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

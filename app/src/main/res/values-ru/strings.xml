@@ -32,6 +32,7 @@
     <string name="sign_up_create_password_hint">Введите пароль</string>
     <string name="sign_up_confirm_the_password_hint">Подтвердите пароль</string>
     <string name="sign_in_invalid_username_or_password">Неверный логин или пароль</string>
+    <string name="sign_up_invalid_user_identity">Неверные данные для входа</string>
     <string name="sign_up_sign_up_action">Зарегистрироваться</string>
     <string name="create_username_dialog_username_hint">Логин</string>
     <string name="create_username_dialog_confirm_action">Подтвердить</string>

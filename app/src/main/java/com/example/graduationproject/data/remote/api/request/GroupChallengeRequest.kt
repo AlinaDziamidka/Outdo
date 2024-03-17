@@ -1,6 +1,6 @@
 package com.example.graduationproject.data.remote.api.request
 
 data class GroupChallengeRequest(
-    val groupId: Long,
-    val challengeId: Long
+    val groupId: String,
+    val challengeId: String
 )

@@ -1,8 +1,8 @@
 package com.example.graduationproject.data.remote.api.request
 
 data class GroupsRequest (
-    val groupId: Long,
+    val groupId: String,
     val groupName: String,
-    val creatorId: Long,
+    val creatorId: String,
     val groupAvatarPath: String
 )

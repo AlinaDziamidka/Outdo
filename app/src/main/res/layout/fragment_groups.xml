@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,7 +35,7 @@
             android:text="@string/group_screen_create_group_action" />
     </RelativeLayout>
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,10 +43,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/bg_edit_text"
-        android:iconifiedByDefault="false"
-        android:queryBackground="@drawable/bg_edit_text"
-        android:queryHint="@string/group_screen_search_hint"
-        android:searchHintTextColor="@color/grey_text_color" />
+        app:iconifiedByDefault="false"
+        app:queryBackground="@drawable/bg_edit_text"
+        app:queryHint="@string/group_screen_search_hint"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/weeklyChallengeRecyclerView"

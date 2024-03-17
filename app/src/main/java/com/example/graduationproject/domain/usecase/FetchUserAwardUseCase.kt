@@ -3,13 +3,15 @@ package com.example.graduationproject.domain.usecase
 import com.example.graduationproject.data.repository.AwardRepositoryImpl
 import com.example.graduationproject.data.repository.UserAwardRepositoryImpl
 import com.example.graduationproject.domain.entity.Award
+import com.example.graduationproject.domain.repository.AwardRepository
+import com.example.graduationproject.domain.repository.UserAwardRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 
 class FetchUserAwardUseCase(
-    private val awardRepository: AwardRepositoryImpl,
-    private val userAwardRepository: UserAwardRepositoryImpl
+    private val awardRepository: AwardRepository,
+    private val userAwardRepository: UserAwardRepository
 ) {
 
     suspend operator fun invoke(userId: Long): Flow<List<Award>> {

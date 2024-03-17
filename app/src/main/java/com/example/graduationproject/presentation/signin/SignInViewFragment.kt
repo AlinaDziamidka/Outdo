@@ -1,11 +1,7 @@
 package com.example.graduationproject.presentation.signin
 
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,11 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.graduationproject.databinding.FragmentSignInBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SignInViewFragment : Fragment() {
 
-    private val viewModel: SignInViewModel by viewModels { SignInViewModel.SignInViewModelFactory }
+    private val viewModel: SignInViewModel by viewModels()
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
     private lateinit var signInAction: Button

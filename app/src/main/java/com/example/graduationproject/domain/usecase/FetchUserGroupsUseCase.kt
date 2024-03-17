@@ -3,14 +3,16 @@ package com.example.graduationproject.domain.usecase
 import com.example.graduationproject.data.repository.GroupRepositoryImpl
 import com.example.graduationproject.data.repository.UserGroupRepositoryImpl
 import com.example.graduationproject.domain.entity.Group
+import com.example.graduationproject.domain.repository.GroupRepository
+import com.example.graduationproject.domain.repository.UserGroupRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 
 
 class FetchUserGroupsUseCase(
-    private val groupRepository: GroupRepositoryImpl,
-    private val userGroupRepository: UserGroupRepositoryImpl
+    private val groupRepository: GroupRepository,
+    private val userGroupRepository: UserGroupRepository
 ) {
 
     suspend operator fun invoke(userId: Long): Flow<List<Group>> {

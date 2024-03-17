@@ -1,9 +1,9 @@
 package com.example.graduationproject.domain.util
 
-import com.example.graduationproject.Event
+import kotlinx.coroutines.flow.Flow
 
-    interface UseCase<T, R> {
-        suspend operator fun invoke(params: T): Event<R>
+interface UseCase<T, R> {
+        suspend operator fun invoke(params: T): Flow<R>
 
         class None
     }

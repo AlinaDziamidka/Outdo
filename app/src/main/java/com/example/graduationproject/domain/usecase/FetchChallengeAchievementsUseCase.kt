@@ -3,13 +3,15 @@ package com.example.graduationproject.domain.usecase
 import com.example.graduationproject.data.repository.AchievementRepositoryImpl
 import com.example.graduationproject.data.repository.ChallengeAchievementRepositoryImpl
 import com.example.graduationproject.domain.entity.Achievement
+import com.example.graduationproject.domain.repository.AchievementRepository
+import com.example.graduationproject.domain.repository.ChallengeAchievementRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 
 class FetchChallengeAchievementsUseCase(
-    private val challengeAchievementRepository: ChallengeAchievementRepositoryImpl,
-    private val achievementRepository: AchievementRepositoryImpl
+    private val challengeAchievementRepository: ChallengeAchievementRepository,
+    private val achievementRepository: AchievementRepository
 ) {
 
     suspend operator fun invoke(challengeId: Long): Flow<List<Achievement>> {
