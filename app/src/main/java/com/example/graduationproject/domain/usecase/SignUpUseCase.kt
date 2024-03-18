@@ -3,7 +3,7 @@ package com.example.graduationproject.domain.usecase
 import android.util.Log
 import com.example.graduationproject.domain.entity.Session
 import com.example.graduationproject.domain.repository.SessionRepository
-import com.example.graduationproject.domain.repository.UsernameRepository
+import com.example.graduationproject.domain.repository.UserRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(
     private val sessionRepository: SessionRepository,
-    private val usernameRepository: UsernameRepository
+    private val userRepository: UserRepository
 ) :
     UseCase<SignUpUseCase.Params, Session> {
 
@@ -40,10 +40,10 @@ class SignUpUseCase @Inject constructor(
         username: String
     ): SignUpException {
         return try {
-//            val usernameResponse = usernameRepository.fetchUsername(username)
-//            if (usernameResponse.username != username) {
-//                SignUpException.UsernameException
-//            } else
+            val usernameResponse = userRepository.fetchUsersByUsername(username)
+            if (username !in usernameResponse.map { it.username }) {
+                SignUpException.UsernameException
+            } else
                 if (userIdentity.isEmpty()) {
                 SignUpException.UserIdentityException
             } else if (!passwordConditions(password)) {

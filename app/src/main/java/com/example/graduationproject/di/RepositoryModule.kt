@@ -5,11 +5,11 @@ import com.example.graduationproject.data.remote.api.service.UserGroupApiService
 import com.example.graduationproject.data.repository.GroupRepositoryImpl
 import com.example.graduationproject.data.repository.SessionRepositoryImpl
 import com.example.graduationproject.data.repository.UserGroupRepositoryImpl
-import com.example.graduationproject.data.repository.UsernameRepositoryImpl
+import com.example.graduationproject.data.repository.UserRepositoryImpl
 import com.example.graduationproject.domain.repository.GroupRepository
 import com.example.graduationproject.domain.repository.SessionRepository
 import com.example.graduationproject.domain.repository.UserGroupRepository
-import com.example.graduationproject.domain.repository.UsernameRepository
+import com.example.graduationproject.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -40,5 +40,5 @@ interface RepositoryBindModule {
     fun bindSessionRepository(sessionRepositoryImpl: SessionRepositoryImpl): SessionRepository
 
     @Binds
-    fun bindUsernameRepository(usernameRepositoryImpl: UsernameRepositoryImpl): UsernameRepository
+    fun bindUsernameRepository(usernameRepositoryImpl: UserRepositoryImpl): UserRepository
 }

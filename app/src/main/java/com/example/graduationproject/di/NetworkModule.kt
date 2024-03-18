@@ -14,7 +14,7 @@ import com.example.graduationproject.data.remote.api.service.GroupChallengeApiSe
 import com.example.graduationproject.data.remote.api.service.UserAwardApiService
 import com.example.graduationproject.data.remote.api.service.UserCompetitionApiService
 import com.example.graduationproject.data.remote.api.service.UserGroupApiService
-import com.example.graduationproject.data.remote.api.service.UsernameApiService
+import com.example.graduationproject.data.remote.api.service.UserApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -103,7 +103,7 @@ object NetworkModule {
         retrofit.create(AuthApiService::class.java)
 
     @Provides
-    fun provideUsernameService(retrofit: Retrofit): UsernameApiService =
-        retrofit.create(UsernameApiService::class.java)
+    fun provideUsernameService(retrofit: Retrofit): UserApiService =
+        retrofit.create(UserApiService::class.java)
 
 }
