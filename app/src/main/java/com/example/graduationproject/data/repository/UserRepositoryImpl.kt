@@ -19,4 +19,17 @@ class UserRepositoryImpl @Inject constructor(private val userApiService: UserApi
             )
         }
     }
+
+    override suspend fun fetchUsersByIdentity(userIdentityQuery: String): List<UserProfile> {
+        val query = "email=\'$userIdentityQuery\'"
+        val response = userApiService.fetchUsersByIdentity(query)
+        return response.map { userResponse ->
+            UserProfile(
+                userId = userResponse.userId,
+                username = userResponse.username,
+                userIdentity = userResponse.userIdentity,
+                userAvatarPath = userResponse.userAvatarPath
+            )
+        }
+    }
 }

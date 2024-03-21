@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/signUpViewContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -59,7 +60,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
-        android:text="@string/sign_up_invalid_user_identity"
+        tools:text="@string/sign_up_invalid_user_identity"
         android:visibility="gone"/>
 
     <EditText
@@ -82,7 +83,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
-        android:text="@string/create_username_dialog_invalid_username"
+        tools:text="@string/create_username_dialog_invalid_username"
         android:visibility="gone"/>
 
     <EditText
@@ -130,7 +131,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="8dp"
-        android:text="@string/sign_up_invalid_password"
+        tools:text="@string/sign_up_invalid_password"
         android:visibility="gone"/>
 
 

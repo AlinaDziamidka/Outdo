@@ -5,66 +5,48 @@ import com.example.graduationproject.domain.entity.Session
 import com.example.graduationproject.domain.repository.SessionRepository
 import com.example.graduationproject.domain.repository.UserRepository
 import com.example.graduationproject.domain.util.Event
+import com.example.graduationproject.domain.util.EventDomain
 import com.example.graduationproject.domain.util.UseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
+typealias SignUpUseCaseEvent = EventDomain<Session, SignUpUseCase.SignUpFailure>
+
 class SignUpUseCase @Inject constructor(
     private val sessionRepository: SessionRepository,
     private val userRepository: UserRepository
 ) :
-    UseCase<SignUpUseCase.Params, Session> {
+    UseCase<SignUpUseCase.Params, SignUpUseCaseEvent> {
 
     data class Params(
         val userIdentity: String,
         val password: String,
-        val username: String
+        val username: String,
+        val confirmPassword: String
     )
 
+    sealed class SignUpFailure {
+        data object UsernameExistFailure : SignUpFailure()
+        data object UserIdentityExistFailure : SignUpFailure()
+        data object UserIdentityFailure : SignUpFailure()
+        data object PasswordFailure : SignUpFailure()
+        data object ConfirmPasswordFailure : SignUpFailure()
 
-    private fun passwordConditions(password: String): Boolean {
-        val digitRegex = Regex("\\d")
-        val lowerCaseRegex = Regex("[a-z]")
-        val upperCaseRegex = Regex("[A-Z]")
+        data object EmptyUsernameFailure : SignUpFailure()
+        data object EmptyIdentityFailure : SignUpFailure()
 
-        return password.length >= 8 &&
-                digitRegex.containsMatchIn(password) &&
-                lowerCaseRegex.containsMatchIn(password) &&
-                upperCaseRegex.containsMatchIn(password)
+        data object EmptyConfirmPasswordFailure : SignUpFailure()
     }
 
-    private suspend fun handleException(
-        userIdentity: String,
-        password: String,
-        username: String
-    ): SignUpException {
-        return try {
-            val usernameResponse = userRepository.fetchUsersByUsername(username)
-            if (username !in usernameResponse.map { it.username }) {
-                SignUpException.UsernameException
-            } else
-                if (userIdentity.isEmpty()) {
-                SignUpException.UserIdentityException
-            } else if (!passwordConditions(password)) {
-                SignUpException.PasswordException
-            } else {
-                SignUpException.NoException
-            }
-        } catch (e: Exception) {
-            throw e
-        }
-    }
-
-    override suspend operator fun invoke(params: Params): Flow<Session> = flow {
+    override suspend operator fun invoke(params: Params): Flow<SignUpUseCaseEvent> = flow {
         val userIdentity = params.userIdentity
         val password = params.password
         val username = params.username
 
-        try {
-            val signUpException = handleException(userIdentity, password, username)
-            Log.d("signUp", "SignUpException: $signUpException")
-            if (signUpException == SignUpException.NoException) {
+        when (val error = validate(params)) {
+            is SignUpFailure -> emit(EventDomain.Failure(error))
+            null -> {
                 val event = sessionRepository.signUp(
                     userIdentity = userIdentity,
                     password = password,
@@ -76,7 +58,7 @@ class SignUpUseCase @Inject constructor(
                         val session = event.data
                         sessionRepository.saveToken(session.token)
                         sessionRepository.saveUserProfile(session.userProfile)
-                        emit(session)
+                        emit(EventDomain.Success(session))
                     }
 
                     is Event.Failure -> {
@@ -84,22 +66,46 @@ class SignUpUseCase @Inject constructor(
                         throw Exception(event.exception)
                     }
                 }
-            } else {
-                Log.d("signUp", "SignUpException is not NoException: $signUpException")
-               throw signUpException
             }
-        } catch (e: Exception) {
-            Log.e("signUp", "Error in signUpUseCase: ${e.message}", e)
-            throw e
         }
     }
 
+    private suspend fun validate(params: Params): SignUpFailure? {
+        val username = params.username
+        val usernameResponse = userRepository.fetchUsersByUsername(username)
 
-    sealed class SignUpException : Exception() {
-        data object UsernameException : SignUpException()
-        data object UserIdentityException : SignUpException()
-        data object PasswordException : SignUpException()
-        data object NoException : SignUpException()
+        val userIdentity = params.userIdentity
+        val identityResponse = userRepository.fetchUsersByIdentity(userIdentity)
+
+        return when {
+            usernameResponse.isNotEmpty() -> SignUpFailure.UsernameExistFailure
+            params.userIdentity.isEmpty() -> SignUpFailure.EmptyIdentityFailure
+            identityResponse.isNotEmpty() -> SignUpFailure.UserIdentityExistFailure
+            !isValidEmail(params.userIdentity) -> SignUpFailure.UserIdentityFailure
+            params.confirmPassword.isEmpty() -> SignUpFailure.EmptyConfirmPasswordFailure
+            !isValidPassword(params.password) -> SignUpFailure.PasswordFailure
+            params.username.isEmpty() -> SignUpFailure.EmptyUsernameFailure
+            params.password != params.confirmPassword -> SignUpFailure.ConfirmPasswordFailure
+            else -> null
+        }
     }
+
+    private fun isValidPassword(password: String): Boolean {
+        val digitRegex = Regex("\\d")
+        val lowerCaseRegex = Regex("[a-z]")
+        val upperCaseRegex = Regex("[A-Z]")
+
+        return password.length >= 8 &&
+                digitRegex.containsMatchIn(password) &&
+                lowerCaseRegex.containsMatchIn(password) &&
+                upperCaseRegex.containsMatchIn(password)
+    }
+
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
+        return emailRegex.matches(email)
+    }
+
+
 }
 

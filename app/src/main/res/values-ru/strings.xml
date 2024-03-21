@@ -32,7 +32,9 @@
     <string name="sign_up_create_password_hint">Введите пароль</string>
     <string name="sign_up_confirm_the_password_hint">Подтвердите пароль</string>
     <string name="sign_in_invalid_username_or_password">Неверный логин или пароль</string>
-    <string name="sign_up_invalid_user_identity">Неверные данные для входа</string>
+    <string name="sign_up_invalid_user_identity">Неверный формат данных для входа</string>
+    <string name="sign_up_exist_user_identity">Такой пользователь уже существует</string>
+    <string name="sign_up_empty_field">Заполните поле</string>
     <string name="sign_up_sign_up_action">Зарегистрироваться</string>
     <string name="create_username_dialog_username_hint">Логин</string>
     <string name="create_username_dialog_confirm_action">Подтвердить</string>
@@ -50,6 +52,4 @@
     <string name="group_screen_upload_action">Загрузить</string>
     <string name="group_screen_participants_title">Участники</string>
     <string name="group_screen_add_friends_to_group">Добавить друзей</string>
-
-
 </resources>

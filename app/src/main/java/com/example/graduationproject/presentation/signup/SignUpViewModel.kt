@@ -1,10 +1,12 @@
 package com.example.graduationproject.presentation.signup
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.graduationproject.domain.usecase.SignInUseCase
 import com.example.graduationproject.domain.usecase.SignUpUseCase
+import com.example.graduationproject.domain.util.EventDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,22 +29,37 @@ class SignUpViewModel @Inject constructor(
     private val _viewState = MutableStateFlow<SignUpViewState>(SignUpViewState.Idle)
     val viewState = _viewState.asStateFlow()
 
-    private val _signUpException = MutableSharedFlow<SignUpUseCase.SignUpException?>()
-    val signUpException: SharedFlow<SignUpUseCase.SignUpException?> = _signUpException.asSharedFlow()
+    private val _signUpFailure = MutableSharedFlow<SignUpUseCase.SignUpFailure?>()
+    val signUpFailure: SharedFlow<SignUpUseCase.SignUpFailure?> = _signUpFailure.asSharedFlow()
 
-    fun onSignUpButtonClicked(identityValue: String, password: String, username: String) {
+    fun onSignUpButtonClicked(identityValue: String, password: String, username: String, confirmPassword: String) {
         viewModelScope.launch {
-            signUpUseCase(SignUpUseCase.Params(identityValue, password, username))
+            signUpUseCase(SignUpUseCase.Params(identityValue, password, username, confirmPassword))
                 .onStart { _viewState.value = SignUpViewState.Loading }
                 .catch { exception ->
-                    _signUpException.emit(exception as? SignUpUseCase.SignUpException)
-                    _viewState.value = SignUpViewState.Failure("Something went wrong.")
+
+                    Log.d("SignUpViewModel", "Exception $exception")
+                    // TODO: you need to decide which text you want to show or change it in use case
+                    _viewState.value = SignUpViewState.Failure(
+                        exception.localizedMessage ?: "Something went wrong"
+                    )
                 }
-                .collect { _ ->
-                    signIn(identityValue, password)
+                .collect { event ->
+                    Log.d("SignUpViewModel", "Event: $event")
+                    when (event) {
+                        is EventDomain.Success -> {
+                            signIn(identityValue, password)
+                        }
+
+                        is EventDomain.Failure -> {
+                            _viewState.value = SignUpViewState.Failure("Something went wrong")
+                            _signUpFailure.emit(event.failure)
+                        }
+                    }
                 }
         }
     }
+
 
     private suspend fun signIn(identityValue: String, password: String) {
         viewModelScope.launch {
@@ -54,6 +71,7 @@ class SignUpViewModel @Inject constructor(
                 }
                 .collect { _ ->
                     _viewState.value = SignUpViewState.Success
+                    Log.d("SignUpViewModel", "SignIn $viewState.value")
                 }
         }
     }

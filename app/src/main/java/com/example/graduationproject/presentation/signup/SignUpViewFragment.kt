@@ -2,11 +2,13 @@ package com.example.graduationproject.presentation.signup
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,6 +35,11 @@ class SignUpViewFragment : Fragment() {
     private lateinit var userConfirmPassword: EditText
     private lateinit var signUpAction: Button
 
+    private lateinit var usernameErrorNotification: TextView
+    private lateinit var userIdentityErrorNotification: TextView
+    private lateinit var passwordErrorNotification: TextView
+    private lateinit var confirmPasswordErrorNotification: TextView
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
     }
@@ -53,16 +60,7 @@ class SignUpViewFragment : Fragment() {
         initViews()
         setUpViews()
         observeEvents()
-//        observeSignUpException()
     }
-
-//    private fun observeSignUpException() {
-//        lifecycleScope.launch {
-//            viewModel.signUpException.collect { signUpException ->
-//                signUpException?.let { handleSignUpException(signUpException) }
-//            }
-//        }
-//    }
 
     private fun initViews() {
         signUpAction = binding.signUpContainer.signUpAction
@@ -70,40 +68,71 @@ class SignUpViewFragment : Fragment() {
         username = binding.signUpContainer.userNameContent
         userPassword = binding.signUpContainer.createPasswordContent
         userConfirmPassword = binding.signUpContainer.confirmPasswordContent
+
+        initErrorViews()
+    }
+
+    private fun initErrorViews() {
+        usernameErrorNotification = binding.signUpContainer.invalidUsernameView
+        userIdentityErrorNotification = binding.signUpContainer.invalidUserIdentityView
+        passwordErrorNotification = binding.signUpContainer.passwordRequirementsView
+        confirmPasswordErrorNotification = binding.signUpContainer.invalidPasswordView
     }
 
     private fun setUpViews() {
         signUpAction.setOnClickListener {
-//            if (userPassword.text.toString() !== userConfirmPassword.text.toString()) {
-//                showConfirmPasswordFailure()
-//            }
+            clearErrorNotifications()
+
             viewModel.onSignUpButtonClicked(
                 identityValue = userIdentity.text.toString(),
                 password = userPassword.text.toString(),
-                username = username.text.toString()
+                username = username.text.toString(),
+                confirmPassword = userConfirmPassword.text.toString()
             )
         }
+    }
+
+    private fun clearErrorNotifications() {
+        usernameErrorNotification.visibility = View.GONE
+        userIdentityErrorNotification.visibility = View.GONE
+        confirmPasswordErrorNotification.visibility = View.GONE
+        passwordErrorNotification.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.black_text_color
+            )
+        )
     }
 
     private fun observeEvents() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                Log.d("SignUpViewFragment", "start handling exception")
+                viewModel.signUpFailure.collect { failure ->
+                    failure?.let { handleSignUpFailure(failure) }
+                    Log.d("SignUpViewFragment", "end handling exception")
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                Log.d("SignUpViewFragment", "startVM")
                 viewModel.viewState.collect {
                     when (it) {
                         is SignUpViewState.Success -> {
+                            Log.d("SignUpViewFragment", "success")
                             moveToHomeScreen()
                         }
 
                         is SignUpViewState.Loading -> {
+                            Log.d("SignUpViewFragment", "loading")
                             signUpAction.isEnabled = false
                         }
 
                         is SignUpViewState.Failure -> {
+                            Log.d("SignUpViewFragment", "failure")
                             signUpAction.isEnabled = true
-
-                            viewModel.signUpException.collect { signUpException ->
-                                signUpException?.let { handleSignUpException(signUpException) }
-                            }
                         }
 
                         is SignUpViewState.Idle -> {}
@@ -113,31 +142,60 @@ class SignUpViewFragment : Fragment() {
         }
     }
 
-    private fun showConfirmPasswordFailure() {
-        binding.signUpContainer.invalidPasswordView.visibility = View.VISIBLE
-    }
 
-    private fun handleSignUpException(exception: SignUpUseCase.SignUpException) {
-        when (exception) {
-            is SignUpUseCase.SignUpException.UsernameException -> {
-                showUsernameFailure()
+    private fun handleSignUpFailure(failure: SignUpUseCase.SignUpFailure) {
+        when (failure) {
+            is SignUpUseCase.SignUpFailure.UsernameExistFailure -> {
+                showUsernameExistFailure()
             }
 
-            is SignUpUseCase.SignUpException.UserIdentityException -> {
+            is SignUpUseCase.SignUpFailure.UserIdentityExistFailure -> {
+                showUserIdentityExistFailure()
+            }
+
+            is SignUpUseCase.SignUpFailure.UserIdentityFailure -> {
                 showUserIdentityFailure()
             }
 
-            is SignUpUseCase.SignUpException.PasswordException -> {
+            is SignUpUseCase.SignUpFailure.PasswordFailure -> {
                 showPasswordFailure()
             }
 
-            else -> {
+            is SignUpUseCase.SignUpFailure.ConfirmPasswordFailure -> {
+                showConfirmPasswordFailure()
+            }
+
+            is SignUpUseCase.SignUpFailure.EmptyUsernameFailure -> {
+                showEmptyUsernameFailure()
+            }
+
+            is SignUpUseCase.SignUpFailure.EmptyIdentityFailure -> {
+                showEmptyIdentityFailure()
+            }
+
+            is SignUpUseCase.SignUpFailure.EmptyConfirmPasswordFailure -> {
+                showEmptyConfirmPasswordFailure()
             }
         }
     }
 
+    private fun showUsernameExistFailure() {
+        usernameErrorNotification.setText(R.string.create_username_dialog_invalid_username)
+        usernameErrorNotification.visibility = View.VISIBLE
+    }
+
+    private fun showUserIdentityExistFailure() {
+        userIdentityErrorNotification.setText(R.string.sign_up_exist_user_identity)
+        userIdentityErrorNotification.visibility = View.VISIBLE
+    }
+
+    private fun showUserIdentityFailure() {
+        userIdentityErrorNotification.setText(R.string.sign_up_invalid_user_identity)
+        userIdentityErrorNotification.visibility = View.VISIBLE
+    }
+
     private fun showPasswordFailure() {
-        binding.signUpContainer.passwordRequirementsView.setTextColor(
+        passwordErrorNotification.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.error_text_color_red
@@ -145,13 +203,26 @@ class SignUpViewFragment : Fragment() {
         )
     }
 
-    private fun showUserIdentityFailure() {
-        binding.signUpContainer.invalidUserIdentityView.visibility = View.VISIBLE
+    private fun showConfirmPasswordFailure() {
+        confirmPasswordErrorNotification.setText(R.string.sign_up_invalid_password)
+        confirmPasswordErrorNotification.visibility = View.VISIBLE
     }
 
-    private fun showUsernameFailure() {
-        binding.signUpContainer.invalidUsernameView.visibility = View.VISIBLE
+    private fun showEmptyUsernameFailure() {
+        usernameErrorNotification.setText(R.string.sign_up_empty_field)
+        usernameErrorNotification.visibility = View.VISIBLE
     }
+
+    private fun showEmptyIdentityFailure() {
+        userIdentityErrorNotification.setText(R.string.sign_up_empty_field)
+        userIdentityErrorNotification.visibility = View.VISIBLE
+    }
+
+    private fun showEmptyConfirmPasswordFailure() {
+        confirmPasswordErrorNotification.setText(R.string.sign_up_empty_field)
+        confirmPasswordErrorNotification.visibility = View.VISIBLE
+    }
+
 
     private fun moveToHomeScreen() {
         val action = SignUpViewFragmentDirections.actionSignUpViewFragmentToHomeActivity()
