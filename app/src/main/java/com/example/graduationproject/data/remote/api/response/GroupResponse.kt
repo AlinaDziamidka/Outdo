@@ -1,8 +1,14 @@
 package com.example.graduationproject.data.remote.api.response
 
+import com.google.gson.annotations.SerializedName
+
 data class GroupResponse (
-    val groupId: Long,
+    @SerializedName("objectId")
+    val groupId: String,
+    @SerializedName("name")
     val groupName: String,
-    val creatorId: Long,
+    @SerializedName("creatorId")
+    val creatorId: String,
+    @SerializedName("avatar")
     val groupAvatarPath: String
 )

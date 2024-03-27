@@ -1,10 +1,8 @@
 package com.example.graduationproject.domain.usecase
 
-import com.example.graduationproject.data.repository.GroupRepositoryImpl
-import com.example.graduationproject.data.repository.UserGroupRepositoryImpl
 import com.example.graduationproject.domain.entity.Group
-import com.example.graduationproject.domain.repository.GroupRepository
-import com.example.graduationproject.domain.repository.UserGroupRepository
+import com.example.graduationproject.domain.repository.remote.GroupRepository
+import com.example.graduationproject.domain.repository.remote.UserGroupRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow

@@ -13,13 +13,13 @@ interface UserDao {
     fun fetchAll(): List<UserModel>
 
     @Query("SELECT * FROM user WHERE user_id = :userId LIMIT 1")
-    fun fetchById(userId: Long): UserModel
+    fun fetchById(userId: String): UserModel
 
     @Insert
     fun insertOne(userModel: UserModel)
 
     @Query("DELETE FROM user WHERE user_id = :userId")
-    fun deleteById(userId: Long)
+    fun deleteById(userId: String)
 
     @Update
     fun updateOne(userModel: UserModel)

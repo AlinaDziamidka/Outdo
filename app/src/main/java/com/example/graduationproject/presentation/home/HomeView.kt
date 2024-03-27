@@ -3,6 +3,7 @@ package com.example.graduationproject.presentation.home
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.Navigator
 import androidx.navigation.fragment.NavHostFragment
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.ActivityHomeBinding
@@ -20,9 +21,11 @@ class HomeView : AppCompatActivity() {
         setBottomNavigation()
     }
 
+
     private fun createNavController() {
         val navHostFragment = setUpNavHostFragment()
         navController = navHostFragment.navController
+        navController.setGraph(R.navigation.nav_graph_home, intent.extras)
     }
 
     private fun setContent() {

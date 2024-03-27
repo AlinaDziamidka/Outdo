@@ -2,6 +2,7 @@ package com.example.graduationproject.presentation.signin
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,7 +96,9 @@ class SignInViewFragment : Fragment() {
     }
 
     private fun moveToHomeScreen() {
-        val action = SignInViewFragmentDirections.actionSignInViewFragmentToHomeActivity()
+        val sharedPreferences = requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("current_username", "  ")?:"  "
+        val action = SignInViewFragmentDirections.actionSignInViewFragmentToHomeActivity(username)
         findNavController().navigate(action)
     }
 
@@ -113,6 +116,4 @@ class SignInViewFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
     }
-
-
 }

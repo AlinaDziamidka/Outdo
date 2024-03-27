@@ -2,8 +2,8 @@ package com.example.graduationproject.domain.usecase
 
 import android.util.Log
 import com.example.graduationproject.domain.entity.Session
-import com.example.graduationproject.domain.repository.SessionRepository
-import com.example.graduationproject.domain.repository.UserRepository
+import com.example.graduationproject.domain.repository.remote.SessionRepository
+import com.example.graduationproject.domain.repository.remote.UserRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.EventDomain
 import com.example.graduationproject.domain.util.UseCase

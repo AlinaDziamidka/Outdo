@@ -27,7 +27,7 @@
                 android:text="@string/home_hello_title" />
 
             <TextView
-                android:id="@+id/userNicNameView"
+                android:id="@+id/userNameView"
                 style="@style/welcome_text"
                 tools:text="Pandochka!"
                 android:layout_width="wrap_content"

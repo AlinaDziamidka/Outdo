@@ -225,7 +225,7 @@ class SignUpViewFragment : Fragment() {
 
 
     private fun moveToHomeScreen() {
-        val action = SignUpViewFragmentDirections.actionSignUpViewFragmentToHomeActivity()
+        val action = SignUpViewFragmentDirections.actionSignUpViewFragmentToHomeActivity(username.toString())
         findNavController().navigate(action)
     }
 

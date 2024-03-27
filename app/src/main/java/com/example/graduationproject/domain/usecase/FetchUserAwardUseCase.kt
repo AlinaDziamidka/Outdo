@@ -1,10 +1,8 @@
 package com.example.graduationproject.domain.usecase
 
-import com.example.graduationproject.data.repository.AwardRepositoryImpl
-import com.example.graduationproject.data.repository.UserAwardRepositoryImpl
 import com.example.graduationproject.domain.entity.Award
-import com.example.graduationproject.domain.repository.AwardRepository
-import com.example.graduationproject.domain.repository.UserAwardRepository
+import com.example.graduationproject.domain.repository.remote.AwardRepository
+import com.example.graduationproject.domain.repository.remote.UserAwardRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow

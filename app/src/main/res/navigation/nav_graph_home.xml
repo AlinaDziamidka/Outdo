@@ -7,5 +7,18 @@
     <fragment
         android:id="@+id/homeViewFragment"
         android:name="com.example.graduationproject.presentation.home.HomeViewFragment"
-        android:label="HomeViewFragment" />
+        android:label="HomeViewFragment">
+
+    <argument
+        android:name= "username"
+        app:argType="string" />
+        <action
+            android:id="@+id/action_homeViewFragment_to_challengeDetailsView"
+            app:destination="@id/challengeDetailsView" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/challengeDetailsView"
+        android:name="com.example.graduationproject.presentation.challengedetails.ChallengeDetailsView"
+        android:label="ChallengeDetailsView" />
 </navigation>

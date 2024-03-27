@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.graduationproject.App
-import com.example.graduationproject.data.repository.SessionRepositoryImpl
+import com.example.graduationproject.data.remote.repository.SessionRepositoryImpl
 import com.example.graduationproject.domain.usecase.SignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
