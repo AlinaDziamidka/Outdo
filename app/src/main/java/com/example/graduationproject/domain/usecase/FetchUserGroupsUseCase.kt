@@ -13,17 +13,17 @@ class FetchUserGroupsUseCase(
     private val userGroupRepository: UserGroupRepository
 ) {
 
-    suspend operator fun invoke(userId: Long): Flow<List<Group>> {
-        val userGroups = userGroupRepository.fetchAllGroupsByUserId(userId)
-        return userGroups.flatMapConcat { userGroup ->
-            flow {
-                val groups = mutableListOf<Group>()
-                for (group in userGroup) {
-                    val fetchedGroup = groupRepository.fetchUserGroup(group.groupId)
-                    groups.add(fetchedGroup)
-                }
-                emit(groups)
-            }
-        }
-    }
+//    suspend operator fun invoke(userId: String): Flow<List<Group>> {
+//        val userGroups = userGroupRepository.fetchAllGroupsByUserId(userId)
+//        return userGroups.flatMapConcat { userGroup ->
+//            flow {
+//                val groups = mutableListOf<Group>()
+//                for (group in userGroup) {
+//                    val fetchedGroup = groupRepository.fetchUserGroup(group.groupId)
+//                    groups.add(fetchedGroup)
+//                }
+//                emit(groups)
+//            }
+//        }
+//    }
 }

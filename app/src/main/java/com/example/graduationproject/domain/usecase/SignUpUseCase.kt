@@ -62,7 +62,6 @@ class SignUpUseCase @Inject constructor(
                     }
 
                     is Event.Failure -> {
-                        Log.d("signUp", "Failure event: ${event.exception}")
                         throw Exception(event.exception)
                     }
                 }

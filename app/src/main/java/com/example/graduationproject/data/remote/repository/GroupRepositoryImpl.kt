@@ -12,12 +12,10 @@ import kotlinx.coroutines.flow.map
 
 class GroupRepositoryImpl(private val groupApiService: GroupApiService) : GroupRepository {
 
-    override suspend fun fetchGroupsByGroupId(groupIdQuery: String): Flow<List<Group>> = flow {
+    override suspend fun fetchGroupsByGroupId(groupIdQuery: String): List<Group> {
         val query = "objectId=\'$groupIdQuery\'"
         val response = groupApiService.fetchGroupsByGroupId(query)
-        emit(response)
-    }.map { responses ->
-        responses.map { groupResponse ->
+        return response.map { groupResponse ->
             val groupTransformer = GroupTransformer()
             groupTransformer.fromResponse(groupResponse)
         }

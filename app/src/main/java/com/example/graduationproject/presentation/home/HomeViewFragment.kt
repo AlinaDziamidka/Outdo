@@ -14,21 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentHomeBinding
 import com.example.graduationproject.presentation.home.adapter.ChallengesAdapter
-import com.example.graduationproject.presentation.signup.SignUpViewFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class HomeViewFragment : Fragment() {
 
-//    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     val args by navArgs<HomeViewArgs>()
     private lateinit var adapter: ChallengesAdapter
     private lateinit var challengeView: RecyclerView
-
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -76,7 +73,5 @@ class HomeViewFragment : Fragment() {
     private fun initViews() {
         val username = args.username
         binding.userNameView.setText(username)
-
-
     }
 }

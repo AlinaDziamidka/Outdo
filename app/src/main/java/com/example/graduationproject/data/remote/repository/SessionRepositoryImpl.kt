@@ -1,8 +1,5 @@
 package com.example.graduationproject.data.remote.repository
 
-import android.util.Log
-import com.example.cartrader.data.api.util.doCall
-
 import com.example.graduationproject.data.remote.api.request.SignInRequest
 import com.example.graduationproject.data.remote.api.request.SignUpRequest
 import com.example.graduationproject.data.remote.api.service.AuthApiService
@@ -11,6 +8,7 @@ import com.example.graduationproject.domain.entity.Session
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.util.Event
+import doCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -20,12 +18,10 @@ class SessionRepositoryImpl @Inject constructor (
     private val authApiService: AuthApiService,
 ) : SessionRepository {
     override suspend fun signIn(userIdentity: String, password: String): Event<Session> {
-        Log.d("SessionRepositoryImpl", "Signing in with user identity: $userIdentity")
         val event = doCall {
             val request = SignInRequest(userIdentity, password)
             return@doCall authApiService.signIn(request)
         }
-        Log.d("SessionRepositoryImpl", "Sign in event: $event")
 
         return when (event) {
             is Event.Success -> {
@@ -39,7 +35,6 @@ class SessionRepositoryImpl @Inject constructor (
                         userAvatarPath = response.userAvatarPath
                     )
                 )
-                Log.d("SessionRepository", "SignIn success: $session")
                 Event.Success(session)
             }
 
@@ -70,13 +65,11 @@ class SessionRepositoryImpl @Inject constructor (
                         userAvatarPath = ""
                     )
                 )
-                Log.d("SessionRepository", "SignIn success: $session")
                 Event.Success(session)
             }
 
             is Event.Failure -> {
                 val error = event.exception
-                Log.e("SessionRepository", "SignIn failure: ${error.toString()}")
                 Event.Failure(error)
             }
         }

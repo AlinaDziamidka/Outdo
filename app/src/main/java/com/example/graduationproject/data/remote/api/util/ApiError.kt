@@ -1,4 +1,4 @@
-package com.example.cartrader.data.api.util
+
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName

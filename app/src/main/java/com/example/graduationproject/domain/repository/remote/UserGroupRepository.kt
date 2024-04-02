@@ -1,8 +1,8 @@
 package com.example.graduationproject.domain.repository.remote
 
 import com.example.graduationproject.domain.entity.UserGroup
-import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 
 interface UserGroupRepository {
-    suspend fun fetchAllGroupsByUserId(userIdQuery: String): Flow<List<UserGroup>>
+    suspend fun fetchAllGroupsByUserId(userIdQuery: String): Response<List<UserGroup>>
 }

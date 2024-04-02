@@ -1,8 +1,8 @@
 package com.example.graduationproject.domain.entity
 
 data class Group(
-    val groupId: Long,
+    val groupId: String,
     val groupName: String,
-    val creatorId: Long,
+    val creatorId: String,
     val groupAvatarPath: String
 )

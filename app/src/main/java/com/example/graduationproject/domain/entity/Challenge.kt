@@ -1,8 +1,8 @@
 package com.example.graduationproject.domain.entity
 
 data class Challenge(
-    val challengeId: Long,
+    val challengeId: String,
     val challengeName: String,
-    val categoryId: Long,
+    val categoryId: String,
     val challengeType: String
 )

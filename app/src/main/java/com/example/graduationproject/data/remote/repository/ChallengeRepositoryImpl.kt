@@ -11,15 +11,12 @@ import kotlinx.coroutines.flow.map
 class ChallengeRepositoryImpl(private val challengeApiService: ChallengeApiService) :
     ChallengeRepository {
 
-    override suspend fun fetchChallengesById(challengeIdQuery: String): Flow<List<Challenge>> =
-        flow {
-            val query = "objectId=\'$challengeIdQuery\'"
-            val response = challengeApiService.fetchChallengesById(query)
-            emit(response)
-        }.map { responses ->
-            responses.map { challengeResponse ->
-                val challengeTransformer = ChallengeTransformer()
-                challengeTransformer.fromResponse(challengeResponse)
-            }
+    override suspend fun fetchChallengesById(challengeIdQuery: String): List<Challenge> {
+        val query = "objectId=\'$challengeIdQuery\'"
+        val response = challengeApiService.fetchChallengesById(query)
+        return response.map { challengeResponse ->
+            val challengeTransformer = ChallengeTransformer()
+            challengeTransformer.fromResponse(challengeResponse)
         }
+    }
 }
