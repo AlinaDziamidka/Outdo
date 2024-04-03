@@ -107,31 +107,25 @@ class SignUpViewFragment : Fragment() {
     private fun observeEvents() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d("SignUpViewFragment", "start handling exception")
                 viewModel.signUpFailure.collect { failure ->
                     failure?.let { handleSignUpFailure(failure) }
-                    Log.d("SignUpViewFragment", "end handling exception")
                 }
             }
         }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                Log.d("SignUpViewFragment", "startVM")
                 viewModel.viewState.collect {
                     when (it) {
                         is SignUpViewState.Success -> {
-                            Log.d("SignUpViewFragment", "success")
                             moveToHomeScreen()
                         }
 
                         is SignUpViewState.Loading -> {
-                            Log.d("SignUpViewFragment", "loading")
                             signUpAction.isEnabled = false
                         }
 
                         is SignUpViewState.Failure -> {
-                            Log.d("SignUpViewFragment", "failure")
                             signUpAction.isEnabled = true
                         }
 

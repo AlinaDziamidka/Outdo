@@ -5,6 +5,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +27,8 @@ class HomeViewModel @Inject constructor(
     private val _viewState = MutableStateFlow<HomeViewState>(HomeViewState.Idle)
     val viewState = _viewState.asStateFlow()
 
-    private val _challenges = MutableStateFlow<List<Challenge>>(emptyList())
-    val challenges: StateFlow<List<Challenge>> get() = _challenges
+    private val _challenges = MutableStateFlow<List<GroupAndChallenges>>(emptyList())
+    val challenges: StateFlow<List<GroupAndChallenges>> get() = _challenges
 
     fun setUpUserGroups(userId: String) {
         viewModelScope.launch {
