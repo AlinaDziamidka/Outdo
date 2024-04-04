@@ -7,7 +7,9 @@ import androidx.navigation.Navigator
 import androidx.navigation.fragment.NavHostFragment
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.ActivityHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeView : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding

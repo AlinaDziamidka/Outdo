@@ -1,9 +1,9 @@
 package com.example.graduationproject.presentation.home
 
-sealed interface HomeViewState {
+sealed interface HomeViewState <out T> {
 
-    data object Success : HomeViewState
-    data class Failure(val message: String) : HomeViewState
-    data object Loading : HomeViewState
-    data object Idle : HomeViewState
+    data class Success<T> (val data: T) : HomeViewState<T>
+    data class Failure(val message: String) : HomeViewState<Nothing>
+    data object Loading : HomeViewState<Nothing>
 }
+

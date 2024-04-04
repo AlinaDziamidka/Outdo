@@ -8,7 +8,8 @@ class ChallengeTransformer {
         return Challenge(
             challengeId = response.challengeId,
             challengeName = response.challengeName,
-            categoryId = response.categoryId
+            categoryId = response.categoryId,
+            challengeType = response.challengeType
         )
     }
 }

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentHomeBinding
+import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.Group
+import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.presentation.home.adapter.ChallengesAdapter
 import com.example.graduationproject.presentation.signin.SignInViewState
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +35,7 @@ class HomeViewFragment : Fragment() {
     val args by navArgs<HomeViewArgs>()
     private lateinit var adapter: ChallengesAdapter
     private lateinit var challengeView: RecyclerView
+    private lateinit var progressView: ProgressBar
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -48,10 +53,6 @@ class HomeViewFragment : Fragment() {
     ): View? {
         super.onCreate(savedInstanceState)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        initAdapter()
-        binding.challengeRecyclerView.adapter = adapter
-
         return binding.root
     }
 
@@ -61,6 +62,7 @@ class HomeViewFragment : Fragment() {
         adapter = ChallengesAdapter(mutableListOf()) { challenge ->
             moveToChallengeDetailsScreen()
         }
+        challengeView.adapter = adapter
     }
 
     private fun moveToChallengeDetailsScreen() {
@@ -73,16 +75,26 @@ class HomeViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
+        initAdapter()
+        setUserName()
         setUpChallenges()
+        observeChallenges()
     }
 
     private fun setUpChallenges() {
-        val sharedPreferences = requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("current_id", "  ")?:"  "
+        val sharedPreferences =
+            requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
+        Log.d("HomeViewFragment", "User ID: $userId")
         viewModel.setUpUserGroups(userId)
     }
 
     private fun initViews() {
+        progressView = binding.progressView
+        challengeView = binding.challengeRecyclerView
+    }
+
+    private fun setUserName() {
         val username = args.username
         binding.userNameView.setText(username)
     }
@@ -94,26 +106,40 @@ class HomeViewFragment : Fragment() {
                 viewModel.viewState.collect {
                     when (it) {
                         is HomeViewState.Success -> {
-
+                            val groupAndChallengesPairs = transformToGroupAndChallengesPair(it.data)
+                            Log.d("HomeViewFragment", "Success: $groupAndChallengesPairs")
+                            handleOnSuccess(groupAndChallengesPairs)
                         }
 
                         is HomeViewState.Loading -> {
-
+                            Log.d("HomeViewFragment", "Loading")
+                            progressView.visibility = View.VISIBLE
+                            challengeView.visibility = View.GONE
                         }
 
                         is HomeViewState.Failure -> {
-
+                            Log.d("HomeViewFragment", "Failure: ${it.message}")
                         }
-
-                        is HomeViewState.Idle -> {}
                     }
                 }
             }
         }
     }
 
-    private fun handleOnSuccess(data: Any) {
+    private fun transformToGroupAndChallengesPair(groupAndChallengesList: List<GroupAndChallenges>): MutableList<Pair<Group, Challenge>> {
+        val groupAndChallengesPairs = mutableListOf<Pair<Group, Challenge>>()
+        groupAndChallengesList.flatMapTo(groupAndChallengesPairs) { groupAndChallenges ->
+            groupAndChallenges.challenges.map {
+                Pair(groupAndChallenges.group, it)
+            }
+        }
+        return groupAndChallengesPairs
+    }
 
+    private fun handleOnSuccess(groupAndChallenges: MutableList<Pair<Group, Challenge>>) {
+        progressView.visibility = View.GONE
+        adapter.setGroupAndChallenges(groupAndChallenges)
+        challengeView.visibility = View.VISIBLE
     }
 
 

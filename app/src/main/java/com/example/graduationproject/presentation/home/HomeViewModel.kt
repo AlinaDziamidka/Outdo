@@ -1,17 +1,15 @@
 package com.example.graduationproject.presentation.home
 
 import android.app.Application
+import android.util.Log
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -24,24 +22,24 @@ class HomeViewModel @Inject constructor(
 ) :
     AndroidViewModel(context) {
 
-    private val _viewState = MutableStateFlow<HomeViewState>(HomeViewState.Idle)
-    val viewState = _viewState.asStateFlow()
-
-    private val _challenges = MutableStateFlow<List<GroupAndChallenges>>(emptyList())
-    val challenges: StateFlow<List<GroupAndChallenges>> get() = _challenges
-
+    private val _viewState =
+        MutableStateFlow<HomeViewState<List<GroupAndChallenges>>>(HomeViewState.Loading)
+    val viewState: StateFlow<HomeViewState<List<GroupAndChallenges>>> = _viewState
     fun setUpUserGroups(userId: String) {
         viewModelScope.launch {
+            Log.d("HomeViewModel", "setUpUserGroups: starting request for userId: $userId")
             fetchUserGroupChallengesUseCase(FetchUserGroupChallengesUseCase.Params(userId))
                 .onStart {
+                    Log.d("HomeViewModel", "setUpUserGroups: fetching data started")
                     _viewState.value = HomeViewState.Loading
                 }.catch {
+                    Log.e("HomeViewModel", "setUpUserGroups: error occurred: ${it.message}")
                     _viewState.value =
                         HomeViewState.Failure(it.message ?: "Something went wrong.")
-                }.collect { challenges ->
-                    _viewState.value = HomeViewState.Success
-                    _challenges.value = challenges
+                }.collect { groupAndChallenges ->
+                    Log.d("HomeViewModel", "setUpUserGroups: data collected")
+                        _viewState.value = HomeViewState.Success(groupAndChallenges)
+                    }
                 }
         }
-    }
 }
