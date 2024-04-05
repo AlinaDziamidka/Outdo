@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="app_name">Graduation project</string>
+    <string name="app_name">Outdo</string>
     <string name="sign_in_header">Вход</string>
     <string name="sign_in_have_not_had_account">Еще нет аккаунта?</string>
     <string name="sign_in_sign_up">Зарегистрируйтесь</string>

@@ -5,6 +5,7 @@ import com.example.graduationproject.domain.repository.remote.GroupRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRepository
 import com.example.graduationproject.domain.repository.remote.UserRepository
+import com.example.graduationproject.domain.usecase.FetchSessionUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupsUseCase
 import com.example.graduationproject.domain.usecase.SignInUseCase
 import com.example.graduationproject.domain.usecase.SignUpUseCase
@@ -33,4 +34,9 @@ object UseCaseModule {
     ): FetchUserGroupsUseCase {
         return FetchUserGroupsUseCase(groupRepository, userGroupRepository)
     }
+
+//    @Provides
+//    fun provideFetchSessionUseCase(repository: SessionRepository): FetchSessionUseCase {
+//        return FetchSessionUseCase(repository)
+//    }
 }

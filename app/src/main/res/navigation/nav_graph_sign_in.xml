@@ -15,7 +15,8 @@
             app:destination="@id/dialogSignUpView" />
         <action
             android:id="@+id/action_signInViewFragment_to_homeActivity"
-            app:destination="@id/homeActivity" >
+            app:destination="@id/homeActivity"
+            app:launchSingleTop="true">
             <argument
                 android:name="username"
                 app:argType="string"/>
@@ -27,7 +28,8 @@
         android:label="DialogSignUpView" >
         <action
             android:id="@+id/action_dialogSignUpView_to_homeActivity"
-            app:destination="@id/homeActivity" >
+            app:destination="@id/homeActivity"
+            app:launchSingleTop="true">
             <argument
                 android:name="username"
                 app:argType="string"/>
@@ -42,7 +44,8 @@
             app:destination="@id/dialogSignUpView" />
         <action
             android:id="@+id/action_signUpViewFragment_to_homeActivity"
-            app:destination="@id/homeActivity">
+            app:destination="@id/homeActivity"
+            app:launchSingleTop="true">
 
         <argument
             android:name="username"

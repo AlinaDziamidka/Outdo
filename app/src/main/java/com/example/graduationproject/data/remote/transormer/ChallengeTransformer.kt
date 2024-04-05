@@ -9,7 +9,8 @@ class ChallengeTransformer {
             challengeId = response.challengeId,
             challengeName = response.challengeName,
             categoryId = response.categoryId,
-            challengeType = response.challengeType
+            challengeType = response.challengeType,
+            endTime = response.endTime
         )
     }
 }

@@ -54,7 +54,7 @@ class GroupChallengeRepositoryImpl(
 
         return when (event) {
             is Event.Success -> {
-                val response = event.data
+                val response = event.data.first()
                 val challengeTransformer = ChallengeTransformer()
                 val challenge = challengeTransformer.fromResponse(response)
                 Event.Success(challenge)

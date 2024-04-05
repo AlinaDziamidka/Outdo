@@ -16,7 +16,7 @@ class GroupRepositoryImpl(private val groupApiService: GroupApiService) : GroupR
 
         return when (event) {
             is Event.Success -> {
-                val response = event.data
+                val response = event.data.first()
                 val groupTransformer = GroupTransformer()
                 val group = groupTransformer.fromResponse(response)
                 Event.Success(group)

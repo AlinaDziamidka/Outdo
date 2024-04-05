@@ -1,6 +1,7 @@
 package com.example.graduationproject.data.remote.api.response
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDateTime
 
 data class ChallengeResponse(
     @SerializedName("objectId")
@@ -10,5 +11,7 @@ data class ChallengeResponse(
     @SerializedName("categoryId")
     val categoryId: String,
     @SerializedName("challengeType")
-    val challengeType: String
+    val challengeType: String,
+    @SerializedName("endTime")
+    val endTime: Long
 )

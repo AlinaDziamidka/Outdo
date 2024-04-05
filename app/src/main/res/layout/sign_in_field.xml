@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:anndroid="http://schemas.android.com/apk/res-auto"
     android:id="@+id/signInViewContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,9 +10,9 @@
     <ImageView
         android:id="@+id/mainIcon"
         android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_height="70dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_test_main" />
+        android:background="@drawable/ic_outdo_home"/>
 
     <TextView
         android:id="@+id/signInView"

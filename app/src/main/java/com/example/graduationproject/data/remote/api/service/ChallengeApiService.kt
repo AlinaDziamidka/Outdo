@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ChallengeApiService {
-    @GET("data/groups")
-    suspend fun fetchChallengesById(@Query("where") challengeIdQuery: String): Response<ChallengeResponse>
+    @GET("data/challenges")
+    suspend fun fetchChallengesById(@Query("where") challengeIdQuery: String): Response<List<ChallengeResponse>>
 }

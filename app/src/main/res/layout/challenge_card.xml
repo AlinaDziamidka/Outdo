@@ -30,15 +30,6 @@
             tools:text="21:07:24" />
 
         <TextView
-            android:id="@+id/challengeView"
-            style="@style/challenges_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/home_challenge_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/challengeNameView"
             style="@style/challenges_name"
             android:layout_width="0dp"
@@ -47,7 +38,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             app:layout_constraintEnd_toStartOf="@id/timeView"
-            app:layout_constraintStart_toEndOf="@+id/challengeView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="«Разрывной»" />
 
@@ -56,9 +47,10 @@
             style="@style/default_grey_darken_text_color_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/home_group_title"
-            app:layout_constraintStart_toStartOf="@id/challengeView"
-            app:layout_constraintTop_toBottomOf="@id/challengeView" />
+            app:layout_constraintStart_toStartOf="@id/challengeNameView"
+            app:layout_constraintTop_toBottomOf="@id/challengeNameView" />
 
         <TextView
             android:id="@+id/groupNameView"
@@ -70,7 +62,8 @@
             android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/groupView"
-            app:layout_constraintTop_toBottomOf="@id/challengeView"
+            app:layout_constraintTop_toBottomOf="@id/challengeNameView"
+            app:layout_constraintTop_toTopOf="@+id/groupView"
             tools:text="11A" />
 
         <TextView
@@ -78,6 +71,7 @@
             style="@style/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/home_progress_title"
             app:layout_constraintStart_toStartOf="@id/groupView"
             app:layout_constraintTop_toBottomOf="@id/groupView" />
@@ -91,6 +85,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/progressView"
             app:layout_constraintTop_toBottomOf="@id/groupView"
+            app:layout_constraintTop_toTopOf="@id/progressView"
             tools:text="12 из 20" />
 
         <ProgressBar

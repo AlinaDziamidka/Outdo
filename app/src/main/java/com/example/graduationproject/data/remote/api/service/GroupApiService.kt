@@ -7,5 +7,5 @@ import retrofit2.http.Query
 
 interface GroupApiService {
     @GET("data/groups")
-    suspend fun fetchGroupByGroupId(@Query("where") groupIdQuery: String): Response<GroupResponse>
+    suspend fun fetchGroupByGroupId(@Query("where") groupIdQuery: String): Response<List<GroupResponse>>
 }
