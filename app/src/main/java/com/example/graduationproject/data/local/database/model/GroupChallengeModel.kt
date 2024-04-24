@@ -6,7 +6,7 @@ import androidx.room.Entity
 @Entity("group_challenges", primaryKeys = ["group_id", "challenge_id"])
 data class GroupChallengeModel(
     @ColumnInfo("group_id")
-    val groupId: Long,
+    val groupId: String,
     @ColumnInfo("challenge_id")
-    val challengeId: Long
+    val challengeId: String
 )

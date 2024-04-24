@@ -6,10 +6,10 @@
     <string name="sign_in_registration_data_hint">Login, phone, e-mail</string>
     <string name="sign_in_password_hint">Password</string>
     <string name="sign_in_action">Sign in</string>
-    <string name="sign_in_forgot_password">tForgot password</string>
+    <string name="sign_in_forgot_password">Forgot password</string>
     <string name="home_hello_title">Hello </string>
     <string name="home_current_challenges_title">Current challenges</string>
-    <string name="home_show_all_action">tAll</string>
+    <string name="home_show_all_action">All</string>
     <string name="home_challenge_title">Challenge</string>
     <string name="home_group_title">Group:</string>
     <string name="home_progress_title">Progress:</string>

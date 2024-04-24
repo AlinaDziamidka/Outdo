@@ -3,14 +3,19 @@ package com.example.graduationproject.data.local.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity("challenges")
 data class ChallengeModel(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo("challenge_id")
-    val challengeId: Long,
-    @ColumnInfo("challenge_name")
+    @PrimaryKey
+    @ColumnInfo("id")
+    val challengeId: String,
+    @ColumnInfo("name")
     val challengeName: String,
     @ColumnInfo("category_id")
-    val categoryId: Long
+    val categoryId: String,
+    @SerializedName("challengeType")
+    val challengeType: String,
+    @SerializedName("endTime")
+    val endTime: Long
 )

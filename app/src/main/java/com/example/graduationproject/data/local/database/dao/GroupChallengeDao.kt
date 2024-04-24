@@ -3,6 +3,7 @@ package com.example.graduationproject.data.local.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.graduationproject.data.local.database.model.GroupChallengeModel
@@ -13,12 +14,12 @@ interface GroupChallengeDao {
     fun fetchAll(): List<GroupChallengeModel>
 
     @Query("SELECT * FROM group_challenges WHERE challenge_id = :challengeId")
-    fun fetchGroupsByChallengeId(challengeId: Long): List<GroupChallengeModel>
+    fun fetchGroupsByChallengeId(challengeId: String): List<GroupChallengeModel>
 
     @Query("SELECT * FROM group_challenges WHERE  group_id = :groupId")
-    fun fetchChallengesByGroupId(groupId: Long): List<GroupChallengeModel>
+    fun fetchChallengesByGroupId(groupId: String): List<GroupChallengeModel>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOne(groupChallengeModel: GroupChallengeModel)
 
     @Delete

@@ -1,7 +1,14 @@
 package com.example.graduationproject.di
 
+import com.example.graduationproject.data.local.database.dao.ChallengeDao
+import com.example.graduationproject.data.local.database.dao.GroupChallengeDao
+import com.example.graduationproject.data.local.database.dao.GroupDao
 import com.example.graduationproject.data.local.database.dao.UserDao
-import com.example.graduationproject.data.local.repository.UserLocalRepositoryImpl
+import com.example.graduationproject.data.local.database.dao.UserGroupDao
+import com.example.graduationproject.data.local.repository.ChallengeLocalRepositoryImpl
+import com.example.graduationproject.data.local.repository.GroupChallengeLocalRepositoryImpl
+import com.example.graduationproject.data.local.repository.GroupLocalRepositoryImpl
+import com.example.graduationproject.data.local.repository.UserGroupLocalRepositoryImpl
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
@@ -13,7 +20,10 @@ import com.example.graduationproject.data.remote.repository.GroupRepositoryImpl
 import com.example.graduationproject.data.remote.repository.SessionRepositoryImpl
 import com.example.graduationproject.data.remote.repository.UserGroupRepositoryImpl
 import com.example.graduationproject.data.remote.repository.UserRepositoryImpl
-import com.example.graduationproject.domain.repository.local.UserLocalRepository
+import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
+import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
+import com.example.graduationproject.domain.repository.local.GroupLocalRepository
+import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.remote.ChallengeRepository
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRepository
 import com.example.graduationproject.domain.repository.remote.GroupRepository
@@ -47,8 +57,23 @@ object RepositoryModule {
     }
 
     @Provides
-    fun provideUserLocalRepository(userDao: UserDao): UserLocalRepository {
-        return UserLocalRepositoryImpl(userDao)
+    fun provideUserGroupLocalRepository(userGroupDao: UserGroupDao): UserGroupLocalRepository {
+        return UserGroupLocalRepositoryImpl(userGroupDao)
+    }
+
+    @Provides
+    fun provideGroupLocalRepository(groupDao: GroupDao): GroupLocalRepository {
+        return GroupLocalRepositoryImpl(groupDao)
+    }
+
+    @Provides
+    fun provideGroupChallengeLocalRepository(groupChallengeDao: GroupChallengeDao): GroupChallengeLocalRepository {
+        return GroupChallengeLocalRepositoryImpl(groupChallengeDao)
+    }
+
+    @Provides
+    fun provideChallengeLocalRepository(challengeDao: ChallengeDao): ChallengeLocalRepository {
+        return ChallengeLocalRepositoryImpl(challengeDao)
     }
 
     @Provides

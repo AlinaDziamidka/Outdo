@@ -6,7 +6,7 @@ import androidx.room.Entity
 @Entity("user_groups", primaryKeys = ["user_id", "group_id"])
 data class UserGroupModel(
     @ColumnInfo("user_id")
-    val userId: Long,
+    val userId: String,
     @ColumnInfo("group_id")
-    val groupId: Long
+    val groupId: String
 )
