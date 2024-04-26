@@ -8,7 +8,7 @@ interface GroupLocalRepository {
 
     suspend fun fetchAll(): List<Group>
 
-    suspend fun fetchById(groupId: String): Group
+    suspend fun fetchById(groupId: String): Group?
 
     suspend fun insertOne(group: Group)
 

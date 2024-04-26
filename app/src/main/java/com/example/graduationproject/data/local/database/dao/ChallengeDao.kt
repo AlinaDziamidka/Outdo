@@ -15,6 +15,9 @@ interface ChallengeDao {
     @Query("SELECT * FROM challenges WHERE id = :challengeId LIMIT 1")
     fun fetchById(challengeId: String): ChallengeModel
 
+    @Query("SELECT * FROM challenges WHERE challengeType = :challengeType LIMIT 1")
+    fun fetchWeekChallenge(challengeType: String): ChallengeModel
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOne(challengeModel: ChallengeModel)
 

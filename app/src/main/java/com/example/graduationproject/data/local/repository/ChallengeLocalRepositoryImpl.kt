@@ -22,6 +22,11 @@ class ChallengeLocalRepositoryImpl @Inject constructor(private val challengeDao:
         return challengeTransformer.fromModel(model)
     }
 
+    override suspend fun fetchWeekChallenge(challengeType: String): Challenge {
+        val model = challengeDao.fetchWeekChallenge(challengeType)
+        return challengeTransformer.fromModel(model)
+    }
+
     override suspend fun insertOne(challenge: Challenge) {
         val model = challengeTransformer.toModel(challenge)
         challengeDao.insertOne(model)

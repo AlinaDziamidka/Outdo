@@ -1,6 +1,5 @@
-package com.example.graduationproject.domain.usecase
+package com.example.graduationproject.domain.usecase.remote
 
-import android.util.Log
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupAndChallenges
@@ -15,14 +14,14 @@ import com.example.graduationproject.domain.repository.remote.GroupRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
-import com.example.graduationproject.domain.util.writeToRepository
+import com.example.graduationproject.domain.util.writeToLocalDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class FetchUserGroupChallengesUseCase @Inject constructor(
+class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
     private val userGroupRepository: UserGroupRepository,
     private val groupRepository: GroupRepository,
     private val groupChallengeRepository: GroupChallengeRepository,
@@ -30,12 +29,12 @@ class FetchUserGroupChallengesUseCase @Inject constructor(
     private val groupLocalRepository: GroupLocalRepository,
     private val groupChallengeLocalRepository: GroupChallengeLocalRepository,
     private val challengeLocalRepository: ChallengeLocalRepository
-) : UseCase<FetchUserGroupChallengesUseCase.Params, List<GroupAndChallenges>> {
+) : UseCase<FetchRemoteUserGroupChallengesUseCase.Params, List<GroupAndChallenges>> {
     data class Params(
         val userId: String,
     )
 
-    override suspend fun invoke(params: FetchUserGroupChallengesUseCase.Params): Flow<List<GroupAndChallenges>> =
+    override suspend fun invoke(params: Params): Flow<List<GroupAndChallenges>> =
         flow {
             val userId = params.userId
             val userGroups = getUserGroups(userId)
@@ -55,7 +54,7 @@ class FetchUserGroupChallengesUseCase @Inject constructor(
             when (event) {
                 is Event.Success -> {
                     event.data.map {
-                        writeToRepository(userGroupLocalRepository::insertOne, it)
+                        writeToLocalDatabase(userGroupLocalRepository::insertOne, it)
                     }
                     event.data
                 }
@@ -68,7 +67,7 @@ class FetchUserGroupChallengesUseCase @Inject constructor(
         val event = groupRepository.fetchGroupsByGroupId(groupId)
         when (event) {
             is Event.Success -> {
-                writeToRepository(groupLocalRepository::insertOne, event.data)
+                writeToLocalDatabase(groupLocalRepository::insertOne, event.data)
                 event.data
             }
 
@@ -82,17 +81,24 @@ class FetchUserGroupChallengesUseCase @Inject constructor(
         val event = groupChallengeRepository.fetchAllChallengesByGroupId(groupId)
         when (event) {
             is Event.Success -> {
-                event.data.map { challenge ->
-                    writeToRepository(challengeLocalRepository::insertOne, challenge)
-                    writeToRepository(
-                        groupChallengeLocalRepository::insertOne,
-                        GroupChallenge(groupId, challenge.challengeId)
-                    )
-                }
+                saveToLocalDatabase(event, groupId)
                 event.data
             }
 
             is Event.Failure -> throw Exception(event.exception)
+        }
+    }
+
+    private suspend fun saveToLocalDatabase(
+        event: Event.Success<List<Challenge>>,
+        groupId: String
+    ) {
+        event.data.map { challenge ->
+            writeToLocalDatabase(challengeLocalRepository::insertOne, challenge)
+            writeToLocalDatabase(
+                groupChallengeLocalRepository::insertOne,
+                GroupChallenge(groupId, challenge.challengeId)
+            )
         }
     }
 }

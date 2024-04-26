@@ -12,6 +12,8 @@ data class ChallengeResponse(
     val categoryId: String,
     @SerializedName("challengeType")
     val challengeType: String,
+    @SerializedName("description")
+    val challengeDescription: String,
     @SerializedName("endTime")
     val endTime: Long
 )

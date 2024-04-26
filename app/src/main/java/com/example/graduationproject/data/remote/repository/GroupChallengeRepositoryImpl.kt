@@ -3,9 +3,7 @@ package com.example.graduationproject.data.remote.repository
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
 import com.example.graduationproject.data.remote.transormer.ChallengeTransformer
-import com.example.graduationproject.data.remote.transormer.GroupChallengeTransformer
 import com.example.graduationproject.domain.entity.Challenge
-import com.example.graduationproject.domain.entity.GroupChallenge
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
@@ -47,9 +45,9 @@ class GroupChallengeRepositoryImpl(
     }
 
     private suspend fun getChallenges(challengeId: String): Event<Challenge> {
-        val query = "objectId=\'$challengeId\'"
+        val idQuery = "objectId=\'$challengeId\'"
         val event = doCall {
-            return@doCall challengeApiService.fetchChallengesById(query)
+            return@doCall challengeApiService.fetchChallengesById(idQuery)
         }
 
         return when (event) {

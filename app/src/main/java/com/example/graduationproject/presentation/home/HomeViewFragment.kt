@@ -90,7 +90,7 @@ class HomeViewFragment : Fragment() {
 
     private fun setUpChallenges() {
         val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
-        viewModel.setUpUserGroups(userId)
+        viewModel.setUpUserChallenges(userId)
     }
 
     private fun initViews() {
@@ -107,6 +107,7 @@ class HomeViewFragment : Fragment() {
         val username = sharedPreferences.getString("current_username", null)
         if (username != null) {
             userName.text = username
+            viewModel.setDatabaseLoadedStatus(true)
         } else {
             userName.text = args.username
         }
@@ -116,7 +117,7 @@ class HomeViewFragment : Fragment() {
     private fun observeChallenges() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.viewState.collect {
+                viewModel.viewStateChallenges.collect {
                     when (it) {
                         is HomeViewState.Success -> {
                             val groupAndChallengesPairs = transformToGroupAndChallengesPair(it.data)

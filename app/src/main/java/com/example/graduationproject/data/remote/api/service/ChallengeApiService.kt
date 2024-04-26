@@ -8,4 +8,8 @@ import retrofit2.http.Query
 interface ChallengeApiService {
     @GET("data/challenges")
     suspend fun fetchChallengesById(@Query("where") challengeIdQuery: String): Response<List<ChallengeResponse>>
+
+    @GET("data/challenges")
+    suspend fun fetchWeekChallenge(@Query("where") challengeTypeQuery: String): Response<List<ChallengeResponse>>
+
 }
