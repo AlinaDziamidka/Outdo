@@ -17,7 +17,7 @@ data class ChallengeModel(
     @SerializedName("challengeType")
     val challengeType: String,
     @SerializedName("description")
-    val challengeDescription: String,
+    val challengeDescription: String?,
     @SerializedName("endTime")
     val endTime: Long
 )

@@ -1,6 +1,7 @@
 package com.example.graduationproject.presentation.home
 
 import android.app.Application
+import android.util.Log
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,31 +43,19 @@ class HomeViewModel @Inject constructor(
 
     fun setDatabaseLoadedStatus(loaded: Boolean) {
         isDatabaseLoaded = loaded
+        Log.d("HomeViewModel", "Database loaded status set to: $loaded")
+        Log.d("HomeViewModel", "Database loaded status set to: $isDatabaseLoaded")
     }
 
     fun setUpUserChallenges(userId: String) {
+        Log.d("HomeViewModel", "Setting up user challenges for user ID: $userId")
+        Log.d("HomeViewModel", "Database loaded status set to: $isDatabaseLoaded")
         if (isDatabaseLoaded) {
+            Log.d("HomeViewModel", "Database is loaded, fetching local group challenges")
             fetchLocalGroupChallenges(userId)
         } else {
+            Log.d("HomeViewModel", "Database is not loaded, fetching remote group challenges")
             fetchRemoteGroupChallenges(userId)
-        }
-    }
-
-    private fun fetchRemoteGroupChallenges(userId: String) {
-        viewModelScope.launch {
-            fetchRemoteUserGroupChallengesUseCase(
-                FetchRemoteUserGroupChallengesUseCase.Params(
-                    userId
-                )
-            )
-                .onStart {
-                    _viewStateChallenges.value = HomeViewState.Loading
-                }.catch {
-                    _viewStateChallenges.value =
-                        HomeViewState.Failure(it.message ?: "Something went wrong.")
-                }.collect { groupAndChallenges ->
-                    _viewStateChallenges.value = HomeViewState.Success(groupAndChallenges)
-                }
         }
     }
 
@@ -88,7 +77,40 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun fetchRemoteGroupChallenges(userId: String) {
+        viewModelScope.launch {
+            Log.d("HomeViewModel", "Fetching remote group challenges for user $userId")
+            fetchRemoteUserGroupChallengesUseCase(
+                FetchRemoteUserGroupChallengesUseCase.Params(
+                    userId
+                )
+            )
+                .onStart {
+                    Log.d("HomeViewModel", "Fetching remote group challenges: Loading state")
+                    _viewStateChallenges.value = HomeViewState.Loading
+                }.catch {
+                    Log.e("HomeViewModel", "Fetching remote group challenges: Error - ${it.message}")
+                    _viewStateChallenges.value =
+                        HomeViewState.Failure(it.message ?: "Something went wrong.")
+                }.collect { groupAndChallenges ->
+                    Log.d("HomeViewModel", "Fetching remote group challenges: Success")
+                    _viewStateChallenges.value = HomeViewState.Success(groupAndChallenges)
+                }
+        }
+    }
+
+
     fun setUpWeekChallenge(challengeType: ChallengeType) {
+        if (isDatabaseLoaded) {
+            Log.d("HomeViewModel", "Database is loaded, fetching local week challenges")
+            fetchLocalWeekChallenge(challengeType)
+        } else {
+            Log.d("HomeViewModel", "Database is not loaded, fetching remote week challenges")
+            fetchRemoteWeekChallenge(challengeType)
+        }
+    }
+
+    private fun fetchRemoteWeekChallenge(challengeType: ChallengeType) {
         viewModelScope.launch {
             fetchRemoteWeekChallengeUseCase(
                 FetchRemoteWeekChallengeUseCase.Params(challengeType)
@@ -99,6 +121,26 @@ class HomeViewModel @Inject constructor(
                     _viewStateWeek.value =
                         HomeViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { challenge ->
+                    _viewStateWeek.value = HomeViewState.Success(challenge)
+                }
+        }
+    }
+
+    private fun fetchLocalWeekChallenge(challengeType: ChallengeType) {
+        viewModelScope.launch {
+            Log.d("HomeViewModel", "fetchLocalWeekChallenge started for challengeType: $challengeType")
+            fetchLocalWeekChallengeUseCase(
+                FetchLocalWeekChallengeUseCase.Params(challengeType)
+            )
+                .onStart {
+                    Log.d("HomeViewModel", "fetchLocalWeekChallenge: Loading")
+                    _viewStateWeek.value = HomeViewState.Loading
+                }.catch {
+                    Log.e("HomeViewModel", "fetchLocalWeekChallenge: Error - ${it.message}")
+                    _viewStateWeek.value =
+                        HomeViewState.Failure(it.message ?: "Something went wrong.")
+                }.collect { challenge ->
+                    Log.d("HomeViewModel", "fetchLocalWeekChallenge: Success - $challenge")
                     _viewStateWeek.value = HomeViewState.Success(challenge)
                 }
         }

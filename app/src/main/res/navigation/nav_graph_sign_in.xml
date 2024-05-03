@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/signInViewFragment"
         android:name="com.example.graduationproject.presentation.signin.SignInViewFragment"
-        android:label="SignInViewFragment" >
+        android:label="SignInViewFragment">
         <action
             android:id="@+id/action_signInViewFragment_to_signUpViewFragment"
             app:destination="@id/signUpViewFragment" />
@@ -17,28 +17,22 @@
             android:id="@+id/action_signInViewFragment_to_homeActivity"
             app:destination="@id/homeActivity"
             app:launchSingleTop="true">
-            <argument
-                android:name="username"
-                app:argType="string"/>
         </action>
     </fragment>
     <dialog
         android:id="@+id/dialogSignUpView"
         android:name="com.example.graduationproject.presentation.signup.DialogSignUpView"
-        android:label="DialogSignUpView" >
+        android:label="DialogSignUpView">
         <action
             android:id="@+id/action_dialogSignUpView_to_homeActivity"
             app:destination="@id/homeActivity"
             app:launchSingleTop="true">
-            <argument
-                android:name="username"
-                app:argType="string"/>
         </action>
     </dialog>
     <fragment
         android:id="@+id/signUpViewFragment"
         android:name="com.example.graduationproject.presentation.signup.SignUpViewFragment"
-        android:label="SignUpViewFragment" >
+        android:label="SignUpViewFragment">
         <action
             android:id="@+id/action_signUpViewFragment_to_dialogSignUpView"
             app:destination="@id/dialogSignUpView" />
@@ -46,20 +40,11 @@
             android:id="@+id/action_signUpViewFragment_to_homeActivity"
             app:destination="@id/homeActivity"
             app:launchSingleTop="true">
-
-        <argument
-            android:name="username"
-            app:argType="string"/>
-            </action>
+        </action>
     </fragment>
     <activity
         android:id="@+id/homeActivity"
         android:name="com.example.graduationproject.presentation.home.HomeView"
         android:label="HomeActivity">
-
-        <argument
-            android:name="username"
-            app:argType="string"/>
-
     </activity>
 </navigation>

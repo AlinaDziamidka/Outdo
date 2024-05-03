@@ -2,7 +2,6 @@ package com.example.graduationproject.presentation.home
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,14 +16,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentHomeBinding
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.presentation.home.adapter.ChallengesAdapter
-import com.example.graduationproject.presentation.signin.SignInViewState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -35,7 +35,6 @@ class HomeViewFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    val args by navArgs<HomeViewArgs>()
     private lateinit var adapter: ChallengesAdapter
     private lateinit var challengeView: RecyclerView
     private lateinit var progressView: ProgressBar
@@ -43,6 +42,7 @@ class HomeViewFragment : Fragment() {
     private lateinit var showAllChallengesView: TextView
     private lateinit var userName: TextView
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var weekChallengeView: WeekView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -84,13 +84,11 @@ class HomeViewFragment : Fragment() {
         initViews()
         initAdapter()
         setUserName()
+        setUpLoadedStatus()
         setUpChallenges()
+        setUpWeekChallenge()
         observeChallenges()
-    }
-
-    private fun setUpChallenges() {
-        val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
-        viewModel.setUpUserChallenges(userId)
+        observeWeekChallenge()
     }
 
     private fun initViews() {
@@ -99,42 +97,54 @@ class HomeViewFragment : Fragment() {
         currentChallengeView = binding.currentChallengesView
         showAllChallengesView = binding.showAllView
         userName = binding.userNameView
+        weekChallengeView = WeekView(binding.weekChallengeContainer)
     }
 
     private fun setUserName() {
+        Log.d("HomeViewFragment", "Setting username")
         sharedPreferences =
             requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
-        val username = sharedPreferences.getString("current_username", null)
-        if (username != null) {
-            userName.text = username
-            viewModel.setDatabaseLoadedStatus(true)
-        } else {
-            userName.text = args.username
-        }
+        val usernamePref = sharedPreferences.getString("current_username", null)
+            userName.text = usernamePref
     }
 
+    private fun setUpLoadedStatus() {
+        val args = HomeViewFragmentArgs.fromBundle(requireArguments())
+        val loadedStatus = args.loadedStatus
+        viewModel.setDatabaseLoadedStatus(loadedStatus)
+        Log.d("HomeViewFragment", "Loaded status in HomeViewFragment: $loadedStatus")
+    }
+
+    private fun setUpChallenges() {
+        val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
+        viewModel.setUpUserChallenges(userId)
+    }
+
+    private fun setUpWeekChallenge() {
+        viewModel.setUpWeekChallenge(ChallengeType.WEEK)
+    }
 
     private fun observeChallenges() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateChallenges.collect {
+                    Log.d("observeChallenges", "New view state: $it")
                     when (it) {
                         is HomeViewState.Success -> {
                             val groupAndChallengesPairs = transformToGroupAndChallengesPair(it.data)
                             handleOnSuccess(groupAndChallengesPairs)
+                            Log.d("observeChallenges", "Success view state, data: ${it.data}")
                         }
 
                         is HomeViewState.Loading -> {
+                            Log.d("observeChallenges", "Loading view state")
                             progressView.visibility = View.VISIBLE
                             challengeView.visibility = View.GONE
                         }
 
                         is HomeViewState.Failure -> {
-                            progressView.visibility = View.GONE
-                            currentChallengeView.visibility = View.GONE
-                            showAllChallengesView.visibility = View.GONE
-                            progressView.visibility = View.VISIBLE
-                            challengeView.visibility = View.GONE
+                            Log.d("observeChallenges", "Failure view state")
+                            handleOnFailure()
                         }
                     }
                 }
@@ -159,4 +169,40 @@ class HomeViewFragment : Fragment() {
         adapter.setGroupAndChallenges(groupAndChallenges)
         challengeView.visibility = View.VISIBLE
     }
+
+    private fun handleOnFailure() {
+        progressView.visibility = View.GONE
+        currentChallengeView.visibility = View.GONE
+        showAllChallengesView.visibility = View.GONE
+        progressView.visibility = View.VISIBLE
+        challengeView.visibility = View.GONE
+    }
+
+    private fun observeWeekChallenge() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewStateWeek.collect {
+                    when (it) {
+                        is HomeViewState.Success -> {
+                            showWeekChallenge(it.data)
+                        }
+
+                        is HomeViewState.Loading -> {
+
+                        }
+
+                        is HomeViewState.Failure -> {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showWeekChallenge(challenge: Challenge) {
+        weekChallengeView.updateWeeklyChallenge(challenge)
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.graduationproject.domain.usecase.remote
 
+import android.util.Log
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupAndChallenges
@@ -40,6 +41,7 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
             val userGroups = getUserGroups(userId)
 
             val groupAndChallengesList = userGroups.map { userGroup ->
+                Log.d("FetchRemoteUserGroupChallengesUseCase", "Fetching group and challenges for group ${userGroup.groupId}")
                 val group = getGroup(userGroup.groupId)
                 val challenges = getCurrentChallenges(userGroup.groupId)
                 GroupAndChallenges(group, challenges)
@@ -53,13 +55,17 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
             val event = userGroupRepository.fetchAllGroupsByUserId(userId)
             when (event) {
                 is Event.Success -> {
+                    Log.d("FetchRemoteUserGroupChallengesUseCase", "Received user groups: ${event.data}")
                     event.data.map {
                         writeToLocalDatabase(userGroupLocalRepository::insertOne, it)
                     }
                     event.data
                 }
 
-                is Event.Failure -> throw Exception(event.exception)
+                is Event.Failure -> {
+                    Log.e("FetchRemoteUserGroupChallengesUseCase", "Failed to fetch user groups: ${event.exception}")
+                    throw Exception(event.exception)
+                }
             }
         }
 
@@ -67,11 +73,15 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
         val event = groupRepository.fetchGroupsByGroupId(groupId)
         when (event) {
             is Event.Success -> {
+                Log.d("FetchRemoteUserGroupChallengesUseCase", "Received group: ${event.data}")
                 writeToLocalDatabase(groupLocalRepository::insertOne, event.data)
                 event.data
             }
 
-            is Event.Failure -> throw Exception(event.exception)
+            is Event.Failure -> {
+                Log.e("FetchRemoteUserGroupChallengesUseCase", "Failed to fetch group: ${event.exception}")
+                throw Exception(event.exception)
+            }
         }
     }
 
@@ -79,13 +89,18 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
         Dispatchers.IO
     ) {
         val event = groupChallengeRepository.fetchAllChallengesByGroupId(groupId)
+        Log.d("FetchRemoteUserGroupChallengesUseCase", "Received challenges: ${event}")
         when (event) {
             is Event.Success -> {
+                Log.d("FetchRemoteUserGroupChallengesUseCase", "Received challenges: ${event.data}")
                 saveToLocalDatabase(event, groupId)
                 event.data
             }
 
-            is Event.Failure -> throw Exception(event.exception)
+            is Event.Failure -> {
+                Log.e("FetchRemoteUserGroupChallengesUseCase", "Failed to fetch challenges: ${event.exception}")
+                throw Exception(event.exception)
+            }
         }
     }
 

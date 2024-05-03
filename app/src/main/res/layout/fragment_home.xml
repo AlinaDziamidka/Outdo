@@ -29,11 +29,11 @@
             <TextView
                 android:id="@+id/userNameView"
                 style="@style/welcome_text"
-                tools:text="Pandochka!"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/helloView" />
+                android:layout_toEndOf="@id/helloView"
+                tools:text="Pandochka!" />
 
             <ImageView
                 android:id="@+id/notificationView"
@@ -47,13 +47,13 @@
             <TextView
                 android:id="@+id/notificationCountView"
                 style="@style/notification_count"
-                tools:text="9+"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="12dp"
                 android:background="@drawable/bg_notification_count"
-                android:gravity="center" />
+                android:gravity="center"
+                tools:text="9+" />
 
             <TextView
                 android:id="@+id/currentChallengesView"
@@ -78,17 +78,17 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/challengeRecyclerView"
-            tools:listitem="@layout/challenge_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            tools:listitem="@layout/challenge_card" />
 
         <ProgressBar
             android:id="@+id/progressView"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/dailyAchievementView"
@@ -97,14 +97,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/home_daily_achievement_title" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/dailyAchievementRecyclerView"
-            tools:listitem="@layout/daily_achievement_card"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="8dp" />
+        <include layout="@layout/daily_achievement_card" />
 
         <TextView
             android:id="@+id/weeklyChallengeView"
@@ -113,13 +109,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/home_daily_achievement_title" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/weeklyChallengeRecyclerView"
-            tools:listitem="@layout/weekly_challenge_card"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="8dp" />
+        <include android:id="@+id/weekChallengeContainer"
+            layout="@layout/weekly_challenge_card" />
+
     </LinearLayout>
 </ScrollView>

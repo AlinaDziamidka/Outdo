@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootContainer"
+    android:id="@+id/weeklyRootContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
@@ -32,7 +32,7 @@
             tools:text="21:07:24" />
 
         <TextView
-            android:id="@+id/dailyAchievementNameView"
+            android:id="@+id/weeklyChallengeNameView"
             style="@style/challenges_name_home_page"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,8 +49,8 @@
             android:ellipsize="end"
             android:maxLines="3"
             app:layout_constraintEnd_toStartOf="@id/iconView"
-            app:layout_constraintStart_toStartOf="@id/dailyAchievementNameView"
-            app:layout_constraintTop_toBottomOf="@id/dailyAchievementNameView"
+            app:layout_constraintStart_toStartOf="@id/weeklyChallengeNameView"
+            app:layout_constraintTop_toBottomOf="@id/weeklyChallengeNameView"
             tools:text="Получите несколько заданий на очищение нашей планеты от мусора" />
 
         <Button

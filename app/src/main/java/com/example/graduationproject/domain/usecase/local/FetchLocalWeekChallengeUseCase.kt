@@ -4,8 +4,10 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.util.UseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FetchLocalWeekChallengeUseCase @Inject constructor(
@@ -16,10 +18,12 @@ class FetchLocalWeekChallengeUseCase @Inject constructor(
         val challengeType: ChallengeType,
     )
 
-    override suspend fun invoke(params: FetchLocalWeekChallengeUseCase.Params): Flow<Challenge> =
+    override suspend fun invoke(params: Params): Flow<Challenge> =
         flow {
             val challengeTypeQuery = params.challengeType
-            val challenge = challengeLocalRepository.fetchWeekChallenge(challengeTypeQuery.stringValue)
+            val challenge = withContext(Dispatchers.IO) {
+                challengeLocalRepository.fetchWeekChallenge(challengeTypeQuery.stringValue)
+            }
             emit(challenge)
     }
 }

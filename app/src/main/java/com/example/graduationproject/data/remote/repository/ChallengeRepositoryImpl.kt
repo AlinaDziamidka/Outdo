@@ -1,5 +1,6 @@
 package com.example.graduationproject.data.remote.repository
 
+import android.util.Log
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
 import com.example.graduationproject.data.remote.transormer.ChallengeTransformer
 import com.example.graduationproject.domain.entity.Challenge
@@ -16,19 +17,23 @@ class ChallengeRepositoryImpl(private val challengeApiService: ChallengeApiServi
 
     override suspend fun fetchChallengesById(challengeIdQuery: String): Event<Challenge> {
         val idQuery = "objectId=\'$challengeIdQuery\'"
+        Log.d("ChallengeRepositoryImpl", "Fetching challenge with query: $idQuery")
         val event = doCall {
             return@doCall challengeApiService.fetchChallengesById(idQuery)
         }
 
         return when (event) {
             is Event.Success -> {
+                Log.d("ChallengeRepositoryImpl", "Received response: ${event.data}")
                 val response = event.data.first()
                 val challengeTransformer = ChallengeTransformer()
                 val challenge = challengeTransformer.fromResponse(response)
+                Log.d("ChallengeRepositoryImpl", "Transformed response to challenge: $challenge")
                 Event.Success(challenge)
             }
 
             is Event.Failure -> {
+                Log.e("ChallengeRepositoryImpl", "Failed to fetch challenges: ${event.exception}")
                 val error = event.exception
                 Event.Failure(error)
             }
