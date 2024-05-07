@@ -100,7 +100,8 @@
             android:layout_marginBottom="8dp"
             android:text="@string/home_daily_achievement_title" />
 
-        <include layout="@layout/daily_achievement_card" />
+        <include android:id="@+id/dailyAchievementContainer"
+            layout="@layout/daily_achievement_card" />
 
         <TextView
             android:id="@+id/weeklyChallengeView"

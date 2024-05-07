@@ -20,6 +20,8 @@ import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentHomeBinding
+import com.example.graduationproject.domain.entity.Achievement
+import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
@@ -43,6 +45,7 @@ class HomeViewFragment : Fragment() {
     private lateinit var userName: TextView
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var weekChallengeView: WeekView
+    private lateinit var dailyAchievementView: DailyView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -87,8 +90,10 @@ class HomeViewFragment : Fragment() {
         setUpLoadedStatus()
         setUpChallenges()
         setUpWeekChallenge()
+        setUpDailyAchievement()
         observeChallenges()
         observeWeekChallenge()
+        observeDailyAchievement()
     }
 
     private fun initViews() {
@@ -98,6 +103,7 @@ class HomeViewFragment : Fragment() {
         showAllChallengesView = binding.showAllView
         userName = binding.userNameView
         weekChallengeView = WeekView(binding.weekChallengeContainer)
+        dailyAchievementView = DailyView(binding.dailyAchievementContainer)
     }
 
     private fun setUserName() {
@@ -122,6 +128,10 @@ class HomeViewFragment : Fragment() {
 
     private fun setUpWeekChallenge() {
         viewModel.setUpWeekChallenge(ChallengeType.WEEK)
+    }
+
+    private fun setUpDailyAchievement() {
+        viewModel.setUpDailyAchievement(AchievementType.DAILY)
     }
 
     private fun observeChallenges() {
@@ -204,5 +214,30 @@ class HomeViewFragment : Fragment() {
         weekChallengeView.updateWeeklyChallenge(challenge)
     }
 
+    private fun observeDailyAchievement() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewStateDaily.collect {
+                    when (it) {
+                        is HomeViewState.Success -> {
+                            showDailyAchievement(it.data)
+                        }
+
+                        is HomeViewState.Loading -> {
+
+                        }
+
+                        is HomeViewState.Failure -> {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showDailyAchievement(achievement: Achievement) {
+        dailyAchievementView.updateDailyAchievement(achievement)
+    }
 
 }

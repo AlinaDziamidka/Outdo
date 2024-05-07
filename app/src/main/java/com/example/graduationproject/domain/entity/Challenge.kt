@@ -1,6 +1,5 @@
 package com.example.graduationproject.domain.entity
 
-import java.time.LocalDateTime
 
 data class Challenge(
     val challengeId: String,

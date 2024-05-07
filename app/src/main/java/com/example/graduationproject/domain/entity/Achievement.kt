@@ -1,10 +1,11 @@
 package com.example.graduationproject.domain.entity
 
-import com.example.graduationproject.data.local.database.model.AchievementStatus
-
 data class Achievement(
-    val achievementId: Long,
+    val achievementId: String,
     val achievementName: String,
-    val description: String,
-    val achievementStatus: AchievementStatus
+    val description: String?,
+    val achievementStatus: AchievementStatus,
+    val categoryId: String,
+    val achievementType: AchievementType,
+    val endTime: Long
 )

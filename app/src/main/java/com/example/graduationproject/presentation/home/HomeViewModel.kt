@@ -5,11 +5,15 @@ import android.util.Log
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.graduationproject.domain.entity.Achievement
+import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.GroupAndChallenges
+import com.example.graduationproject.domain.usecase.local.FetchLocalDailyAchievementUseCase
 import com.example.graduationproject.domain.usecase.local.FetchLocalUserGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.local.FetchLocalWeekChallengeUseCase
+import com.example.graduationproject.domain.usecase.remote.FetchRemoteDailyAchievementUseCase
 import com.example.graduationproject.domain.usecase.remote.FetchRemoteUserGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.remote.FetchRemoteWeekChallengeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +30,9 @@ class HomeViewModel @Inject constructor(
     private val fetchRemoteUserGroupChallengesUseCase: FetchRemoteUserGroupChallengesUseCase,
     private val fetchLocalUserGroupChallengesUseCase: FetchLocalUserGroupChallengesUseCase,
     private val fetchRemoteWeekChallengeUseCase: FetchRemoteWeekChallengeUseCase,
-    private val fetchLocalWeekChallengeUseCase: FetchLocalWeekChallengeUseCase
+    private val fetchLocalWeekChallengeUseCase: FetchLocalWeekChallengeUseCase,
+    private val fetchRemoteDailyAchievementUseCase: FetchRemoteDailyAchievementUseCase,
+    private val fetchLocalDailyAchievementUseCase: FetchLocalDailyAchievementUseCase
 ) :
     AndroidViewModel(context) {
 
@@ -38,6 +44,10 @@ class HomeViewModel @Inject constructor(
     private val _viewStateWeek =
         MutableStateFlow<HomeViewState<Challenge>>(HomeViewState.Loading)
     val viewStateWeek: StateFlow<HomeViewState<Challenge>> = _viewStateWeek
+
+    private val _viewStateDaily =
+        MutableStateFlow<HomeViewState<Achievement>>(HomeViewState.Loading)
+    val viewStateDaily: StateFlow<HomeViewState<Achievement>> = _viewStateDaily
 
     private var isDatabaseLoaded = false
 
@@ -89,7 +99,10 @@ class HomeViewModel @Inject constructor(
                     Log.d("HomeViewModel", "Fetching remote group challenges: Loading state")
                     _viewStateChallenges.value = HomeViewState.Loading
                 }.catch {
-                    Log.e("HomeViewModel", "Fetching remote group challenges: Error - ${it.message}")
+                    Log.e(
+                        "HomeViewModel",
+                        "Fetching remote group challenges: Error - ${it.message}"
+                    )
                     _viewStateChallenges.value =
                         HomeViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { groupAndChallenges ->
@@ -110,25 +123,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchRemoteWeekChallenge(challengeType: ChallengeType) {
-        viewModelScope.launch {
-            fetchRemoteWeekChallengeUseCase(
-                FetchRemoteWeekChallengeUseCase.Params(challengeType)
-            )
-                .onStart {
-                    _viewStateWeek.value = HomeViewState.Loading
-                }.catch {
-                    _viewStateWeek.value =
-                        HomeViewState.Failure(it.message ?: "Something went wrong.")
-                }.collect { challenge ->
-                    _viewStateWeek.value = HomeViewState.Success(challenge)
-                }
-        }
-    }
-
     private fun fetchLocalWeekChallenge(challengeType: ChallengeType) {
         viewModelScope.launch {
-            Log.d("HomeViewModel", "fetchLocalWeekChallenge started for challengeType: $challengeType")
+            Log.d(
+                "HomeViewModel",
+                "fetchLocalWeekChallenge started for challengeType: $challengeType"
+            )
             fetchLocalWeekChallengeUseCase(
                 FetchLocalWeekChallengeUseCase.Params(challengeType)
             )
@@ -146,4 +146,68 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun fetchRemoteWeekChallenge(challengeType: ChallengeType) {
+        viewModelScope.launch {
+            fetchRemoteWeekChallengeUseCase(
+                FetchRemoteWeekChallengeUseCase.Params(challengeType)
+            )
+                .onStart {
+                    _viewStateWeek.value = HomeViewState.Loading
+                }.catch {
+                    _viewStateWeek.value =
+                        HomeViewState.Failure(it.message ?: "Something went wrong.")
+                }.collect { challenge ->
+                    _viewStateWeek.value = HomeViewState.Success(challenge)
+                }
+        }
+    }
+
+    fun setUpDailyAchievement(achievementType: AchievementType) {
+        if (isDatabaseLoaded) {
+            Log.d("HomeViewModel", "Database is loaded, fetching local daily achievement")
+            fetchLocalDailyAchievement(achievementType)
+        } else {
+            Log.d("HomeViewModel", "Database is not loaded, fetching remote daily achievement")
+            fetchRemoteDailyAchievement(achievementType)
+        }
+    }
+
+    private fun fetchRemoteDailyAchievement(achievementType: AchievementType) {
+        viewModelScope.launch {
+            fetchRemoteDailyAchievementUseCase(
+                FetchRemoteDailyAchievementUseCase.Params(achievementType)
+            )
+                .onStart {
+                    _viewStateDaily.value = HomeViewState.Loading
+                }.catch {
+                    _viewStateDaily.value =
+                        HomeViewState.Failure(it.message ?: "Something went wrong.")
+                }.collect { achievement ->
+                    _viewStateDaily.value = HomeViewState.Success(achievement)
+                }
+        }
+    }
+
+    private fun fetchLocalDailyAchievement(achievementType: AchievementType) {
+        viewModelScope.launch {
+            Log.d(
+                "HomeViewModel",
+                "fetchLocalWeekChallenge started for challengeType: $achievementType"
+            )
+            fetchLocalDailyAchievementUseCase(
+                FetchLocalDailyAchievementUseCase.Params(achievementType)
+            )
+                .onStart {
+                    Log.d("HomeViewModel", "fetchLocalDailyAchievement: Loading")
+                    _viewStateDaily.value = HomeViewState.Loading
+                }.catch {
+                    Log.e("HomeViewModel", "fetchLocalDailyAchievement: Error - ${it.message}")
+                    _viewStateDaily.value =
+                        HomeViewState.Failure(it.message ?: "Something went wrong.")
+                }.collect { achievement ->
+                    Log.d("HomeViewModel", "fetchLocalDailyAchievement: Success - $achievement")
+                    _viewStateDaily.value = HomeViewState.Success(achievement)
+                }
+        }
+    }
 }

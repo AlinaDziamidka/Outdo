@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.graduationproject.App
 import com.example.graduationproject.data.local.database.UserDatabase
+import com.example.graduationproject.data.local.database.dao.AchievementDao
 import com.example.graduationproject.data.local.database.dao.AwardDao
 import com.example.graduationproject.data.local.database.dao.CategoryDao
 import com.example.graduationproject.data.local.database.dao.ChallengeAchievementDao
@@ -90,6 +91,11 @@ object LocalDatabaseModule {
     @Provides
     fun provideUserGroupDao(database: UserDatabase): UserGroupDao {
         return database.userGroupDao()
+    }
+
+    @Provides
+    fun provideAchievementDao(database: UserDatabase): AchievementDao {
+        return database.achievementDao()
     }
 
 }

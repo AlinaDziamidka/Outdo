@@ -1,10 +1,21 @@
 package com.example.graduationproject.data.remote.api.response
 
-import com.example.graduationproject.data.local.database.model.AchievementStatus
+import com.example.graduationproject.domain.entity.AchievementStatus
+import com.google.gson.annotations.SerializedName
 
 data class AchievementResponse(
-    val achievementId: Long,
+    @SerializedName("objectId")
+    val achievementId: String,
+    @SerializedName("name")
     val achievementName: String,
+    @SerializedName("description")
     val description: String,
-    val achievementStatus: AchievementStatus
+    @SerializedName("status")
+    val achievementStatus: String,
+    @SerializedName("categoryId")
+    val categoryId: String,
+    @SerializedName("achievementType")
+    val achievementType: String,
+    @SerializedName("endTime")
+    val endTime: Long
 )
