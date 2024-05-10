@@ -5,7 +5,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import coil.decode.SvgDecoder
+import coil.load
+import com.example.graduationproject.R
 import com.example.graduationproject.databinding.WeeklyChallengeCardBinding
+import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Challenge
 import java.util.Locale
 
@@ -35,6 +39,7 @@ class WeekView(rootView: WeeklyChallengeCardBinding){
         setUpTimeView(endTime)
         weeklyNameView.text = challenge.challengeName
         descriptionView.text = challenge.challengeDescription
+        setWeekIcon(challenge)
     }
 
     private fun setUpTimeView(endTimeMillis: Long) {
@@ -82,5 +87,14 @@ class WeekView(rootView: WeeklyChallengeCardBinding){
         }
 
         timeView.text = formattedTime
+    }
+
+    private fun setWeekIcon(challenge: Challenge) {
+        val imageUrl = challenge.challengeIcon
+        iconView.load(imageUrl) {
+            decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+                .placeholder(R.drawable.placeholder_week_daily_icon)
+                .error(R.drawable.error_week_daily_icon)
+        }
     }
 }

@@ -12,7 +12,8 @@ class ChallengeTransformer {
             categoryId = response.categoryId,
             challengeType = ChallengeType.valueOf(response.challengeType),
             challengeDescription = response.challengeDescription,
-            endTime = response.endTime
+            endTime = response.endTime,
+            challengeIcon = response.challengeIcon
         )
     }
 }

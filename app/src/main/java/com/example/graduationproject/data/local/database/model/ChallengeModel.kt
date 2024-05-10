@@ -19,5 +19,7 @@ data class ChallengeModel(
     @SerializedName("description")
     val challengeDescription: String?,
     @SerializedName("endTime")
-    val endTime: Long
+    val endTime: Long,
+    @ColumnInfo("iconPath")
+    val challengeIcon: String?
 )

@@ -22,5 +22,7 @@ data class AchievementModel(
     @ColumnInfo("achievementType")
     val achievementType: String,
     @ColumnInfo("endTime")
-    val endTime: Long
+    val endTime: Long,
+    @ColumnInfo("iconPath")
+    val achievementIcon: String?
 )

@@ -17,5 +17,7 @@ data class AchievementRequest(
     @SerializedName("achievementType")
     val achievementType: String,
     @SerializedName("endTime")
-    val endTime: Long
+    val endTime: Long,
+    @SerializedName("iconPath")
+    val achievementIcon: String?
 )

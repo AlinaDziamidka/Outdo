@@ -15,5 +15,7 @@ data class ChallengeRequest(
     @SerializedName("description")
     val challengeDescription: String,
     @SerializedName("endTime")
-    val endTime: Long
+    val endTime: Long,
+    @SerializedName("iconPath")
+    val challengeIcon: String?
 )

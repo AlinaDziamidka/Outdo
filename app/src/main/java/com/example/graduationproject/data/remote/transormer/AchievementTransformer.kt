@@ -16,7 +16,8 @@ class AchievementTransformer {
             achievementStatus = AchievementStatus.valueOf(response.achievementStatus),
             achievementType = AchievementType.valueOf(response.achievementType),
             categoryId = response.categoryId,
-            endTime = response.endTime
+            endTime = response.endTime,
+            achievementIcon = response.achievementIcon
         )
     }
 }

@@ -4,11 +4,16 @@ import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import coil.decode.SvgDecoder
+import com.example.graduationproject.R
 import com.example.graduationproject.databinding.DailyAchievementCardBinding
 import com.example.graduationproject.domain.entity.Achievement
 import java.util.Locale
+import coil.load
 
-class DailyView (rootView: DailyAchievementCardBinding){
+
+
+class DailyView ( rootView: DailyAchievementCardBinding) {
     private lateinit var timeView: TextView
     private lateinit var countdownTimer: CountDownTimer
     private lateinit var dailyNameView: TextView
@@ -33,6 +38,7 @@ class DailyView (rootView: DailyAchievementCardBinding){
         setUpTimeView(endTime)
         dailyNameView.text = achievement.achievementName
         descriptionView.text = achievement.description
+        setDailyIcon(achievement)
     }
 
     private fun setUpTimeView(endTimeMillis: Long) {
@@ -80,5 +86,14 @@ class DailyView (rootView: DailyAchievementCardBinding){
         }
 
         timeView.text = formattedTime
+    }
+
+    private fun setDailyIcon(achievement: Achievement) {
+        val imageUrl = achievement.achievementIcon
+        iconView.load(imageUrl) {
+            decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+                .placeholder(R.drawable.placeholder_week_daily_icon)
+                .error(R.drawable.error_week_daily_icon)
+        }
     }
 }

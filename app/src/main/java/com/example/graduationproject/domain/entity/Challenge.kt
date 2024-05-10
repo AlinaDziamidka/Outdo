@@ -7,5 +7,6 @@ data class Challenge(
     val categoryId: String,
     val challengeType: ChallengeType,
     val challengeDescription: String?,
-    val endTime: Long
+    val endTime: Long,
+    val challengeIcon: String?
 )

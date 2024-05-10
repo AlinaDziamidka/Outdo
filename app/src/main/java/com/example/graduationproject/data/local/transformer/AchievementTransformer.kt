@@ -16,7 +16,8 @@ class AchievementTransformer {
             achievementStatus = AchievementStatus.valueOf(model.achievementStatus),
             achievementType = AchievementType.valueOf(model.achievementType),
             categoryId = model.categoryId,
-            endTime = model.endTime
+            endTime = model.endTime,
+            achievementIcon = model.achievementIcon
         )
     }
 
@@ -28,7 +29,8 @@ class AchievementTransformer {
             achievementStatus = achievement.achievementStatus.stringValue,
             achievementType = achievement.achievementType.stringValue,
             categoryId = achievement.categoryId,
-            endTime = achievement.endTime
+            endTime = achievement.endTime,
+            achievementIcon = achievement.achievementIcon
         )
     }
 }

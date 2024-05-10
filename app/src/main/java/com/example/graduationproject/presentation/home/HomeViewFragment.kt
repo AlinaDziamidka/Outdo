@@ -19,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+//import com.bumptech.glide.RequestManager
 import com.example.graduationproject.databinding.FragmentHomeBinding
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementType
@@ -29,6 +30,7 @@ import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.presentation.home.adapter.ChallengesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -46,6 +48,8 @@ class HomeViewFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var weekChallengeView: WeekView
     private lateinit var dailyAchievementView: DailyView
+//    @Inject
+//    lateinit var glide: RequestManager
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -103,7 +107,7 @@ class HomeViewFragment : Fragment() {
         showAllChallengesView = binding.showAllView
         userName = binding.userNameView
         weekChallengeView = WeekView(binding.weekChallengeContainer)
-        dailyAchievementView = DailyView(binding.dailyAchievementContainer)
+        dailyAchievementView = DailyView( binding.dailyAchievementContainer)
     }
 
     private fun setUserName() {
