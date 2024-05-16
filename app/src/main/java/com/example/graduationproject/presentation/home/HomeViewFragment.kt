@@ -15,11 +15,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-//import com.bumptech.glide.RequestManager
+import com.example.graduationproject.App
 import com.example.graduationproject.databinding.FragmentHomeBinding
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementType
@@ -30,7 +28,6 @@ import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.presentation.home.adapter.ChallengesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -48,8 +45,6 @@ class HomeViewFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var weekChallengeView: WeekView
     private lateinit var dailyAchievementView: DailyView
-//    @Inject
-//    lateinit var glide: RequestManager
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -70,6 +65,22 @@ class HomeViewFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initViews()
+        initAdapter()
+        setUserName()
+        setUpLoadedStatus()
+        setUpChallenges()
+        setUpWeekChallenge()
+        setUpDailyAchievement()
+        observeChallenges()
+        observeWeekChallenge()
+        observeDailyAchievement()
+        moveToAllChallengesScreen()
+    }
+
     private fun initAdapter() {
         challengeView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -84,30 +95,14 @@ class HomeViewFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initViews()
-        initAdapter()
-        setUserName()
-        setUpLoadedStatus()
-        setUpChallenges()
-        setUpWeekChallenge()
-        setUpDailyAchievement()
-        observeChallenges()
-        observeWeekChallenge()
-        observeDailyAchievement()
-    }
-
     private fun initViews() {
         progressView = binding.progressView
         challengeView = binding.challengeRecyclerView
         currentChallengeView = binding.currentChallengesView
-        showAllChallengesView = binding.showAllView
+        showAllChallengesView = binding.showAllChallenges
         userName = binding.userNameView
         weekChallengeView = WeekView(binding.weekChallengeContainer)
-        dailyAchievementView = DailyView( binding.dailyAchievementContainer)
+        dailyAchievementView = DailyView(binding.dailyAchievementContainer)
     }
 
     private fun setUserName() {
@@ -115,12 +110,13 @@ class HomeViewFragment : Fragment() {
         sharedPreferences =
             requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
         val usernamePref = sharedPreferences.getString("current_username", null)
-            userName.text = usernamePref
+        userName.text = usernamePref
     }
 
     private fun setUpLoadedStatus() {
-        val args = HomeViewFragmentArgs.fromBundle(requireArguments())
-        val loadedStatus = args.loadedStatus
+//        val args = HomeViewFragmentArgs.fromBundle(requireArguments())
+//        val loadedStatus = args.loadedStatus
+        val loadedStatus = App.isLoaded
         viewModel.setDatabaseLoadedStatus(loadedStatus)
         Log.d("HomeViewFragment", "Loaded status in HomeViewFragment: $loadedStatus")
     }
@@ -244,4 +240,15 @@ class HomeViewFragment : Fragment() {
         dailyAchievementView.updateDailyAchievement(achievement)
     }
 
+    private fun moveToAllChallengesScreen() {
+        showAllChallengesView.setOnClickListener {
+            val action = HomeViewFragmentDirections.actionHomeViewFragmentToAllChallengesView()
+            findNavController().navigate(action)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        App.isLoaded = true
+    }
 }

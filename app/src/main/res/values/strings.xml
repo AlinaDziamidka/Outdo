@@ -50,4 +50,5 @@
     <string name="group_screen_upload_action">Upload</string>
     <string name="group_screen_participants_title">Participants</string>
     <string name="group_screen_add_friends_to_group">Add friends</string>
+    <string name="all_challenges_my_challenges">My challenges</string>
 </resources>

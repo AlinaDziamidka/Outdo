@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.graduationproject.App
 import com.example.graduationproject.R
 import com.example.graduationproject.presentation.home.HomeView
 import com.example.graduationproject.presentation.signin.SignInView
@@ -32,9 +33,11 @@ class SplashView : AppCompatActivity(R.layout.activity_splash) {
                     when (it) {
                         SplashViewState.Success -> {
                             Log.d("SplashView", "Navigating to HomeView")
-                            val intent = Intent(this@SplashView, HomeView::class.java).apply {
-                                putExtra("loadedStatus", true)
-                            }
+                            App.isLoaded = true
+                            val intent = Intent(this@SplashView, HomeView::class.java)
+//                                .apply {
+//                                putExtra("loadedStatus", true)
+//                            }
                             startActivity(intent)
                             finish()
                         }

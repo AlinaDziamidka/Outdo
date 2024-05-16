@@ -52,4 +52,5 @@
     <string name="group_screen_upload_action">Загрузить</string>
     <string name="group_screen_participants_title">Участники</string>
     <string name="group_screen_add_friends_to_group">Добавить друзей</string>
+    <string name="all_challenges_my_challenges">Мои челленджи</string>
 </resources>

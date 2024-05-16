@@ -1,15 +1,10 @@
 package com.example.graduationproject.presentation.home
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.Navigator
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.navArgs
-import androidx.navigation.navArgs
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,8 +22,8 @@ class HomeView : AppCompatActivity() {
         createNavController()
         setBottomNavigation()
         setLoadedStatus()
+        onBackPressedAction()
     }
-
 
     private fun createNavController() {
         val navHostFragment = setUpNavHostFragment()
@@ -49,6 +44,7 @@ class HomeView : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.homeView -> navController.navigate(R.id.homeViewFragment)
+                R.id.myGroupsView -> navController.navigate(R.id.groupView)
             }
             true
         }
@@ -59,9 +55,20 @@ class HomeView : AppCompatActivity() {
     }
 
     private fun setLoadedStatus() {
-        val loadedStatus = intent.getBooleanExtra("loadedStatus", false)
-        Log.d("HomeView", "Loaded status from intent: $loadedStatus")
-        val args = HomeViewFragmentArgs.Builder(loadedStatus).build().toBundle()
-        navController.navigate(R.id.homeViewFragment, args)
+//        val loadedStatus = intent.getBooleanExtra("loadedStatus", false)
+//        Log.d("HomeView", "Loaded status from intent: $loadedStatus")
+//        val args = HomeViewFragmentArgs.Builder(loadedStatus).build().toBundle()
+        navController.navigate(R.id.homeViewFragment)
+    }
+
+    private fun onBackPressedAction() {
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!navController.navigateUp()) {
+                    finish()
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 }

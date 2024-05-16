@@ -10,6 +10,14 @@ class App : Application() {
 
     companion object {
         lateinit var instance: App
+
+        var isLoaded: Boolean = false
+            get() {
+                return field
+            }
+            set(value) {
+                field = value
+            }
     }
 
     override fun onCreate() {
@@ -21,7 +29,6 @@ class App : Application() {
                 add(SvgDecoder.Factory())
             }
             .build()
-
 
     }
 }

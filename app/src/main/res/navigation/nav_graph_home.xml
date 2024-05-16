@@ -8,15 +8,33 @@
         android:id="@+id/homeViewFragment"
         android:name="com.example.graduationproject.presentation.home.HomeViewFragment"
         android:label="HomeViewFragment">
-        <argument
-            android:name="loadedStatus"
-            app:argType="boolean" />
+<!--        <argument-->
+<!--            android:name="loadedStatus"-->
+<!--            app:argType="boolean" />-->
         <action
             android:id="@+id/action_homeViewFragment_to_challengeDetailsView"
             app:destination="@id/challengeDetailsView" />
-            </fragment>
+        <action
+            android:id="@+id/action_homeViewFragment_to_allChallengesView"
+            app:destination="@id/allChallengesView" />
+        <action
+            android:id="@+id/action_homeViewFragment_to_groupView"
+            app:destination="@id/groupView" />
+    </fragment>
     <fragment
         android:id="@+id/challengeDetailsView"
         android:name="com.example.graduationproject.presentation.challengedetails.ChallengeDetailsView"
         android:label="ChallengeDetailsView" />
+    <fragment
+        android:id="@+id/allChallengesView"
+        android:name="com.example.graduationproject.presentation.challenges.AllChallengesView"
+        android:label="AllChallengesView" >
+        <action
+            android:id="@+id/action_allChallengesView_to_challengeDetailsView"
+            app:destination="@id/challengeDetailsView" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupView"
+        android:name="com.example.graduationproject.presentation.group.GroupView"
+        android:label="GroupView" />
 </navigation>

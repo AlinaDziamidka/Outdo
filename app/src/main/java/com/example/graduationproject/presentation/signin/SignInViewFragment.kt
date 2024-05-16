@@ -96,9 +96,6 @@ class SignInViewFragment : Fragment() {
     }
 
     private fun moveToHomeScreen() {
-//        val sharedPreferences = requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
-//        val username = sharedPreferences.getString("current_username", "  ")?:"  "
-//        val action = SignInViewFragmentDirections.actionSignInViewFragmentToHomeActivity(username, false)
         val action = SignInViewFragmentDirections.actionSignInViewFragmentToHomeActivity()
         findNavController().navigate(action)
     }
