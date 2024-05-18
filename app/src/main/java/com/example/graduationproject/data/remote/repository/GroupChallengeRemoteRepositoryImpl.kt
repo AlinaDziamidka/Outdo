@@ -5,16 +5,15 @@ import com.example.graduationproject.data.remote.api.service.ChallengeApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
 import com.example.graduationproject.data.remote.transormer.ChallengeTransformer
 import com.example.graduationproject.domain.entity.Challenge
-import com.example.graduationproject.domain.repository.remote.GroupChallengeRepository
+import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
-import kotlinx.coroutines.flow.map
 
-class GroupChallengeRepositoryImpl(
+class GroupChallengeRemoteRepositoryImpl(
     private val groupChallengeApiService: GroupChallengeApiService,
     private val challengeApiService: ChallengeApiService
 ) :
-    GroupChallengeRepository {
+    GroupChallengeRemoteRepository {
 
     override suspend fun fetchAllChallengesByGroupId(groupIdQuery: String): Event<List<Challenge>> {
         val query = "groupId=\'$groupIdQuery\'"

@@ -30,7 +30,7 @@ class SessionRepositoryImpl @Inject constructor (
                     token = response.token,
                     userProfile = UserProfile(
                         userId = response.userId,
-                        userIdentity = response.userIdentity,
+                        userEmail = response.userIdentity,
                         username = response.username,
                         userAvatarPath = response.userAvatarPath
                     )
@@ -60,7 +60,7 @@ class SessionRepositoryImpl @Inject constructor (
                     token = "",
                     userProfile = UserProfile(
                         userId = response.userId,
-                        userIdentity = response.userIdentity,
+                        userEmail = response.userIdentity,
                         username = response.username ?: "",
                         userAvatarPath = ""
                     )

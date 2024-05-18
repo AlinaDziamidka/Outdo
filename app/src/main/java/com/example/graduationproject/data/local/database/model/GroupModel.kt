@@ -14,5 +14,5 @@ data class GroupModel(
     @ColumnInfo("user_creator_id")
     val creatorId: String,
     @ColumnInfo("avatar")
-    val groupAvatarPath: String
+    val groupAvatarPath: String?
 )

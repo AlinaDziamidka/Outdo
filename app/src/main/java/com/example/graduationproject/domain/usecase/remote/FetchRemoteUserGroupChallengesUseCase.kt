@@ -10,9 +10,9 @@ import com.example.graduationproject.domain.repository.local.ChallengeLocalRepos
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
-import com.example.graduationproject.domain.repository.remote.GroupChallengeRepository
-import com.example.graduationproject.domain.repository.remote.GroupRepository
-import com.example.graduationproject.domain.repository.remote.UserGroupRepository
+import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
+import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
+import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
 import com.example.graduationproject.domain.util.writeToLocalDatabase
@@ -23,9 +23,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
-    private val userGroupRepository: UserGroupRepository,
-    private val groupRepository: GroupRepository,
-    private val groupChallengeRepository: GroupChallengeRepository,
+    private val userGroupRemoteRepository: UserGroupRemoteRepository,
+    private val groupRemoteRepository: GroupRemoteRepository,
+    private val groupChallengeRemoteRepository: GroupChallengeRemoteRepository,
     private val userGroupLocalRepository: UserGroupLocalRepository,
     private val groupLocalRepository: GroupLocalRepository,
     private val groupChallengeLocalRepository: GroupChallengeLocalRepository,
@@ -52,7 +52,7 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
 
     private suspend fun getUserGroups(userId: String): List<UserGroup> =
         withContext(Dispatchers.IO) {
-            val event = userGroupRepository.fetchAllGroupsByUserId(userId)
+            val event = userGroupRemoteRepository.fetchAllGroupsByUserId(userId)
             when (event) {
                 is Event.Success -> {
                     Log.d("FetchRemoteUserGroupChallengesUseCase", "Received user groups: ${event.data}")
@@ -70,7 +70,7 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
         }
 
     private suspend fun getGroup(groupId: String): Group = withContext(Dispatchers.IO) {
-        val event = groupRepository.fetchGroupsByGroupId(groupId)
+        val event = groupRemoteRepository.fetchGroupsByGroupId(groupId)
         when (event) {
             is Event.Success -> {
                 Log.d("FetchRemoteUserGroupChallengesUseCase", "Received group: ${event.data}")
@@ -88,7 +88,7 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
     private suspend fun getCurrentChallenges(groupId: String): List<Challenge> = withContext(
         Dispatchers.IO
     ) {
-        val event = groupChallengeRepository.fetchAllChallengesByGroupId(groupId)
+        val event = groupChallengeRemoteRepository.fetchAllChallengesByGroupId(groupId)
         Log.d("FetchRemoteUserGroupChallengesUseCase", "Received challenges: ${event}")
         when (event) {
             is Event.Success -> {

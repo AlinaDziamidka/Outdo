@@ -4,16 +4,12 @@ import android.util.Log
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
 import com.example.graduationproject.data.remote.transormer.ChallengeTransformer
 import com.example.graduationproject.domain.entity.Challenge
-import com.example.graduationproject.domain.entity.ChallengeType
-import com.example.graduationproject.domain.repository.remote.ChallengeRepository
+import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 
-class ChallengeRepositoryImpl(private val challengeApiService: ChallengeApiService) :
-    ChallengeRepository {
+class ChallengeRemoteRepositoryImpl(private val challengeApiService: ChallengeApiService) :
+    ChallengeRemoteRepository {
 
     override suspend fun fetchChallengesById(challengeIdQuery: String): Event<Challenge> {
         val idQuery = "objectId=\'$challengeIdQuery\'"

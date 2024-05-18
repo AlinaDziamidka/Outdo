@@ -32,7 +32,7 @@ class PrefsDataSourceImpl @Inject constructor(private val context: Context) : Pr
 
         with(prefs.edit()) {
             putString(userIdKey, userProfile.userId)
-            putString(userIdentity, userProfile.userIdentity)
+            putString(userIdentity, userProfile.userEmail)
             putString(usernameKey, userProfile.username)
             apply()
         }

@@ -3,7 +3,7 @@ package com.example.graduationproject.domain.usecase.remote
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
-import com.example.graduationproject.domain.repository.remote.ChallengeRepository
+import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
 import com.example.graduationproject.domain.util.writeToLocalDatabase
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FetchRemoteWeekChallengeUseCase @Inject constructor(
-    private val challengeRepository: ChallengeRepository,
+    private val challengeRemoteRepository: ChallengeRemoteRepository,
     private val challengeLocalRepository: ChallengeLocalRepository
 ) : UseCase<FetchRemoteWeekChallengeUseCase.Params, Challenge> {
 
@@ -31,7 +31,7 @@ class FetchRemoteWeekChallengeUseCase @Inject constructor(
 
     private suspend fun getWeekChallenge(challengeType: ChallengeType): Challenge =
         withContext(Dispatchers.IO) {
-            val event = challengeRepository.fetchWeekChallenge(challengeType.stringValue)
+            val event = challengeRemoteRepository.fetchWeekChallenge(challengeType.stringValue)
             when (event) {
                 is Event.Success -> {
                     writeToLocalDatabase(challengeLocalRepository::insertOne, event.data)

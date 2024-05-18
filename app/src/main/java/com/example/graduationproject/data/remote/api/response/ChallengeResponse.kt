@@ -9,7 +9,7 @@ data class ChallengeResponse(
     @SerializedName("name")
     val challengeName: String,
     @SerializedName("categoryId")
-    val categoryId: String,
+    val categoryId: String?,
     @SerializedName("challengeType")
     val challengeType: String,
     @SerializedName("description")

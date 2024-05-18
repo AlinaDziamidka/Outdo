@@ -3,10 +3,10 @@ package com.example.graduationproject.data.remote.repository
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.transormer.GroupTransformer
 import com.example.graduationproject.domain.entity.Group
-import com.example.graduationproject.domain.repository.remote.GroupRepository
+import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
-class GroupRepositoryImpl(private val groupApiService: GroupApiService) : GroupRepository {
+class GroupRemoteRepositoryImpl(private val groupApiService: GroupApiService) : GroupRemoteRepository {
 
     override suspend fun fetchGroupsByGroupId(groupIdQuery: String): Event<Group> {
         val query = "objectId=\'$groupIdQuery\'"

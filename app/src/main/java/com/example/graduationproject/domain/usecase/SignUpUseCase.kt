@@ -1,9 +1,8 @@
 package com.example.graduationproject.domain.usecase
 
-import android.util.Log
 import com.example.graduationproject.domain.entity.Session
 import com.example.graduationproject.domain.repository.remote.SessionRepository
-import com.example.graduationproject.domain.repository.remote.UserRepository
+import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.EventDomain
 import com.example.graduationproject.domain.util.UseCase
@@ -15,12 +14,12 @@ typealias SignUpUseCaseEvent = EventDomain<Session, SignUpUseCase.SignUpFailure>
 
 class SignUpUseCase @Inject constructor(
     private val sessionRepository: SessionRepository,
-    private val userRepository: UserRepository
+    private val userRemoteRepository: UserRemoteRepository
 ) :
     UseCase<SignUpUseCase.Params, SignUpUseCaseEvent> {
 
     data class Params(
-        val userIdentity: String,
+        val userEmail: String,
         val password: String,
         val username: String,
         val confirmPassword: String
@@ -28,19 +27,19 @@ class SignUpUseCase @Inject constructor(
 
     sealed class SignUpFailure {
         data object UsernameExistFailure : SignUpFailure()
-        data object UserIdentityExistFailure : SignUpFailure()
-        data object UserIdentityFailure : SignUpFailure()
+        data object UserEmailExistFailure : SignUpFailure()
+        data object UserEmailFailure : SignUpFailure()
         data object PasswordFailure : SignUpFailure()
         data object ConfirmPasswordFailure : SignUpFailure()
 
         data object EmptyUsernameFailure : SignUpFailure()
-        data object EmptyIdentityFailure : SignUpFailure()
+        data object EmptyEmailFailure : SignUpFailure()
 
         data object EmptyConfirmPasswordFailure : SignUpFailure()
     }
 
     override suspend operator fun invoke(params: Params): Flow<SignUpUseCaseEvent> = flow {
-        val userIdentity = params.userIdentity
+        val userIdentity = params.userEmail
         val password = params.password
         val username = params.username
 
@@ -71,16 +70,16 @@ class SignUpUseCase @Inject constructor(
 
     private suspend fun validate(params: Params): SignUpFailure? {
         val username = params.username
-        val usernameResponse = userRepository.fetchUsersByUsername(username)
+        val usernameResponse = userRemoteRepository.fetchUsersByUsername(username)
 
-        val userIdentity = params.userIdentity
-        val identityResponse = userRepository.fetchUsersByIdentity(userIdentity)
+        val userEmail = params.userEmail
+        val emailResponse = userRemoteRepository.fetchUsersByEmail(userEmail)
 
         return when {
             usernameResponse.isNotEmpty() -> SignUpFailure.UsernameExistFailure
-            params.userIdentity.isEmpty() -> SignUpFailure.EmptyIdentityFailure
-            identityResponse.isNotEmpty() -> SignUpFailure.UserIdentityExistFailure
-            !isValidEmail(params.userIdentity) -> SignUpFailure.UserIdentityFailure
+            params.userEmail.isEmpty() -> SignUpFailure.EmptyEmailFailure
+            emailResponse.isNotEmpty() -> SignUpFailure.UserEmailExistFailure
+            !isValidEmail(params.userEmail) -> SignUpFailure.UserEmailFailure
             params.confirmPassword.isEmpty() -> SignUpFailure.EmptyConfirmPasswordFailure
             !isValidPassword(params.password) -> SignUpFailure.PasswordFailure
             params.username.isEmpty() -> SignUpFailure.EmptyUsernameFailure
@@ -104,7 +103,5 @@ class SignUpUseCase @Inject constructor(
         val emailRegex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
         return emailRegex.matches(email)
     }
-
-
 }
 

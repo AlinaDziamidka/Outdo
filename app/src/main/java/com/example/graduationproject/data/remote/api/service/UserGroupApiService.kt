@@ -11,4 +11,7 @@ import retrofit2.http.Query
 interface UserGroupApiService {
     @GET("data/userGroups")
     suspend fun fetchAllGroupsByUserId(@Query("where") userIdQuery: String): Response<List<UserGroupsResponse>>
+
+    @GET("data/userGroups")
+    suspend fun fetchAllUsersByGroupId(@Query("where") groupIdQuery: String): Response<List<UserGroupsResponse>>
 }

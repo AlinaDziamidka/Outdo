@@ -4,15 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("user")
+@Entity("users")
 data class UserModel(
     @PrimaryKey()
     @ColumnInfo("user_id")
     val userId: String,
-    @ColumnInfo("user_identity")
-    val userIdentity: String,
+    @ColumnInfo("email")
+    val userEmail: String,
     @ColumnInfo(name = "username")
     val username: String,
     @ColumnInfo(name = "user_avatar")
-    val userAvatarPath: String
+    val userAvatarPath: String?
 )

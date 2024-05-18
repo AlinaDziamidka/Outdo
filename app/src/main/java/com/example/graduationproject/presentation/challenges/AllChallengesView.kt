@@ -41,7 +41,6 @@ class AllChallengesView : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -64,6 +63,11 @@ class AllChallengesView : Fragment() {
         observeChallenges()
     }
 
+    private fun initViews() {
+        challengesView = binding.challengesRecyclerView
+        onBackAction = binding.onBackAction
+    }
+
     private fun initAdapter() {
         challengesView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -76,11 +80,6 @@ class AllChallengesView : Fragment() {
     private fun moveToChallengeDetailsScreen() {
         val action = AllChallengesViewDirections.actionAllChallengesViewToChallengeDetailsView()
         findNavController().navigate(action)
-    }
-
-    private fun initViews() {
-        challengesView = binding.challengesRecyclerView
-        onBackAction = binding.onBackAction
     }
 
     private fun onPressedBackAction() {
@@ -100,12 +99,12 @@ class AllChallengesView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
-                    Log.d("observeChallenges", "New view state: $it")
+                    Log.d("observeAllChallenges", "New view state: $it")
                     when (it) {
                         is ChallengeViewState.Success -> {
                             val groupAndChallengesPairs = transformToGroupAndChallengesPair(it.data)
                             handleOnSuccess(groupAndChallengesPairs)
-                            Log.d("observeChallenges", "Success view state, data: ${it.data}")
+                            Log.d("observeAllChallenges", "Success view state, data: ${it.data}")
                         }
 
                         is ChallengeViewState.Loading -> {

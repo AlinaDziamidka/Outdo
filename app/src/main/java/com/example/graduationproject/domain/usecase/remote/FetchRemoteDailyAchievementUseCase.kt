@@ -3,7 +3,7 @@ package com.example.graduationproject.domain.usecase.remote
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
-import com.example.graduationproject.domain.repository.remote.AchievementRepository
+import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
 import com.example.graduationproject.domain.util.writeToLocalDatabase
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FetchRemoteDailyAchievementUseCase @Inject constructor(
-    private val achievementRepository: AchievementRepository,
+    private val achievementRemoteRepository: AchievementRemoteRepository,
     private val achievementLocalRepository: AchievementLocalRepository
 ) : UseCase<FetchRemoteDailyAchievementUseCase.Params, Achievement> {
 
@@ -31,7 +31,7 @@ class FetchRemoteDailyAchievementUseCase @Inject constructor(
 
     private suspend fun getDailyAchievement(achievementType: AchievementType): Achievement =
         withContext(Dispatchers.IO) {
-            val event = achievementRepository.fetchDailyAchievement(achievementType.stringValue)
+            val event = achievementRemoteRepository.fetchDailyAchievement(achievementType.stringValue)
             when (event) {
                 is Event.Success -> {
                     writeToLocalDatabase(achievementLocalRepository::insertOne, event.data)

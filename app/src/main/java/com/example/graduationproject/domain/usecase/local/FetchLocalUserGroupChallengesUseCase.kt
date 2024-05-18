@@ -42,11 +42,11 @@ class FetchLocalUserGroupChallengesUseCase @Inject constructor(
     private suspend fun getUserGroups(userId: String): List<UserGroup> =
         withContext(Dispatchers.IO) {
             val userGroups = userGroupLocalRepository.fetchGroupsByUserId(userId)
-            if (userGroups.isNotEmpty()) {
+//            if (userGroups.isNotEmpty()) {
                 return@withContext userGroups
-            } else {
-                throw Exception("UserGroups not found")
-            }
+//            } else {
+//                throw Exception("UserGroups not found")
+//            }
         }
 
     private suspend fun getGroup(groupId: String): Group = withContext(Dispatchers.IO) {
@@ -58,12 +58,8 @@ class FetchLocalUserGroupChallengesUseCase @Inject constructor(
         Dispatchers.IO
     ) {
         val groupChallenges = groupChallengeLocalRepository.fetchChallengesByGroupId(groupId)
-        if (groupChallenges.isNotEmpty()) {
             return@withContext groupChallenges.map { groupChallenge ->
                 challengeLocalRepository.fetchById(groupChallenge.challengeId)
-            }
-        } else {
-            throw Exception("Challenges not found")
         }
     }
 }

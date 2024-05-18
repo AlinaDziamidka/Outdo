@@ -9,7 +9,7 @@ public class UserTransformer {
         return UserProfile(
             userId = response.userId,
             username = response.username,
-            userIdentity = response.userIdentity,
+            userEmail = response.userIdentity,
             userAvatarPath = response.userAvatarPath
         )
     }

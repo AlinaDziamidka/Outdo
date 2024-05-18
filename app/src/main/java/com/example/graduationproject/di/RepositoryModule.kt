@@ -11,31 +11,33 @@ import com.example.graduationproject.data.local.repository.ChallengeLocalReposit
 import com.example.graduationproject.data.local.repository.GroupChallengeLocalRepositoryImpl
 import com.example.graduationproject.data.local.repository.GroupLocalRepositoryImpl
 import com.example.graduationproject.data.local.repository.UserGroupLocalRepositoryImpl
+import com.example.graduationproject.data.local.repository.UserLocalRepositoryImpl
 import com.example.graduationproject.data.remote.api.service.AchievementApiService
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
 import com.example.graduationproject.data.remote.api.service.UserApiService
 import com.example.graduationproject.data.remote.api.service.UserGroupApiService
-import com.example.graduationproject.data.remote.repository.AchievementRepositoryImpl
-import com.example.graduationproject.data.remote.repository.ChallengeRepositoryImpl
-import com.example.graduationproject.data.remote.repository.GroupChallengeRepositoryImpl
-import com.example.graduationproject.data.remote.repository.GroupRepositoryImpl
+import com.example.graduationproject.data.remote.repository.AchievementRemoteRepositoryImpl
+import com.example.graduationproject.data.remote.repository.ChallengeRemoteRepositoryImpl
+import com.example.graduationproject.data.remote.repository.GroupChallengeRemoteRepositoryImpl
+import com.example.graduationproject.data.remote.repository.GroupRemoteRepositoryImpl
 import com.example.graduationproject.data.remote.repository.SessionRepositoryImpl
-import com.example.graduationproject.data.remote.repository.UserGroupRepositoryImpl
-import com.example.graduationproject.data.remote.repository.UserRepositoryImpl
+import com.example.graduationproject.data.remote.repository.UserGroupRemoteRepositoryImpl
+import com.example.graduationproject.data.remote.repository.UserRemoteRepositoryImpl
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
-import com.example.graduationproject.domain.repository.remote.AchievementRepository
-import com.example.graduationproject.domain.repository.remote.ChallengeRepository
-import com.example.graduationproject.domain.repository.remote.GroupChallengeRepository
-import com.example.graduationproject.domain.repository.remote.GroupRepository
+import com.example.graduationproject.domain.repository.local.UserLocalRepository
+import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
+import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
+import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
+import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
-import com.example.graduationproject.domain.repository.remote.UserGroupRepository
-import com.example.graduationproject.domain.repository.remote.UserRepository
+import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
+import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -48,18 +50,23 @@ import dagger.hilt.android.components.ViewModelComponent
 object RepositoryModule {
 
     @Provides
-    fun provideGroupRepository(groupApiService: GroupApiService): GroupRepository {
-        return GroupRepositoryImpl(groupApiService)
+    fun provideGroupRepository(groupApiService: GroupApiService): GroupRemoteRepository {
+        return GroupRemoteRepositoryImpl(groupApiService)
     }
 
     @Provides
-    fun provideUserGroupRepository(userGroupApiService: UserGroupApiService): UserGroupRepository {
-        return UserGroupRepositoryImpl(userGroupApiService)
+    fun provideUserGroupRepository(userGroupApiService: UserGroupApiService): UserGroupRemoteRepository {
+        return UserGroupRemoteRepositoryImpl(userGroupApiService)
     }
 
     @Provides
-    fun provideUserRepository(userApiService: UserApiService): UserRepository {
-        return UserRepositoryImpl(userApiService)
+    fun provideUserRepository(userApiService: UserApiService): UserRemoteRepository {
+        return UserRemoteRepositoryImpl(userApiService)
+    }
+
+    @Provides
+    fun provideUserLocalRepository(userDao: UserDao): UserLocalRepository {
+        return UserLocalRepositoryImpl(userDao)
     }
 
     @Provides
@@ -86,18 +93,18 @@ object RepositoryModule {
     fun provideGroupChallengeRepository(
         groupChallengeApiService: GroupChallengeApiService,
         challengeApiService: ChallengeApiService
-    ): GroupChallengeRepository {
-        return GroupChallengeRepositoryImpl(groupChallengeApiService, challengeApiService)
+    ): GroupChallengeRemoteRepository {
+        return GroupChallengeRemoteRepositoryImpl(groupChallengeApiService, challengeApiService)
     }
 
     @Provides
-    fun provideChallengeRepository(challengeApiService: ChallengeApiService): ChallengeRepository {
-        return ChallengeRepositoryImpl(challengeApiService)
+    fun provideChallengeRepository(challengeApiService: ChallengeApiService): ChallengeRemoteRepository {
+        return ChallengeRemoteRepositoryImpl(challengeApiService)
     }
 
     @Provides
-    fun provideAchievementRepository(achievementApiService: AchievementApiService): AchievementRepository {
-        return AchievementRepositoryImpl(achievementApiService)
+    fun provideAchievementRepository(achievementApiService: AchievementApiService): AchievementRemoteRepository {
+        return AchievementRemoteRepositoryImpl(achievementApiService)
     }
 
     @Provides

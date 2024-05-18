@@ -13,7 +13,7 @@ data class ChallengeModel(
     @ColumnInfo("name")
     val challengeName: String,
     @ColumnInfo("category_id")
-    val categoryId: String,
+    val categoryId: String?,
     @SerializedName("challengeType")
     val challengeType: String,
     @SerializedName("description")

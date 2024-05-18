@@ -4,12 +4,12 @@ import android.util.Log
 import com.example.graduationproject.data.remote.api.service.AchievementApiService
 import com.example.graduationproject.data.remote.transormer.AchievementTransformer
 import com.example.graduationproject.domain.entity.Achievement
-import com.example.graduationproject.domain.repository.remote.AchievementRepository
+import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
 
-class AchievementRepositoryImpl(private val achievementApiService: AchievementApiService) :
-    AchievementRepository {
+class AchievementRemoteRepositoryImpl(private val achievementApiService: AchievementApiService) :
+    AchievementRemoteRepository {
     override suspend fun fetchAchievementById(achievementIdQuery: String): Event<Achievement> {
         val idQuery = "objectId=\'$achievementIdQuery\'"
         Log.d("AchievementRepositoryImpl", "Fetching achievement with query: $idQuery")

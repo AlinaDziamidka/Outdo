@@ -48,7 +48,7 @@
         app:queryHint="@string/group_screen_search_hint"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/weeklyChallengeRecyclerView"
+        android:id="@+id/groupsRecyclerView"
         tools:listitem="@layout/group_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

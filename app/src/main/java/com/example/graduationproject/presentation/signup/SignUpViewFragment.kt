@@ -2,7 +2,6 @@ package com.example.graduationproject.presentation.signup
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -143,11 +142,11 @@ class SignUpViewFragment : Fragment() {
                 showUsernameExistFailure()
             }
 
-            is SignUpUseCase.SignUpFailure.UserIdentityExistFailure -> {
+            is SignUpUseCase.SignUpFailure.UserEmailExistFailure -> {
                 showUserIdentityExistFailure()
             }
 
-            is SignUpUseCase.SignUpFailure.UserIdentityFailure -> {
+            is SignUpUseCase.SignUpFailure.UserEmailFailure -> {
                 showUserIdentityFailure()
             }
 
@@ -163,7 +162,7 @@ class SignUpViewFragment : Fragment() {
                 showEmptyUsernameFailure()
             }
 
-            is SignUpUseCase.SignUpFailure.EmptyIdentityFailure -> {
+            is SignUpUseCase.SignUpFailure.EmptyEmailFailure -> {
                 showEmptyIdentityFailure()
             }
 
