@@ -50,9 +50,9 @@ class FetchRemoteUserGroupsUseCase @Inject constructor(
 
     private suspend fun getUserGroupsByUserId(userId: String): List<UserGroup> =
         withContext(Dispatchers.IO) {
-            val userGroups = userGroupLocalRepository.fetchGroupsByUserId(userId)
+            return@withContext userGroupLocalRepository.fetchGroupsByUserId(userId)
 //            if (userGroups.isNotEmpty()) {
-                return@withContext userGroups
+//                return@withContext userGroups
 //            } else {
 //                throw Exception("UserGroups not found")
 //            }
