@@ -1,8 +1,12 @@
 package com.example.graduationproject.domain.usecase.remote
 
 import android.util.Log
+import com.example.graduationproject.data.local.LocalLoadManager
 import com.example.graduationproject.data.remote.RemoteLoadManager
+import com.example.graduationproject.di.qualifiers.Local
+import com.example.graduationproject.di.qualifiers.Remote
 import com.example.graduationproject.domain.entity.Group
+import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.domain.entity.GroupParticipants
 import com.example.graduationproject.domain.entity.UserGroup
 import com.example.graduationproject.domain.entity.UserProfile
@@ -12,6 +16,7 @@ import com.example.graduationproject.domain.repository.local.UserLocalRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.util.Event
+import com.example.graduationproject.domain.util.LoadManager
 import com.example.graduationproject.domain.util.UseCase
 import com.example.graduationproject.domain.util.writeToLocalDatabase
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +31,8 @@ class FetchRemoteUserGroupsUseCase @Inject constructor(
 //    private val userGroupRemoteRepository: UserGroupRemoteRepository,
 //    private val userRemoteRepository: UserRemoteRepository,
 //    private val userLocalRepository: UserLocalRepository
-    private val remoteLoadManager: RemoteLoadManager,
-    private val localLoadManager: RemoteLoadManager
+    @Remote private val remoteLoadManager: LoadManager,
+    @Local private val localLoadManager: LoadManager
 ) : UseCase<FetchRemoteUserGroupsUseCase.Params, MutableList<GroupParticipants>> {
     data class Params(
         val userId: String
@@ -39,9 +44,14 @@ class FetchRemoteUserGroupsUseCase @Inject constructor(
             val groups = localLoadManager.fetchGroupsByUserId(userId)
 
             val groupParticipants = groups.map { group ->
-                val participants = remoteLoadManager.fetchUsersByGroupId(group.groupId)
+                var participants = localLoadManager.fetchUsersByGroupId(group.groupId)
+                if (participants.isEmpty()){
+                    participants = remoteLoadManager.fetchUsersByGroupId(group.groupId)
+                }
                 GroupParticipants(group, participants)
             }.toMutableList()
+            emit(groupParticipants)
+        }
 
 //            val userGroupsByUserId = getUserGroupsByUserId(userId)
 //            val groupParticipants = userGroupsByUserId.map { userGroupByUserId ->
@@ -57,8 +67,7 @@ class FetchRemoteUserGroupsUseCase @Inject constructor(
 //                GroupParticipants(group, participants)
 //            }.toMutableList()
 
-            emit(groupParticipants)
-        }
+
 
 //    private suspend fun getUserGroupsByUserId(userId: String): List<UserGroup> =
 //        withContext(Dispatchers.IO) {

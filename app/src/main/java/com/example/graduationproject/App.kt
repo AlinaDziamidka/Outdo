@@ -14,14 +14,6 @@ class App : Application(), Configuration.Provider {
 
     companion object {
         lateinit var instance: App
-
-        var isLoaded: Boolean = false
-            get() {
-                return field
-            }
-            set(value) {
-                field = value
-            }
     }
 
     override fun onCreate() {

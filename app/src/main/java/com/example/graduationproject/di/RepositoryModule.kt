@@ -43,54 +43,36 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 
 @Module
-@InstallIn(ViewModelComponent::class)
+//@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
     @Provides
-    fun provideGroupRepository(groupApiService: GroupApiService): GroupRemoteRepository {
+    @Singleton
+    fun provideGroupRemoteRepository(groupApiService: GroupApiService): GroupRemoteRepository {
         return GroupRemoteRepositoryImpl(groupApiService)
     }
 
     @Provides
-    fun provideUserGroupRepository(userGroupApiService: UserGroupApiService): UserGroupRemoteRepository {
+    @Singleton
+    fun provideUserGroupRemoteRepository(userGroupApiService: UserGroupApiService): UserGroupRemoteRepository {
         return UserGroupRemoteRepositoryImpl(userGroupApiService)
     }
 
     @Provides
-    fun provideUserRepository(userApiService: UserApiService): UserRemoteRepository {
+    @Singleton
+    fun provideUserRemoteRepository(userApiService: UserApiService): UserRemoteRepository {
         return UserRemoteRepositoryImpl(userApiService)
     }
 
     @Provides
-    fun provideUserLocalRepository(userDao: UserDao): UserLocalRepository {
-        return UserLocalRepositoryImpl(userDao)
-    }
-
-    @Provides
-    fun provideUserGroupLocalRepository(userGroupDao: UserGroupDao): UserGroupLocalRepository {
-        return UserGroupLocalRepositoryImpl(userGroupDao)
-    }
-
-    @Provides
-    fun provideGroupLocalRepository(groupDao: GroupDao): GroupLocalRepository {
-        return GroupLocalRepositoryImpl(groupDao)
-    }
-
-    @Provides
-    fun provideGroupChallengeLocalRepository(groupChallengeDao: GroupChallengeDao): GroupChallengeLocalRepository {
-        return GroupChallengeLocalRepositoryImpl(groupChallengeDao)
-    }
-
-    @Provides
-    fun provideChallengeLocalRepository(challengeDao: ChallengeDao): ChallengeLocalRepository {
-        return ChallengeLocalRepositoryImpl(challengeDao)
-    }
-
-    @Provides
-    fun provideGroupChallengeRepository(
+    @Singleton
+    fun provideGroupChallengeRemoteRepository(
         groupChallengeApiService: GroupChallengeApiService,
         challengeApiService: ChallengeApiService
     ): GroupChallengeRemoteRepository {
@@ -98,20 +80,52 @@ object RepositoryModule {
     }
 
     @Provides
-    fun provideChallengeRepository(challengeApiService: ChallengeApiService): ChallengeRemoteRepository {
+    @Singleton
+    fun provideChallengeRemoteRepository(challengeApiService: ChallengeApiService): ChallengeRemoteRepository {
         return ChallengeRemoteRepositoryImpl(challengeApiService)
     }
 
     @Provides
-    fun provideAchievementRepository(achievementApiService: AchievementApiService): AchievementRemoteRepository {
+    @Singleton
+    fun provideAchievementRemoteRepository(achievementApiService: AchievementApiService): AchievementRemoteRepository {
         return AchievementRemoteRepositoryImpl(achievementApiService)
     }
 
     @Provides
+    @Singleton
+    fun provideUserLocalRepository(userDao: UserDao): UserLocalRepository {
+        return UserLocalRepositoryImpl(userDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserGroupLocalRepository(userGroupDao: UserGroupDao): UserGroupLocalRepository {
+        return UserGroupLocalRepositoryImpl(userGroupDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGroupLocalRepository(groupDao: GroupDao): GroupLocalRepository {
+        return GroupLocalRepositoryImpl(groupDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGroupChallengeLocalRepository(groupChallengeDao: GroupChallengeDao): GroupChallengeLocalRepository {
+        return GroupChallengeLocalRepositoryImpl(groupChallengeDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChallengeLocalRepository(challengeDao: ChallengeDao): ChallengeLocalRepository {
+        return ChallengeLocalRepositoryImpl(challengeDao)
+    }
+
+    @Provides
+    @Singleton
     fun provideAchievementLocalRepository(achievementDao: AchievementDao): AchievementLocalRepository {
         return AchievementLocalRepositoryImpl(achievementDao)
     }
-
 }
 
 @Module

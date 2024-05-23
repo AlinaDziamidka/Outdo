@@ -51,43 +51,23 @@ class HomeViewModel @Inject constructor(
 
     private var isDatabaseLoaded = false
 
-    fun setDatabaseLoadedStatus(loaded: Boolean) {
-        isDatabaseLoaded = loaded
-        Log.d("HomeViewModel", "Database loaded status set to: $loaded")
-        Log.d("HomeViewModel", "Database loaded status set to: $isDatabaseLoaded")
-    }
+//    fun setDatabaseLoadedStatus(loaded: Boolean) {
+//        isDatabaseLoaded = loaded
+//        Log.d("HomeViewModel", "Database loaded status set to: $loaded")
+//        Log.d("HomeViewModel", "Database loaded status set to: $isDatabaseLoaded")
+//    }
 
     fun setUpUserChallenges(userId: String) {
-        Log.d("HomeViewModel", "Setting up user challenges for user ID: $userId")
-        Log.d("HomeViewModel", "Database loaded status set to: $isDatabaseLoaded")
-        if (isDatabaseLoaded) {
-            Log.d("HomeViewModel", "Database is loaded, fetching local group challenges")
-            fetchLocalGroupChallenges(userId)
-        } else {
-            Log.d("HomeViewModel", "Database is not loaded, fetching remote group challenges")
-            fetchRemoteGroupChallenges(userId)
-        }
-    }
+//        Log.d("HomeViewModel", "Setting up user challenges for user ID: $userId")
+//        Log.d("HomeViewModel", "Database loaded status set to: $isDatabaseLoaded")
+//        if (isDatabaseLoaded) {
+//            Log.d("HomeViewModel", "Database is loaded, fetching local group challenges")
+//            fetchLocalGroupChallenges(userId)
+//        } else {
+//            Log.d("HomeViewModel", "Database is not loaded, fetching remote group challenges")
+//            fetchRemoteGroupChallenges(userId)
+//        }
 
-    private fun fetchLocalGroupChallenges(userId: String) {
-        viewModelScope.launch {
-            fetchLocalUserGroupChallengesUseCase(
-                FetchLocalUserGroupChallengesUseCase.Params(
-                    userId
-                )
-            )
-                .onStart {
-                    _viewStateChallenges.value = HomeViewState.Loading
-                }.catch {
-                    _viewStateChallenges.value =
-                        HomeViewState.Failure(it.message ?: "Something went wrong.")
-                }.collect { groupAndChallenges ->
-                    _viewStateChallenges.value = HomeViewState.Success(groupAndChallenges)
-                }
-        }
-    }
-
-    private fun fetchRemoteGroupChallenges(userId: String) {
         viewModelScope.launch {
             Log.d("HomeViewModel", "Fetching remote group challenges for user $userId")
             fetchRemoteUserGroupChallengesUseCase(
@@ -112,6 +92,48 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+//    private fun fetchLocalGroupChallenges(userId: String) {
+//        viewModelScope.launch {
+//            fetchLocalUserGroupChallengesUseCase(
+//                FetchLocalUserGroupChallengesUseCase.Params(
+//                    userId
+//                )
+//            )
+//                .onStart {
+//                    _viewStateChallenges.value = HomeViewState.Loading
+//                }.catch {
+//                    _viewStateChallenges.value =
+//                        HomeViewState.Failure(it.message ?: "Something went wrong.")
+//                }.collect { groupAndChallenges ->
+//                    _viewStateChallenges.value = HomeViewState.Success(groupAndChallenges)
+//                }
+//        }
+//    }
+
+//    private fun fetchRemoteGroupChallenges(userId: String) {
+//        viewModelScope.launch {
+//            Log.d("HomeViewModel", "Fetching remote group challenges for user $userId")
+//            fetchRemoteUserGroupChallengesUseCase(
+//                FetchRemoteUserGroupChallengesUseCase.Params(
+//                    userId
+//                )
+//            )
+//                .onStart {
+//                    Log.d("HomeViewModel", "Fetching remote group challenges: Loading state")
+//                    _viewStateChallenges.value = HomeViewState.Loading
+//                }.catch {
+//                    Log.e(
+//                        "HomeViewModel",
+//                        "Fetching remote group challenges: Error - ${it.message}"
+//                    )
+//                    _viewStateChallenges.value =
+//                        HomeViewState.Failure(it.message ?: "Something went wrong.")
+//                }.collect { groupAndChallenges ->
+//                    Log.d("HomeViewModel", "Fetching remote group challenges: Success")
+//                    _viewStateChallenges.value = HomeViewState.Success(groupAndChallenges)
+//                }
+//        }
+//    }
 
     fun setUpWeekChallenge(challengeType: ChallengeType) {
         if (isDatabaseLoaded) {

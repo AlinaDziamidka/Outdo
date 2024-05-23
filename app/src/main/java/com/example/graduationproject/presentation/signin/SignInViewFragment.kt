@@ -14,6 +14,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
+import com.example.graduationproject.data.worker.InitialLoadWorker
 import com.example.graduationproject.databinding.FragmentSignInBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -72,6 +76,7 @@ class SignInViewFragment : Fragment() {
                 viewModel.viewState.collect {
                     when (it) {
                         is SignInViewState.Success -> {
+//                            runWorker()
                             moveToHomeScreen()
                         }
 
@@ -90,6 +95,20 @@ class SignInViewFragment : Fragment() {
             }
         }
     }
+
+//    private fun runWorker() {
+//        val sharedPreferences =
+//            requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
+//        val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
+//        Log.d("SignInViewFragment", userId)
+//        val inputData = workDataOf("USER_ID" to userId)
+//
+//        val workRequest = OneTimeWorkRequestBuilder<InitialLoadWorker>()
+//            .setInputData(inputData)
+//            .build()
+//        Log.d("SignInViewFragment", "Start WorkManager")
+//        context?.let { WorkManager.getInstance(it).enqueue(workRequest) }
+//    }
 
     private fun showFailureNotification() {
         binding.signInContainer.invalidUsernameOrPasswordView.visibility = View.VISIBLE

@@ -1,26 +1,15 @@
 package com.example.graduationproject.domain.usecase.remote
 
 import android.util.Log
+import com.example.graduationproject.data.local.LocalLoadManager
 import com.example.graduationproject.data.remote.RemoteLoadManager
-import com.example.graduationproject.domain.entity.Challenge
-import com.example.graduationproject.domain.entity.Group
+import com.example.graduationproject.di.qualifiers.Local
+import com.example.graduationproject.di.qualifiers.Remote
 import com.example.graduationproject.domain.entity.GroupAndChallenges
-import com.example.graduationproject.domain.entity.GroupChallenge
-import com.example.graduationproject.domain.entity.UserGroup
-import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
-import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
-import com.example.graduationproject.domain.repository.local.GroupLocalRepository
-import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
-import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
-import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
-import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
-import com.example.graduationproject.domain.util.Event
+import com.example.graduationproject.domain.util.LoadManager
 import com.example.graduationproject.domain.util.UseCase
-import com.example.graduationproject.domain.util.writeToLocalDatabase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
@@ -31,21 +20,34 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
 //    private val groupLocalRepository: GroupLocalRepository,
 //    private val groupChallengeLocalRepository: GroupChallengeLocalRepository,
 //    private val challengeLocalRepository: ChallengeLocalRepository
-    private val remoteLoadManager: RemoteLoadManager
-) : UseCase<FetchRemoteUserGroupChallengesUseCase.Params, List<GroupAndChallenges>> {
+    @Remote private val remoteLoadManager: LoadManager,
+    @Local private val localLoadManager: LoadManager
+) : UseCase<FetchRemoteUserGroupChallengesUseCase.Params, MutableList<GroupAndChallenges>> {
     data class Params(
         val userId: String,
     )
 
-    override suspend fun invoke(params: Params): Flow<List<GroupAndChallenges>> =
+    override suspend fun invoke(params: Params): Flow<MutableList<GroupAndChallenges>> =
         flow {
             val userId = params.userId
-            val groups = remoteLoadManager.fetchGroupsByUserId(userId)
+            val groupAndChallenges : MutableList<GroupAndChallenges>
+            var groups = localLoadManager.fetchGroupsByUserId(userId)
 
-            val groupAndChallengesList = groups.map { group ->
-                val challenges = remoteLoadManager.fetchUserChallengesByGroupId(group.groupId)
-                GroupAndChallenges(group, challenges)
+            if (groups.isNotEmpty()) {
+                groupAndChallenges = groups.map { group ->
+                    val challenges = localLoadManager.fetchUserChallengesByGroupId(group.groupId)
+                    GroupAndChallenges(group, challenges)
+                }.toMutableList()
             }
+            else {
+                groups = remoteLoadManager.fetchGroupsByUserId(userId)
+                groupAndChallenges = groups.map { group ->
+                    val challenges = remoteLoadManager.fetchUserChallengesByGroupId(group.groupId)
+                    GroupAndChallenges(group, challenges)
+                }.toMutableList()
+            }
+
+
             //            val userGroups = getUserGroups(userId)
 //
 //            val groupAndChallengesList = userGroups.map { userGroup ->
@@ -55,7 +57,7 @@ class FetchRemoteUserGroupChallengesUseCase @Inject constructor(
 //                GroupAndChallenges(group, challenges)
 //            }.toList()
 
-            emit(groupAndChallengesList)
+            emit(groupAndChallenges)
         }
 
 //    private suspend fun getUserGroups(userId: String): List<UserGroup> =

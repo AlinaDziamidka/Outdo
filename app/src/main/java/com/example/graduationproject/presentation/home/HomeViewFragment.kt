@@ -114,11 +114,9 @@ class HomeViewFragment : Fragment() {
     }
 
     private fun setUpLoadedStatus() {
-//        val args = HomeViewFragmentArgs.fromBundle(requireArguments())
-//        val loadedStatus = args.loadedStatus
-        val loadedStatus = App.isLoaded
-        viewModel.setDatabaseLoadedStatus(loadedStatus)
-        Log.d("HomeViewFragment", "Loaded status in HomeViewFragment: $loadedStatus")
+//        val loadedStatus = App.isLoaded
+//        viewModel.setDatabaseLoadedStatus(loadedStatus)
+//        Log.d("HomeViewFragment", "Loaded status in HomeViewFragment: $loadedStatus")
     }
 
     private fun setUpChallenges() {

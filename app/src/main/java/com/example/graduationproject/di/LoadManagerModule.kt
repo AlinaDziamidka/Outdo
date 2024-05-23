@@ -5,21 +5,24 @@ import com.example.graduationproject.data.remote.RemoteLoadManager
 import com.example.graduationproject.di.qualifiers.Local
 import com.example.graduationproject.di.qualifiers.Remote
 import com.example.graduationproject.domain.util.LoadManager
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class LoadManagerModule {
+object LoadManagerModule {
 
-    @Binds
+    @Provides
     @Local
-    abstract fun bindLocalLoadManager(localLoadManager: LocalLoadManager): LoadManager
+    fun provideLocalLoadManager(localLoadManager: LocalLoadManager): LoadManager{
+        return localLoadManager
+    }
 
-    @Binds
+    @Provides
     @Remote
-    abstract fun bindRemoteLoadManager(remoteLoadManager: RemoteLoadManager): LoadManager
-
+    fun provideRemoteLoadManager(remoteLoadManager: RemoteLoadManager): LoadManager {
+        return remoteLoadManager
+    }
 }
