@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.graduationproject.data.local.database.model.ChallengeModel
+import com.example.graduationproject.domain.util.Event
 
 @Dao
 interface ChallengeDao {
@@ -16,7 +17,7 @@ interface ChallengeDao {
     fun fetchById(challengeId: String): ChallengeModel
 
     @Query("SELECT * FROM challenges WHERE challengeType = :challengeType LIMIT 1")
-    fun fetchWeekChallenge(challengeType: String): ChallengeModel
+    fun fetchWeekChallenge(challengeType: String): ChallengeModel?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOne(challengeModel: ChallengeModel)

@@ -4,6 +4,7 @@ import com.example.graduationproject.data.local.database.dao.ChallengeDao
 import com.example.graduationproject.data.local.transformer.ChallengeTransformer
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
+import com.example.graduationproject.domain.util.Event
 import javax.inject.Inject
 
 class ChallengeLocalRepositoryImpl @Inject constructor(private val challengeDao: ChallengeDao) :
@@ -22,9 +23,15 @@ class ChallengeLocalRepositoryImpl @Inject constructor(private val challengeDao:
         return challengeTransformer.fromModel(model)
     }
 
-    override suspend fun fetchWeekChallenge(challengeType: String): Challenge {
+    override suspend fun fetchWeekChallenge(challengeType: String): Event<Challenge> {
         val model = challengeDao.fetchWeekChallenge(challengeType)
-        return challengeTransformer.fromModel(model)
+
+        return if (model != null) {
+            val challenge = challengeTransformer.fromModel(model)
+            Event.Success(challenge)
+        } else {
+            Event.Failure("Week not found")
+        }
     }
 
     override suspend fun insertOne(challenge: Challenge) {

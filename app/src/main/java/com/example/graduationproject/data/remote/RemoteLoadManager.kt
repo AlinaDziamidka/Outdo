@@ -1,16 +1,22 @@
 package com.example.graduationproject.data.remote
 
 import android.util.Log
+import com.example.graduationproject.domain.entity.Achievement
+import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupChallenge
 import com.example.graduationproject.domain.entity.UserGroup
 import com.example.graduationproject.domain.entity.UserProfile
+import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
+import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
+import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
@@ -29,9 +35,12 @@ class RemoteLoadManager @Inject constructor(
     private val userGroupLocalRepository: UserGroupLocalRepository,
     private val groupLocalRepository: GroupLocalRepository,
     private val groupChallengeLocalRepository: GroupChallengeLocalRepository,
+    private val challengeRemoteRepository: ChallengeRemoteRepository,
     private val challengeLocalRepository: ChallengeLocalRepository,
     private val userRemoteRepository: UserRemoteRepository,
-    private val userLocalRepository: UserLocalRepository
+    private val userLocalRepository: UserLocalRepository,
+    private val achievementRemoteRepository: AchievementRemoteRepository,
+    private val achievementLocalRepository: AchievementLocalRepository
 ) : LoadManager {
 
     override suspend fun fetchGroupsByUserId(userId: String): List<Group> {
@@ -171,4 +180,37 @@ class RemoteLoadManager @Inject constructor(
             )
         }
     }
+
+    override suspend fun fetchDailyAchievement(achievementType: AchievementType): Event<Achievement> =
+        withContext(Dispatchers.IO) {
+            val event =
+                achievementRemoteRepository.fetchDailyAchievement(achievementType.stringValue)
+            when (event) {
+                is Event.Success -> {
+                    writeToLocalDatabase(achievementLocalRepository::insertOne, event.data)
+                    Event.Success(event.data)
+                }
+
+                is Event.Failure -> {
+                    val error = event.exception
+                    Event.Failure(error)
+                }
+            }
+        }
+
+    override suspend fun fetchWeekChallenge(challengeType: ChallengeType): Event<Challenge> =
+        withContext(Dispatchers.IO) {
+            val event = challengeRemoteRepository.fetchWeekChallenge(challengeType.stringValue)
+            when (event) {
+                is Event.Success -> {
+                    writeToLocalDatabase(challengeLocalRepository::insertOne, event.data)
+                    Event.Success(event.data)
+                }
+
+                is Event.Failure -> {
+                    val error = event.exception
+                    Event.Failure(error)
+                }
+            }
+        }
 }

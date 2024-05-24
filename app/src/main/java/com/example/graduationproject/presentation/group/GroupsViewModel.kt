@@ -3,10 +3,8 @@ package com.example.graduationproject.presentation.group
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.domain.entity.GroupParticipants
-import com.example.graduationproject.domain.usecase.local.FetchLocalUserGroupChallengesUseCase
-import com.example.graduationproject.domain.usecase.remote.FetchRemoteUserGroupsUseCase
+import com.example.graduationproject.domain.usecase.FetchUserGroupsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class GroupsViewModel @Inject constructor(
     context: Application,
-    private val fetchRemoteUserGroupsUseCase: FetchRemoteUserGroupsUseCase
+    private val fetchUserGroupsUseCase: FetchUserGroupsUseCase
 ) : AndroidViewModel(context) {
 
     private val _viewState =
@@ -27,8 +25,8 @@ class GroupsViewModel @Inject constructor(
 
     fun setUpUserGroups(userId: String) {
         viewModelScope.launch {
-            fetchRemoteUserGroupsUseCase(
-                FetchRemoteUserGroupsUseCase.Params(
+            fetchUserGroupsUseCase(
+                FetchUserGroupsUseCase.Params(
                     userId
                 )
             )

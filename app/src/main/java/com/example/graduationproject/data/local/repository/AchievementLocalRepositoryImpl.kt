@@ -4,6 +4,8 @@ import com.example.graduationproject.data.local.database.dao.AchievementDao
 import com.example.graduationproject.data.local.transformer.AchievementTransformer
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
+import com.example.graduationproject.domain.util.Event
+import org.jetbrains.annotations.NotNull
 import javax.inject.Inject
 
 class AchievementLocalRepositoryImpl @Inject constructor(private val achievementDao: AchievementDao) :
@@ -23,9 +25,15 @@ class AchievementLocalRepositoryImpl @Inject constructor(private val achievement
         return achievementTransformer.fromModel(model)
     }
 
-    override suspend fun fetchDailyAchievement(achievementType: String): Achievement {
+    override suspend fun fetchDailyAchievement(achievementType: String): Event<Achievement> {
         val model = achievementDao.fetchDailyAchievement(achievementType)
-        return achievementTransformer.fromModel(model)
+
+        return if (model != null) {
+            val achievement = achievementTransformer.fromModel(model)
+            Event.Success(achievement)
+        } else {
+            Event.Failure("Daily achievement not found")
+        }
     }
 
     override suspend fun insertOne(achievement: Achievement) {
@@ -39,6 +47,4 @@ class AchievementLocalRepositoryImpl @Inject constructor(private val achievement
         val model = achievementTransformer.toModel(achievement)
         achievementDao.updateOne(model)
     }
-
-
 }

@@ -16,6 +16,7 @@ import androidx.work.workDataOf
 import com.example.graduationproject.App
 import com.example.graduationproject.R
 import com.example.graduationproject.data.worker.InitialLoadWorker
+//import com.example.graduationproject.data.worker.InitialLoadWorker
 import com.example.graduationproject.presentation.home.HomeView
 import com.example.graduationproject.presentation.signin.SignInView
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +40,6 @@ class SplashView : AppCompatActivity(R.layout.activity_splash) {
                     when (it) {
                         SplashViewState.Success -> {
                             Log.d("SplashView", "Navigating to HomeView")
-//                            App.isLoaded = true
                             runWorker()
                             val intent = Intent(this@SplashView, HomeView::class.java)
                             startActivity(intent)

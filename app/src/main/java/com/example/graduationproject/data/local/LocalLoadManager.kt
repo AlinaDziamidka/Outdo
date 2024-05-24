@@ -1,14 +1,19 @@
 package com.example.graduationproject.data.local
 
 import android.util.Log
+import com.example.graduationproject.domain.entity.Achievement
+import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
+import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
+import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.LoadManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,7 +24,8 @@ class LocalLoadManager @Inject constructor(
     private val groupLocalRepository: GroupLocalRepository,
     private val groupChallengeLocalRepository: GroupChallengeLocalRepository,
     private val challengeLocalRepository: ChallengeLocalRepository,
-    private val userLocalRepository: UserLocalRepository
+    private val userLocalRepository: UserLocalRepository,
+    private val achievementLocalRepository: AchievementLocalRepository
 ) : LoadManager {
     override suspend fun fetchGroupsByUserId(userId: String): List<Group> =
         withContext(Dispatchers.IO) {
@@ -63,5 +69,15 @@ class LocalLoadManager @Inject constructor(
             return@withContext groupChallenges.map { groupChallenge ->
                 challengeLocalRepository.fetchById(groupChallenge.challengeId)
             }
+        }
+
+    override suspend fun fetchDailyAchievement(achievementType: AchievementType): Event<Achievement> =
+        withContext(Dispatchers.IO) {
+            return@withContext achievementLocalRepository.fetchDailyAchievement(achievementType.stringValue)
+        }
+
+    override suspend fun fetchWeekChallenge(challengeType: ChallengeType): Event<Challenge> =
+        withContext(Dispatchers.IO) {
+            return@withContext challengeLocalRepository.fetchWeekChallenge(challengeType.stringValue)
         }
 }

@@ -4,7 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.graduationproject.domain.entity.GroupAndChallenges
-import com.example.graduationproject.domain.usecase.local.FetchLocalUserGroupChallengesUseCase
+import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
+import com.example.graduationproject.domain.usecase.FetchUserGroupsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChallengesViewModel @Inject constructor(
     context: Application,
-    private val fetchLocalUserGroupChallengesUseCase: FetchLocalUserGroupChallengesUseCase
+    private val fetchUserGroupChallengesUseCase: FetchUserGroupChallengesUseCase
 ) : AndroidViewModel(context) {
 
     private val _viewState =
@@ -25,8 +26,8 @@ class ChallengesViewModel @Inject constructor(
 
     fun setUpUserChallenges(userId: String) {
         viewModelScope.launch {
-            fetchLocalUserGroupChallengesUseCase(
-                FetchLocalUserGroupChallengesUseCase.Params(
+            fetchUserGroupChallengesUseCase(
+                FetchUserGroupChallengesUseCase.Params(
                     userId
                 )
             )

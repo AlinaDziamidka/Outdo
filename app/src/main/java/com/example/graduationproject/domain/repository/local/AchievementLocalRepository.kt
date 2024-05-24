@@ -2,6 +2,7 @@ package com.example.graduationproject.domain.repository.local
 
 import com.example.graduationproject.data.local.database.model.AchievementModel
 import com.example.graduationproject.domain.entity.Achievement
+import com.example.graduationproject.domain.util.Event
 
 interface AchievementLocalRepository {
 
@@ -9,7 +10,7 @@ interface AchievementLocalRepository {
 
     suspend fun fetchById(achievementId: String): Achievement
 
-    suspend fun fetchDailyAchievement(achievementType: String): Achievement
+    suspend fun fetchDailyAchievement(achievementType: String): Event<Achievement>
 
     suspend fun insertOne(achievement: Achievement)
 

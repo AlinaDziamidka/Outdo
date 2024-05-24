@@ -1,5 +1,6 @@
 package com.example.graduationproject.presentation.group.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ class GroupAdapter(
     private val onGroupClickListener: (GroupParticipants) -> Unit
 ) :
     RecyclerView.Adapter<GroupAdapter.GroupViewHolder>() {
+
+    lateinit var originalList : MutableList<GroupParticipants>
 
     class GroupViewHolder(
         itemView: View,
@@ -65,6 +68,8 @@ class GroupAdapter(
 
     fun setGroupParticipants(groupParticipants: MutableList<GroupParticipants>) {
         this.groupParticipantsList = groupParticipants
+        originalList = groupParticipants.toMutableList()
+        Log.d("GroupAdapter", "setList $originalList")
         notifyDataSetChanged()
     }
 
@@ -73,9 +78,26 @@ class GroupAdapter(
         notifyDataSetChanged()
     }
 
-    fun removeGroupAndChallenges(groupParticipants: GroupParticipants) {
+    fun removeGroupParticipants(groupParticipants: GroupParticipants) {
         groupParticipantsList.remove(groupParticipants)
         notifyDataSetChanged()
+    }
+
+    fun filterGroupParticipants(query: String?) {
+        Log.d("GroupAdapter", "query = $query")
+         if (query.isNullOrEmpty()) {
+             notifyDataSetChanged()
+        } else {
+            val filteredList = groupParticipantsList.filter {item ->
+                item.group.groupName.contains(query, ignoreCase = true)}.toMutableList()
+             groupParticipantsList.clear()
+             groupParticipantsList.addAll(filteredList)
+             notifyDataSetChanged()
+        }
+    }
+
+    fun updateGroupParticipants(){
+        groupParticipantsList = originalList.toMutableList()
     }
 
     fun clear() {

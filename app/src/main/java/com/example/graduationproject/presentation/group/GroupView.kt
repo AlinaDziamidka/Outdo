@@ -56,6 +56,7 @@ class GroupView : Fragment() {
 
         initViews()
         initAdapter()
+        setUpSearchView()
         setUpGroups()
         observeGroups()
     }
@@ -78,6 +79,21 @@ class GroupView : Fragment() {
     private fun moveToGroupDetailsScreen() {
 //        val action = AllChallengesViewDirections.actionAllChallengesViewToChallengeDetailsView()
 //        findNavController().navigate(action)
+    }
+
+    private fun setUpSearchView() {
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.updateGroupParticipants()
+                adapter.filterGroupParticipants(newText)
+                return true
+            }
+        })
     }
 
     private fun setUpGroups() {

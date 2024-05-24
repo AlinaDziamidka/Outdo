@@ -7,7 +7,8 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class App : Application(), Configuration.Provider {
+class App : Application(), Configuration.Provider
+{
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
@@ -25,5 +26,4 @@ class App : Application(), Configuration.Provider {
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
-
 }

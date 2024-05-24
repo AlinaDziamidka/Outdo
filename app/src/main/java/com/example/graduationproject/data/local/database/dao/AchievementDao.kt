@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.graduationproject.data.local.database.model.AchievementModel
 import com.example.graduationproject.data.local.database.model.ChallengeModel
+import com.example.graduationproject.domain.util.Event
 
 @Dao
 interface AchievementDao {
@@ -18,7 +19,7 @@ interface AchievementDao {
     fun fetchById(achievementId: String): AchievementModel
 
     @Query("SELECT * FROM achievements WHERE achievementType = :achievementType LIMIT 1")
-    fun fetchDailyAchievement(achievementType: String): AchievementModel
+    fun fetchDailyAchievement(achievementType: String): AchievementModel?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOne(achievementModel: AchievementModel)
