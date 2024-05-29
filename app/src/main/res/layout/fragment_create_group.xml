@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_create_group_action"
+            android:background="@drawable/bg_create_feature_action"
             android:text="@string/group_screen_create_group_action" />
     </RelativeLayout>
 

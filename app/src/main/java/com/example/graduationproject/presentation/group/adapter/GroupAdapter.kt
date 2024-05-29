@@ -84,6 +84,7 @@ class GroupAdapter(
     }
 
     fun filterGroupParticipants(query: String?) {
+        Log.d("GroupAdapter", "filterGroupParticipants: Filtering group participants with query - $query")
         Log.d("GroupAdapter", "query = $query")
          if (query.isNullOrEmpty()) {
              notifyDataSetChanged()
@@ -97,6 +98,7 @@ class GroupAdapter(
     }
 
     fun updateGroupParticipants(){
+        Log.d("GroupAdapter", "updateGroupParticipants: Updating group participants")
         groupParticipantsList = originalList.toMutableList()
     }
 

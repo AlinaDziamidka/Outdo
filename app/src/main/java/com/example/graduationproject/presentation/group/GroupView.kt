@@ -56,9 +56,9 @@ class GroupView : Fragment() {
 
         initViews()
         initAdapter()
-        setUpSearchView()
         setUpGroups()
         observeGroups()
+//        setUpSearchView()
     }
 
     private fun initViews() {
@@ -68,32 +68,21 @@ class GroupView : Fragment() {
     }
 
     private fun initAdapter() {
+        Log.d("GroupFragment", "initAdapter: Setting up layout manager")
         groupsView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        adapter = GroupAdapter(mutableListOf()) { group ->
-            moveToGroupDetailsScreen()
+        Log.d("GroupFragment", "initAdapter: Creating adapter")
+        adapter = GroupAdapter(mutableListOf()) { groupParticipants ->
+            Log.d("GroupFragment", "initAdapter: Adapter item clicked, moving to group details screen")
+            moveToGroupDetailsScreen(groupParticipants)
         }
+        Log.d("GroupFragment", "initAdapter: Setting adapter to RecyclerView")
         groupsView.adapter = adapter
     }
 
-    private fun moveToGroupDetailsScreen() {
-//        val action = AllChallengesViewDirections.actionAllChallengesViewToChallengeDetailsView()
-//        findNavController().navigate(action)
-    }
-
-    private fun setUpSearchView() {
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.updateGroupParticipants()
-                adapter.filterGroupParticipants(newText)
-                return true
-            }
-        })
+    private fun moveToGroupDetailsScreen(groupParticipants: GroupParticipants) {
+        val action =GroupViewDirections.actionGroupViewToGroupDetailsView(groupParticipants.group.groupId)
+        findNavController().navigate(action)
     }
 
     private fun setUpGroups() {
@@ -127,5 +116,23 @@ class GroupView : Fragment() {
 
     private fun handleOnSuccess(groupParticipants: MutableList<GroupParticipants>) {
         adapter.setGroupParticipants(groupParticipants)
+        setUpSearchView()
+    }
+
+    private fun setUpSearchView() {
+        Log.d("GroupFragment", "setUpSearchView: Setting up search view listener")
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.d("GroupFragment", "onQueryTextSubmit: Query submitted - $query")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d("GroupFragment", "onQueryTextChange: Query text changed - $newText")
+                adapter.updateGroupParticipants()
+                adapter.filterGroupParticipants(newText)
+                return true
+            }
+        })
     }
 }

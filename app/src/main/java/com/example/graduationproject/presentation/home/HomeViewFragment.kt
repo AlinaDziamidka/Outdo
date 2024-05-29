@@ -71,7 +71,6 @@ class HomeViewFragment : Fragment() {
         initViews()
         initAdapter()
         setUserName()
-        setUpLoadedStatus()
         setUpChallenges()
         setUpWeekChallenge()
         setUpDailyAchievement()
@@ -111,12 +110,6 @@ class HomeViewFragment : Fragment() {
             requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
         val usernamePref = sharedPreferences.getString("current_username", null)
         userName.text = usernamePref
-    }
-
-    private fun setUpLoadedStatus() {
-//        val loadedStatus = App.isLoaded
-//        viewModel.setDatabaseLoadedStatus(loadedStatus)
-//        Log.d("HomeViewFragment", "Loaded status in HomeViewFragment: $loadedStatus")
     }
 
     private fun setUpChallenges() {

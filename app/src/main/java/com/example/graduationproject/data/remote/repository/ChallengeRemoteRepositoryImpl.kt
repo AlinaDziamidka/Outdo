@@ -56,4 +56,32 @@ class ChallengeRemoteRepositoryImpl(private val challengeApiService: ChallengeAp
             }
         }
     }
+
+    override suspend fun fetchChallengesByStatusAndId(
+        challengeIdQuery: String,
+        challengeStatusQuery: String
+    ): Event<Challenge> {
+        val idQuery = "objectId=\'$challengeIdQuery\'"
+        val statusQuery = "challengeStatus = \'$challengeStatusQuery\'"
+        val event = doCall {
+            return@doCall challengeApiService.fetchChallengesByStatusAndId(idQuery, statusQuery)
+        }
+
+        return when (event) {
+            is Event.Success -> {
+                Log.d("ChallengeRepositoryImpl", "Received response with STATUS: ${event.data}")
+                val response = event.data.first()
+                val challengeTransformer = ChallengeTransformer()
+                val challenge = challengeTransformer.fromResponse(response)
+                Log.d("ChallengeRepositoryImpl", "Transformed response to challenge with STATUS: $challenge")
+                Event.Success(challenge)
+            }
+
+            is Event.Failure -> {
+                Log.e("ChallengeRepositoryImpl", "Failed to fetch challenges with STATUS: ${event.exception}")
+                val error = event.exception
+                Event.Failure(error)
+            }
+        }
+    }
 }

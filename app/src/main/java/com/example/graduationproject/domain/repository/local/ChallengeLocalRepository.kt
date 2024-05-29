@@ -12,6 +12,8 @@ interface ChallengeLocalRepository {
 
     suspend fun fetchWeekChallenge(challengeType: String): Event<Challenge>
 
+    suspend fun fetchChallengeSByStatusAndId(challengeId: String, challengeStatus: String): Event<Challenge>
+
     suspend fun insertOne(challenge: Challenge)
 
     suspend fun deleteById(challengeId: String)

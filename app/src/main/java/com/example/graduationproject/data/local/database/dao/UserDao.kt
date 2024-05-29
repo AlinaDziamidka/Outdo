@@ -16,7 +16,7 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE user_id = :userId LIMIT 1")
     fun fetchById(userId: String): UserModel
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOne(userModel: UserModel)
 
     @Query("DELETE FROM users WHERE user_id = :userId")

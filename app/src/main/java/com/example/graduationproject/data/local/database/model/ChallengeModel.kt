@@ -14,12 +14,14 @@ data class ChallengeModel(
     val challengeName: String,
     @ColumnInfo("category_id")
     val categoryId: String?,
-    @SerializedName("challengeType")
+    @ColumnInfo("challengeType")
     val challengeType: String,
-    @SerializedName("description")
+    @ColumnInfo("description")
     val challengeDescription: String?,
-    @SerializedName("endTime")
+    @ColumnInfo("endTime")
     val endTime: Long,
     @ColumnInfo("iconPath")
-    val challengeIcon: String?
+    val challengeIcon: String?,
+    @ColumnInfo("challengeStatus")
+    val challengeStatus: String
 )

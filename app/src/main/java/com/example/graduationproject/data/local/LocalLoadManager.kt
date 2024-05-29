@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
@@ -80,4 +81,30 @@ class LocalLoadManager @Inject constructor(
         withContext(Dispatchers.IO) {
             return@withContext challengeLocalRepository.fetchWeekChallenge(challengeType.stringValue)
         }
-}
+
+    override suspend fun fetchChallengesByStatusAndId(
+        groupId: String,
+        challengeStatus: ChallengeStatus
+    ): List<Challenge> =
+        withContext(
+            Dispatchers.IO
+        ) {
+            val groupChallenges = groupChallengeLocalRepository.fetchChallengesByGroupId(groupId)
+            val challenges = mutableListOf<Challenge>()
+
+            for (groupChallenge in groupChallenges) {
+                Log.d("LocalLoadManager", "Received group challenges ${groupChallenges}")
+                try {
+                    val event = challengeLocalRepository.fetchChallengeSByStatusAndId(
+                        groupChallenge.challengeId,
+                        challengeStatus.stringValue
+                    )
+                    if (event is Event.Success)
+                    challenges.add(event.data)
+                } catch (e: Exception) {
+                    Log.e("LocalLoadManager", "Error fetching challenges", e)
+                }
+            }
+            return@withContext challenges
+            }
+        }

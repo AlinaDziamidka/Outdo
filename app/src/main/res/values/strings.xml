@@ -51,4 +51,8 @@
     <string name="group_screen_participants_title">Participants</string>
     <string name="group_screen_add_friends_to_group">Add friends</string>
     <string name="all_challenges_my_challenges">My challenges</string>
+    <string name="group_info_create_challenge_action">Create challenge</string>
+    <string name="group_info_switch_challenge">Challenges</string>
+    <string name="group_info_switch_participants">Participants</string>
+    <string name="group_info_challenge_history">Challenge history</string>
 </resources>

@@ -5,4 +5,9 @@ import com.example.graduationproject.domain.util.Event
 
 interface GroupChallengeRemoteRepository {
     suspend fun fetchAllChallengesByGroupId(groupIdQuery: String): Event<List<Challenge>>
+
+    suspend fun fetchChallengesByGroupIdANDStatus(
+        groupIdQuery: String,
+        challengeStatusQuery: String
+    ): Event<List<Challenge>>
 }

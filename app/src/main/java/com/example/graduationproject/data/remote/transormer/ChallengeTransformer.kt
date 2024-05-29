@@ -2,6 +2,7 @@ package com.example.graduationproject.data.remote.transormer
 
 import com.example.graduationproject.data.remote.api.response.ChallengeResponse
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 
 class ChallengeTransformer {
@@ -13,7 +14,8 @@ class ChallengeTransformer {
             challengeType = ChallengeType.valueOf(response.challengeType),
             challengeDescription = response.challengeDescription,
             endTime = response.endTime,
-            challengeIcon = response.challengeIcon
+            challengeIcon = response.challengeIcon,
+            challengeStatus = ChallengeStatus.valueOf(response.challengeStatus)
         )
     }
 }

@@ -3,6 +3,7 @@ package com.example.graduationproject.presentation.challenges
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupsUseCase
@@ -28,7 +29,7 @@ class ChallengesViewModel @Inject constructor(
         viewModelScope.launch {
             fetchUserGroupChallengesUseCase(
                 FetchUserGroupChallengesUseCase.Params(
-                    userId
+                    userId, ChallengeStatus.UNFINISHED
                 )
             )
                 .onStart {

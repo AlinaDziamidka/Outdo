@@ -10,7 +10,8 @@
         android:id="@+id/homeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="70dp">
 
         <RelativeLayout
             android:id="@+id/welcomeContainer"
@@ -57,7 +58,7 @@
 
             <TextView
                 android:id="@+id/currentChallengesView"
-                style="@style/challenges_name_home_page"
+                style="@style/challenges_name_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/helloView"
@@ -92,7 +93,7 @@
 
         <TextView
             android:id="@+id/dailyAchievementView"
-            style="@style/challenges_name_home_page"
+            style="@style/challenges_name_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -105,13 +106,13 @@
 
         <TextView
             android:id="@+id/weeklyChallengeView"
-            style="@style/challenges_name_home_page"
+            style="@style/challenges_name_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/home_daily_achievement_title" />
+            android:text="@string/home_weekly_challenge_title" />
 
         <include android:id="@+id/weekChallengeContainer"
             layout="@layout/weekly_challenge_card" />

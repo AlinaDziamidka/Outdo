@@ -16,7 +16,7 @@ interface GroupDao {
     @Query("SELECT * FROM groups WHERE id = :groupId LIMIT 1")
     fun fetchById(groupId: String): GroupModel
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOne(groupModel: GroupModel)
 
     @Query("DELETE FROM groups WHERE id = :groupId")

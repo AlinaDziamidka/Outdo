@@ -12,4 +12,9 @@ interface ChallengeApiService {
     @GET("data/challenges")
     suspend fun fetchWeekChallenge(@Query("where") challengeTypeQuery: String): Response<List<ChallengeResponse>>
 
+    @GET("data/challenges")
+    suspend fun fetchChallengesByStatusAndId(
+        @Query("where") challengeIdQuery: String,
+        @Query("where") challengeStatusQuery: String
+    ): Response<List<ChallengeResponse>>
 }

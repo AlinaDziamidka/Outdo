@@ -19,5 +19,5 @@
     <color name="progress_bar_color">#F0F0F0</color>
     <color name="bottom_nav_text_color">#B5B6B8</color>
     <color name="error_text_color_red">#FF4040</color>
-
+    <color name="switch_action_text_color">#99000000</color>
 </resources>

@@ -34,6 +34,19 @@ class ChallengeLocalRepositoryImpl @Inject constructor(private val challengeDao:
         }
     }
 
+    override suspend fun fetchChallengeSByStatusAndId(
+        challengeId: String,
+        challengeStatus: String
+    ): Event<Challenge> {
+        val model = challengeDao.fetchChallengesByStatusAndID(challengeId, challengeStatus)
+        return if (model != null) {
+            val challenge = challengeTransformer.fromModel(model)
+            Event.Success(challenge)
+        } else {
+            Event.Failure("Challenge not found")
+        }
+    }
+
     override suspend fun insertOne(challenge: Challenge) {
         val model = challengeTransformer.toModel(challenge)
         challengeDao.insertOne(model)

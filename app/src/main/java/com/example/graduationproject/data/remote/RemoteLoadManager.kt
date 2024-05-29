@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupChallenge
@@ -167,6 +168,29 @@ class RemoteLoadManager @Inject constructor(
                 }
             }
         }
+
+    override suspend fun fetchChallengesByStatusAndId(
+        groupId: String,
+        challengeStatus: ChallengeStatus
+    ): List<Challenge> {
+        val event = groupChallengeRemoteRepository.fetchChallengesByGroupIdANDStatus(
+            groupId,
+            challengeStatus.stringValue
+        )
+        Log.d("RemoteLoadManager", "Received challenges: ${event}")
+       return when (event) {
+            is Event.Success -> {
+                Log.d("RemoteLoadManager", "Received challenges: ${event.data}")
+                saveToLocalDatabase(event, groupId)
+                event.data
+            }
+
+            is Event.Failure -> {
+                Log.e("RemoteLoadManager", "Failed to fetch challenges: ${event.exception}")
+                throw Exception(event.exception)
+            }
+        }
+    }
 
     private suspend fun saveToLocalDatabase(
         event: Event.Success<List<Challenge>>,

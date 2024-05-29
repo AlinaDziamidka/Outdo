@@ -20,7 +20,7 @@ interface UserGroupDao {
     @Query("SELECT * FROM user_groups WHERE  group_id = :groupId")
     fun fetchUsersByGroupId(groupId: String): List<UserGroupModel>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOne(userGroupModel: UserGroupModel)
 
     @Delete

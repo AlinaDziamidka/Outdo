@@ -19,7 +19,7 @@ interface GroupChallengeDao {
     @Query("SELECT * FROM group_challenges WHERE  group_id = :groupId")
     fun fetchChallengesByGroupId(groupId: String): List<GroupChallengeModel>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOne(groupChallengeModel: GroupChallengeModel)
 
     @Delete

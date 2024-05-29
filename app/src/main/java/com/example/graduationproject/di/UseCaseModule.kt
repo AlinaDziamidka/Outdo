@@ -2,6 +2,7 @@ package com.example.graduationproject.di
 
 import com.example.graduationproject.di.qualifiers.Local
 import com.example.graduationproject.di.qualifiers.Remote
+import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.usecase.SignInUseCase
@@ -9,6 +10,8 @@ import com.example.graduationproject.domain.usecase.SignUpUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupsUseCase
 import com.example.graduationproject.domain.usecase.FetchDailyAchievementUseCase
+import com.example.graduationproject.domain.usecase.FetchGroupChallengesUseCase
+import com.example.graduationproject.domain.usecase.FetchGroupNameUseCase
 import com.example.graduationproject.domain.usecase.FetchWeekChallengeUseCase
 import com.example.graduationproject.domain.util.LoadManager
 import dagger.Module
@@ -44,7 +47,7 @@ object UseCaseModule {
     fun provideFetchRemoteUserGroupsUseCase(
         @Remote remoteLoadManager: LoadManager,
         @Local localLoadManager: LoadManager
-    ) : FetchUserGroupsUseCase {
+    ): FetchUserGroupsUseCase {
         return FetchUserGroupsUseCase(remoteLoadManager, localLoadManager)
     }
 
@@ -52,7 +55,7 @@ object UseCaseModule {
     fun provideFetchDailyAchievementUseCase(
         @Remote remoteLoadManager: LoadManager,
         @Local localLoadManager: LoadManager
-    ) : FetchDailyAchievementUseCase {
+    ): FetchDailyAchievementUseCase {
         return FetchDailyAchievementUseCase(remoteLoadManager, localLoadManager)
     }
 
@@ -60,7 +63,21 @@ object UseCaseModule {
     fun provideFetchWeekChallengeUseCase(
         @Remote remoteLoadManager: LoadManager,
         @Local localLoadManager: LoadManager
-    ) : FetchWeekChallengeUseCase {
+    ): FetchWeekChallengeUseCase {
         return FetchWeekChallengeUseCase(remoteLoadManager, localLoadManager)
     }
+
+    @Provides
+    fun provideFetchGroupChallengesUseCase(
+        @Remote remoteLoadManager: LoadManager,
+        @Local localLoadManager: LoadManager
+    ): FetchGroupChallengesUseCase {
+        return FetchGroupChallengesUseCase(remoteLoadManager, localLoadManager)
+    }
+
+    @Provides
+    fun provideFetchGroupNameUseCase(repository: GroupLocalRepository): FetchGroupNameUseCase {
+        return FetchGroupNameUseCase(repository)
+    }
+
 }

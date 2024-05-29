@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/dailyAchievementNameView"
-            style="@style/challenges_name_home_page"
+            style="@style/challenges_name_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"

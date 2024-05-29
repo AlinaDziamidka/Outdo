@@ -21,7 +21,7 @@ interface AchievementDao {
     @Query("SELECT * FROM achievements WHERE achievementType = :achievementType LIMIT 1")
     fun fetchDailyAchievement(achievementType: String): AchievementModel?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOne(achievementModel: AchievementModel)
 
     @Query("DELETE FROM achievements WHERE id = :achievementId")
