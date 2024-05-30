@@ -59,34 +59,6 @@ class GroupDetailsView : Fragment() {
         observeCurrentGroup()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreate(savedInstanceState)
-        _binding = FragmentGroupDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initViews()
-        setUpChallenges()
-        observeChallenges()
-        setUpChallengesHistory()
-        observeChallengesHistory()
-    }
-
-    private fun initViews() {
-        groupNameView = binding.groupNameView
-        createChallengeAction = binding.createChallengeAction
-        challengesView = binding.challengesRecyclerView
-        switchParticipantsAction = binding.selectParticipantsAction
-        challengesHistoryView = binding.challengeHistoryRecyclerView
-    }
-
     private fun setUpGroupName() {
         groupId = args.groupId
         viewModel.setCurrentGroup(groupId)
@@ -114,10 +86,6 @@ class GroupDetailsView : Fragment() {
                 }
             }
         }
-    }
-
-    private fun setGroupName(group: Group) {
-        groupNameView.text = group.groupName
     }
 
     private fun initAdapter(group: Group) {
@@ -148,6 +116,39 @@ class GroupDetailsView : Fragment() {
 //        findNavController().navigate(action)
     }
 
+    private fun setGroupName(group: Group) {
+        groupNameView.text = group.groupName
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreate(savedInstanceState)
+        _binding = FragmentGroupDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initViews()
+        setUpChallenges()
+        observeChallenges()
+        setUpChallengesHistory()
+        observeChallengesHistory()
+        setUpSwitchParticipantsAction()
+    }
+
+    private fun initViews() {
+        groupNameView = binding.groupNameView
+        createChallengeAction = binding.createChallengeAction
+        challengesView = binding.challengesRecyclerView
+        switchParticipantsAction = binding.selectParticipantsAction
+        challengesHistoryView = binding.challengeHistoryRecyclerView
+    }
+
     private fun setUpChallenges() {
         viewModel.setUpChallenges(groupId)
     }
@@ -176,10 +177,10 @@ class GroupDetailsView : Fragment() {
         }
     }
 
-        private fun loadChallenges(challenges: MutableList<Challenge>) {
-            val sortedChallenges = challenges.sortedBy { it.endTime }.toMutableList()
-            challengesAdapter.setChallenges(sortedChallenges, group)
-        }
+    private fun loadChallenges(challenges: MutableList<Challenge>) {
+        val sortedChallenges = challenges.sortedBy { it.endTime }.toMutableList()
+        challengesAdapter.setChallenges(sortedChallenges, group)
+    }
 
     private fun setUpChallengesHistory() {
         viewModel.setUpChallengesHistory(groupId)
@@ -193,7 +194,10 @@ class GroupDetailsView : Fragment() {
                     when (it) {
                         is GroupDetailsViewState.Success -> {
                             loadChallengesHistory(it.data)
-                            Log.d("observeChallengesHistory", "Success view state, data: ${it.data}")
+                            Log.d(
+                                "observeChallengesHistory",
+                                "Success view state, data: ${it.data}"
+                            )
                         }
 
                         is GroupDetailsViewState.Loading -> {
@@ -212,5 +216,13 @@ class GroupDetailsView : Fragment() {
     private fun loadChallengesHistory(challenges: MutableList<Challenge>) {
         val sortedChallenges = challenges.sortedBy { it.endTime }.toMutableList()
         challengesHistoryAdapter.setChallenges(sortedChallenges, group)
+    }
+
+    private fun setUpSwitchParticipantsAction() {
+        switchParticipantsAction.setOnClickListener {
+            val action =
+                GroupDetailsViewDirections.actionGroupDetailsViewToGroupParticipantsView(groupId)
+            findNavController().navigate(action)
+        }
     }
 }

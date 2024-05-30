@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/rootContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -25,16 +26,17 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
                 tools:text="11А класс" />
 
             <Button
-                android:id="@+id/createChallengeAction"
+                android:id="@+id/addFriendsAction"
                 style="@style/create_group_action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/bg_create_feature_action"
-                android:text="@string/group_info_create_challenge_action" />
+                android:text="@string/group_participants_screen_add_friends" />
 
         </RelativeLayout>
 
@@ -49,6 +51,16 @@
 
             <TextView
                 android:id="@+id/selectChallengesAction"
+                style="@style/switch_action_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawable="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="@string/group_info_switch_challenge" />
+
+            <TextView
+                android:id="@+id/selectParticipantsAction"
                 style="@style/active_switch_action_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -57,41 +69,15 @@
                 android:drawable="?android:attr/selectableItemBackground"
                 android:elevation="5dp"
                 android:gravity="center"
-                android:text="@string/group_info_switch_challenge" />
-
-            <TextView
-                android:id="@+id/selectParticipantsAction"
-                style="@style/switch_action_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawable="?android:attr/selectableItemBackground"
-                android:gravity="center"
                 android:text="@string/group_info_switch_participants" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/challengesRecyclerView"
+            android:id="@+id/participantsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            tools:listitem="@layout/challenge_card" />
+            tools:listitem="@layout/participants_card" />
 
-        <TextView
-            android:id="@+id/challengesHistoryView"
-            style="@style/challenges_name_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/group_info_challenge_history" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/challengeHistoryRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            tools:listitem="@layout/challenge_card" />
     </LinearLayout>
 </ScrollView>

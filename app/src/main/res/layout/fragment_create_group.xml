@@ -35,7 +35,7 @@
 
     <TextView
         android:id="@+id/groupNameView"
-        style="@style/group_screen_group_name"
+        style="@style/card_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/group_screen_group_name" />
@@ -51,7 +51,7 @@
 
     <TextView
         android:id="@+id/groupAvatarView"
-        style="@style/group_screen_group_name"
+        style="@style/card_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -88,7 +88,7 @@
 
     <TextView
         android:id="@+id/participantsView"
-        style="@style/group_screen_group_name"
+        style="@style/card_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"

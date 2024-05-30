@@ -12,6 +12,7 @@ import com.example.graduationproject.domain.usecase.FetchUserGroupsUseCase
 import com.example.graduationproject.domain.usecase.FetchDailyAchievementUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupNameUseCase
+import com.example.graduationproject.domain.usecase.FetchGroupParticipantsUseCase
 import com.example.graduationproject.domain.usecase.FetchWeekChallengeUseCase
 import com.example.graduationproject.domain.util.LoadManager
 import dagger.Module
@@ -80,4 +81,11 @@ object UseCaseModule {
         return FetchGroupNameUseCase(repository)
     }
 
+    @Provides
+    fun provideFetchGroupParticipantsUseCase(
+        @Remote remoteLoadManager: LoadManager,
+        @Local localLoadManager: LoadManager
+    ): FetchGroupParticipantsUseCase {
+        return FetchGroupParticipantsUseCase(remoteLoadManager, localLoadManager)
+    }
 }

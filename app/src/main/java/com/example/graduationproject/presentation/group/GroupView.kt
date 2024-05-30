@@ -58,7 +58,6 @@ class GroupView : Fragment() {
         initAdapter()
         setUpGroups()
         observeGroups()
-//        setUpSearchView()
     }
 
     private fun initViews() {

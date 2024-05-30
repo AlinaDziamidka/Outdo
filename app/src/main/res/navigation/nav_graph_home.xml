@@ -49,5 +49,31 @@
         <argument
             android:name="groupId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_groupDetailsView_to_groupParticipantsView"
+            app:destination="@id/groupParticipantsView"
+            app:popUpTo="@id/groupDetailsView"
+            app:popUpToInclusive="true">
+            <argument
+                android:name="groupId"
+                app:argType="string"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/groupParticipantsView"
+        android:name="com.example.graduationproject.presentation.groupparticipants.GroupParticipantsView"
+        android:label="GroupParticipantsView">
+        <argument
+            android:name="groupId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_groupParticipantsView_to_groupDetailsView"
+            app:destination="@id/groupDetailsView"
+            app:popUpTo="@id/groupParticipantsView"
+            app:popUpToInclusive="true">
+            <argument
+                android:name="groupId"
+                app:argType="string"/>
+        </action>
     </fragment>
 </navigation>
