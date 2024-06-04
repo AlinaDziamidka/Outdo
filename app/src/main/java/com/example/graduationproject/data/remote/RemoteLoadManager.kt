@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.ChallengeAchievement
 import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
@@ -11,12 +12,14 @@ import com.example.graduationproject.domain.entity.GroupChallenge
 import com.example.graduationproject.domain.entity.UserGroup
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
+import com.example.graduationproject.domain.repository.local.ChallengeAchievementsLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
 import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
+import com.example.graduationproject.domain.repository.remote.ChallengeAchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
@@ -41,7 +44,9 @@ class RemoteLoadManager @Inject constructor(
     private val userRemoteRepository: UserRemoteRepository,
     private val userLocalRepository: UserLocalRepository,
     private val achievementRemoteRepository: AchievementRemoteRepository,
-    private val achievementLocalRepository: AchievementLocalRepository
+    private val achievementLocalRepository: AchievementLocalRepository,
+    private val challengeAchievementRemoteRepository: ChallengeAchievementRemoteRepository,
+    private val challengeAchievementLocalRepository: ChallengeAchievementsLocalRepository
 ) : LoadManager {
 
     override suspend fun fetchGroupsByUserId(userId: String): List<Group> {
@@ -158,7 +163,7 @@ class RemoteLoadManager @Inject constructor(
             when (event) {
                 is Event.Success -> {
                     Log.d("RemoteLoadManager", "Received challenges: ${event.data}")
-                    saveToLocalDatabase(event, groupId)
+                    saveChallengesToLocalDatabase(event, groupId)
                     event.data
                 }
 
@@ -181,7 +186,7 @@ class RemoteLoadManager @Inject constructor(
        return when (event) {
             is Event.Success -> {
                 Log.d("RemoteLoadManager", "Received challenges: ${event.data}")
-                saveToLocalDatabase(event, groupId)
+                saveChallengesToLocalDatabase(event, groupId)
                 event.data
             }
 
@@ -192,7 +197,7 @@ class RemoteLoadManager @Inject constructor(
         }
     }
 
-    private suspend fun saveToLocalDatabase(
+    private suspend fun saveChallengesToLocalDatabase(
         event: Event.Success<List<Challenge>>,
         groupId: String
     ) {
@@ -201,6 +206,39 @@ class RemoteLoadManager @Inject constructor(
             writeToLocalDatabase(
                 groupChallengeLocalRepository::insertOne,
                 GroupChallenge(groupId, challenge.challengeId)
+            )
+        }
+    }
+
+    override suspend fun fetchAchievementsByChallengeId(challengeId: String): List<Achievement> =
+        withContext(
+            Dispatchers.IO
+        ) {
+            val event = challengeAchievementRemoteRepository.fetchAllAchievementsByChallengeId(challengeId)
+            Log.d("RemoteLoadManager", "Received achievements: ${event}")
+            when (event) {
+                is Event.Success -> {
+                    Log.d("RemoteLoadManager", "Received achievements: ${event.data}")
+                    saveAchievementsToLocalDatabase(event, challengeId)
+                    event.data
+                }
+
+                is Event.Failure -> {
+                    Log.e("RemoteLoadManager", "Failed to fetch achievements: ${event.exception}")
+                    throw Exception(event.exception)
+                }
+            }
+        }
+
+    private suspend fun saveAchievementsToLocalDatabase(
+        event: Event.Success<List<Achievement>>,
+        challengeId: String
+    ) {
+        event.data.map { achievement ->
+            writeToLocalDatabase(achievementLocalRepository::insertOne, achievement)
+            writeToLocalDatabase(
+                challengeAchievementLocalRepository::insertOne,
+                ChallengeAchievement(challengeId, achievement.achievementId)
             )
         }
     }

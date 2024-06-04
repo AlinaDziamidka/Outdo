@@ -24,4 +24,7 @@ interface LoadManager {
         groupId: String,
         challengeStatus: ChallengeStatus
     ): List<Challenge>
+
+    suspend fun fetchAchievementsByChallengeId(challengeId: String): List<Achievement>
+
 }

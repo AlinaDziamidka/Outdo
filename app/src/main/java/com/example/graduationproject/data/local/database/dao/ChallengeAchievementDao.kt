@@ -3,6 +3,7 @@ package com.example.graduationproject.data.local.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.graduationproject.data.local.database.model.ChallengeAchievementModel
@@ -14,12 +15,12 @@ interface ChallengeAchievementDao {
     fun fetchAll(): List<ChallengeAchievementModel>
 
     @Query("SELECT * FROM challenge_achievements WHERE challenge_id = :challengeId")
-    fun fetchAchievementsByChallengeId(challengeId: Long): List<ChallengeAchievementModel>
+    fun fetchAchievementsByChallengeId(challengeId: String): List<ChallengeAchievementModel>
 
     @Query("SELECT * FROM challenge_achievements WHERE  achievement_id = :achievementId")
-    fun fetchChallengesByChallengeId(achievementId: Long): List<ChallengeAchievementModel>
+    fun fetchChallengesByChallengeId(achievementId: String): List<ChallengeAchievementModel>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOne(challengeAchievementModel: ChallengeAchievementModel)
 
     @Delete

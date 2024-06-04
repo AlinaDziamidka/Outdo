@@ -1,13 +1,9 @@
 package com.example.graduationproject.data.local.repository
 
 import com.example.graduationproject.data.local.database.dao.GroupChallengeDao
-import com.example.graduationproject.data.local.database.dao.GroupDao
-import com.example.graduationproject.data.local.database.model.GroupChallengeModel
 import com.example.graduationproject.data.local.transformer.GroupChallengeTransformer
-import com.example.graduationproject.data.local.transformer.UserGroupTransformer
 import com.example.graduationproject.domain.entity.GroupChallenge
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
-import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import javax.inject.Inject
 
 class GroupChallengeLocalRepositoryImpl @Inject constructor(private val groupChallengeDao: GroupChallengeDao) :

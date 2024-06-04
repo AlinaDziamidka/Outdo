@@ -9,6 +9,7 @@ import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
+import com.example.graduationproject.domain.repository.local.ChallengeAchievementsLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
@@ -26,7 +27,9 @@ class LocalLoadManager @Inject constructor(
     private val groupChallengeLocalRepository: GroupChallengeLocalRepository,
     private val challengeLocalRepository: ChallengeLocalRepository,
     private val userLocalRepository: UserLocalRepository,
-    private val achievementLocalRepository: AchievementLocalRepository
+    private val achievementLocalRepository: AchievementLocalRepository,
+    private val challengeAchievementsLocalRepository: ChallengeAchievementsLocalRepository,
+    private val achievementsLocalRepository: AchievementLocalRepository
 ) : LoadManager {
     override suspend fun fetchGroupsByUserId(userId: String): List<Group> =
         withContext(Dispatchers.IO) {
@@ -100,11 +103,22 @@ class LocalLoadManager @Inject constructor(
                         challengeStatus.stringValue
                     )
                     if (event is Event.Success)
-                    challenges.add(event.data)
+                        challenges.add(event.data)
                 } catch (e: Exception) {
                     Log.e("LocalLoadManager", "Error fetching challenges", e)
                 }
             }
             return@withContext challenges
+        }
+
+    override suspend fun fetchAchievementsByChallengeId(challengeId: String): List<Achievement> =
+        withContext(
+            Dispatchers.IO
+        ) {
+            val challengeAchievements =
+                challengeAchievementsLocalRepository.fetchAchievementsByChallengeId(challengeId)
+            return@withContext challengeAchievements.map { challengeAchievement ->
+                achievementsLocalRepository.fetchById(challengeAchievement.achievementId)
             }
         }
+}

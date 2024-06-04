@@ -60,12 +60,11 @@ class GroupChallengeRemoteRepositoryImpl(
         val event = doCall {
             return@doCall challengeApiService.fetchChallengesById(idQuery)
         }
-        return getAllChallenges(event, challengeId)
+        return getAllChallenges(event)
     }
 
     private fun getAllChallenges(
-        event: Event<List<ChallengeResponse>>,
-        challengeId: String
+        event: Event<List<ChallengeResponse>>
     ): Event<Challenge> {
         return when (event) {
             is Event.Success -> {
@@ -82,10 +81,6 @@ class GroupChallengeRemoteRepositoryImpl(
 
             is Event.Failure -> {
                 val error = event.exception
-                Log.e(
-                    "GroupChallengeRepositoryImpl",
-                    "Failed to fetch challenge with ID: $challengeId, Error: $error"
-                )
                 Event.Failure(error)
             }
         }

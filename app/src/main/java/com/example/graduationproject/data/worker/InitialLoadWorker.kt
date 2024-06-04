@@ -6,6 +6,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.graduationproject.di.qualifiers.Remote
+import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.util.LoadManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -14,7 +15,7 @@ import dagger.assisted.AssistedInject
 class InitialLoadWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-   @Remote private val remoteLoadManager: LoadManager
+    @Remote private val remoteLoadManager: LoadManager
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
@@ -22,9 +23,13 @@ class InitialLoadWorker @AssistedInject constructor(
             val userId = inputData.getString("USER_ID")!!
             Log.d("InitialLoadWorker", "UserID: $userId")
             val groups = remoteLoadManager.fetchGroupsByUserId(userId)
+            var challenges = listOf<Challenge>()
             groups.map { group ->
                 remoteLoadManager.fetchUsersByGroupId(group.groupId)
-                remoteLoadManager.fetchUserChallengesByGroupId(group.groupId)
+                challenges = remoteLoadManager.fetchUserChallengesByGroupId(group.groupId)
+            }
+            challenges.map { challenge ->
+                remoteLoadManager.fetchAchievementsByChallengeId(challenge.challengeId)
             }
             Log.d("InitialLoadWorker", "Work completed successfully")
             Result.success()

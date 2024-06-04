@@ -72,13 +72,13 @@ class AllChallengesView : Fragment() {
         challengesView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         adapter = AllChallengesAdapter(mutableListOf()) { challenge ->
-            moveToChallengeDetailsScreen()
+            moveToChallengeDetailsScreen(challenge)
         }
         challengesView.adapter = adapter
     }
 
-    private fun moveToChallengeDetailsScreen() {
-        val action = AllChallengesViewDirections.actionAllChallengesViewToChallengeDetailsView()
+    private fun moveToChallengeDetailsScreen(challenge: Challenge) {
+        val action = AllChallengesViewDirections.actionAllChallengesViewToChallengeDetailsView(challenge.challengeId)
         findNavController().navigate(action)
     }
 

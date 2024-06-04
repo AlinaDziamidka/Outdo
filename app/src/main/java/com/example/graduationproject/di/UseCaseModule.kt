@@ -2,9 +2,12 @@ package com.example.graduationproject.di
 
 import com.example.graduationproject.di.qualifiers.Local
 import com.example.graduationproject.di.qualifiers.Remote
+import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
+import com.example.graduationproject.domain.usecase.FetchChallengeAchievementUseCase
+import com.example.graduationproject.domain.usecase.FetchChallengeNameUseCase
 import com.example.graduationproject.domain.usecase.SignInUseCase
 import com.example.graduationproject.domain.usecase.SignUpUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
@@ -88,4 +91,20 @@ object UseCaseModule {
     ): FetchGroupParticipantsUseCase {
         return FetchGroupParticipantsUseCase(remoteLoadManager, localLoadManager)
     }
+
+    @Provides
+    fun provideFetchChallengeNameUseCase(repository: ChallengeLocalRepository): FetchChallengeNameUseCase {
+        return FetchChallengeNameUseCase(repository)
+    }
+
+    @Provides
+    fun provideFetchChallengeAchievementUseCase(
+        @Remote remoteLoadManager: LoadManager,
+        @Local localLoadManager: LoadManager
+    ): FetchChallengeAchievementUseCase {
+        return FetchChallengeAchievementUseCase(remoteLoadManager, localLoadManager)
+    }
+
+
+
 }

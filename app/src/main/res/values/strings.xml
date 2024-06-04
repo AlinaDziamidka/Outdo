@@ -57,4 +57,10 @@
     <string name="group_info_challenge_history">Challenge history</string>
     <string name="participants_card_scores">scores</string>
     <string name="group_participants_screen_add_friends">Add friends</string>
+    <string name="challenge_details_screen_challenge_title">Challenge «%1$s»</string>
+    <string name="challenge_details_screen_achievements_title">Achievements</string>
+    <string name="challenge_details_card_creator">Creator:</string>
+    <string name="challenge_details_card_start_date">Start:</string>
+    <string name="challenge_details_card_finish_date">Finish:</string>
+
 </resources>

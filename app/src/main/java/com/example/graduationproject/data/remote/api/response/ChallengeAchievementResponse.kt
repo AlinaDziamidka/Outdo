@@ -1,6 +1,10 @@
 package com.example.graduationproject.data.remote.api.response
 
+import com.google.gson.annotations.SerializedName
+
 data class ChallengeAchievementResponse(
-    val challengeId: Long,
-    val achievementId: Long
+    @SerializedName("challengeId")
+    val challengeId: String,
+    @SerializedName("achievementId")
+    val achievementId: String
 )

@@ -59,4 +59,9 @@
     <string name="group_info_challenge_history">История челленджей</string>
     <string name="participants_card_scores">очков</string>
     <string name="group_participants_screen_add_friends">Добавить друзей</string>
+    <string name="challenge_details_screen_challenge_title">Челлендж «%1$s»</string>
+    <string name="challenge_details_screen_achievements_title">Ачивки</string>
+    <string name="challenge_details_card_creator">Создатель:</string>
+    <string name="challenge_details_card_start_date">Время старта:</string>
+    <string name="challenge_details_card_finish_date">Время окончания:</string>
 </resources>

@@ -11,7 +11,7 @@
     <color name="primary_background_color">#EBF1FE</color>
     <color name="black_text_color">#2C2727</color>
     <color name="blue_text_color">#007AFF</color>
-    <color name="grey_text_color">#959393</color>
+    <color name="grey_text_color">#802C2727</color>
     <color name="sign_in_pressed_darkened_color">#588EF7</color>
     <color name="notification_red_color">#FF4040</color>
     <color name="grey_darken_text_color">#565252</color>
@@ -20,4 +20,5 @@
     <color name="bottom_nav_text_color">#B5B6B8</color>
     <color name="error_text_color_red">#FF4040</color>
     <color name="switch_action_text_color">#99000000</color>
+    <color name="challenge_description_text_color">#CC2C2727</color>
 </resources>

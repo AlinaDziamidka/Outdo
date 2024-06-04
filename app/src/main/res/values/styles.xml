@@ -47,7 +47,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="time_count">
+    <style name="default_grey_text_color_text">
         <item name="android:textColor">@color/grey_text_color</item>
     </style>
 
@@ -96,7 +96,7 @@
         <item name="fontFamily">@font/gilroy_semibold</item>
     </style>
 
-    <style name="default_grey_darken_text_color_text" parent="time_count">
+    <style name="default_grey_darken_text_color_text">
         <item name="android:textColor">@color/grey_darken_text_color</item>
     </style>
 
@@ -114,4 +114,12 @@
 
     <style name="scores_text" parent="switch_action_name"/>
 
+    <style name="challenge_description_text">
+        <item name="android:textColor">@color/challenge_description_text_color</item>
+    </style>
+
+    <style name="achievement_title">
+        <item name="android:textSize">14sp</item>
+    </style>
+    
 </resources>

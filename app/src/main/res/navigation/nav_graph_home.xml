@@ -13,7 +13,7 @@
             app:destination="@id/challengeDetailsView" />
         <action
             android:id="@+id/action_homeViewFragment_to_allChallengesView"
-            app:destination="@id/allChallengesView" />
+            app:destination="@id/allChallengesView"/>
         <action
             android:id="@+id/action_homeViewFragment_to_groupView"
             app:destination="@id/groupView" />
@@ -21,14 +21,22 @@
     <fragment
         android:id="@+id/challengeDetailsView"
         android:name="com.example.graduationproject.presentation.challengedetails.ChallengeDetailsView"
-        android:label="ChallengeDetailsView" />
+        android:label="ChallengeDetailsView" >
+        <argument
+            android:name="chalengeId"
+            app:argType="string"/>
+    </fragment>
     <fragment
         android:id="@+id/allChallengesView"
         android:name="com.example.graduationproject.presentation.challenges.AllChallengesView"
         android:label="AllChallengesView" >
         <action
             android:id="@+id/action_allChallengesView_to_challengeDetailsView"
-            app:destination="@id/challengeDetailsView" />
+            app:destination="@id/challengeDetailsView">
+            <argument
+                android:name="chalengeId"
+                app:argType="string"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/groupView"
@@ -56,6 +64,13 @@
             app:popUpToInclusive="true">
             <argument
                 android:name="groupId"
+                app:argType="string"/>
+        </action>
+        <action
+            android:id="@+id/action_groupDetailsView_to_challengeDetailsView"
+            app:destination="@id/challengeDetailsView">
+            <argument
+                android:name="chalengeId"
                 app:argType="string"/>
         </action>
     </fragment>

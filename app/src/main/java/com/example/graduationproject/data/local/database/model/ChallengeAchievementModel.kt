@@ -6,7 +6,7 @@ import androidx.room.Entity
 @Entity("challenge_achievements", primaryKeys = ["challenge_id", "achievement_id"])
 data class ChallengeAchievementModel(
     @ColumnInfo("challenge_id")
-    val challengeId: Long,
+    val challengeId: String,
     @ColumnInfo("achievement_id")
-    val achievementId: Long
+    val achievementId: String
 )

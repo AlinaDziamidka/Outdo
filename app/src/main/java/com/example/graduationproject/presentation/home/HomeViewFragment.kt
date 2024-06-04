@@ -84,13 +84,13 @@ class HomeViewFragment : Fragment() {
         challengeView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         adapter = ChallengesAdapter(mutableListOf()) { challenge ->
-            moveToChallengeDetailsScreen()
+            moveToChallengeDetailsScreen(challenge)
         }
         challengeView.adapter = adapter
     }
 
-    private fun moveToChallengeDetailsScreen() {
-        val action = HomeViewFragmentDirections.actionHomeViewFragmentToChallengeDetailsView()
+    private fun moveToChallengeDetailsScreen(challenge: Challenge) {
+        val action = HomeViewFragmentDirections.actionHomeViewFragmentToChallengeDetailsView(challenge.challengeId)
         findNavController().navigate(action)
     }
 

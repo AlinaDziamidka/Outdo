@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/challengeDetailsRootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="10dp"
+    android:focusable="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:id="@+id/challengeDetailsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:id="@+id/creatorViewContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/creatorView"
+                style="@style/challenge_description_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/challenge_details_card_creator" />
+
+            <TextView
+                android:id="@+id/creatorNameView"
+                style="@style/default_semibold_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                tools:text="Trezor" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/descriptionView"
+            style="@style/challenge_description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            tools:text="И нет сомнений, что элементы политического процесса являются только методом политического участия и преданы социально-демократической анафеме."/>
+
+        <LinearLayout
+            android:id="@+id/startChallengeContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/startChallengeTextView"
+                style="@style/challenge_description_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/challenge_details_card_start_date" />
+
+            <TextView
+                android:id="@+id/dateOfStartView"
+                style="@style/default_semibold_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                tools:text="23 марта" />
+
+            <TextView
+                android:id="@+id/dividerView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                style="@style/default_semibold_text_style"
+                android:text="|"/>
+
+            <TextView
+                android:id="@+id/timeOfStartView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/default_semibold_text_style"
+                android:layout_marginStart="5dp"
+                tools:text="00:00:00"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/finishChallengeContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/finishChallengeView"
+                style="@style/challenge_description_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/challenge_details_card_finish_date" />
+
+            <TextView
+                android:id="@+id/dateOfFinishView"
+                style="@style/default_semibold_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                tools:text="24 марта" />
+
+            <TextView
+                android:id="@+id/dividerView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                style="@style/default_semibold_text_style"
+                android:text="|"/>
+
+            <TextView
+                android:id="@+id/timeOfFinishView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/default_semibold_text_style"
+                android:layout_marginStart="5dp"
+                tools:text="23:59:59"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

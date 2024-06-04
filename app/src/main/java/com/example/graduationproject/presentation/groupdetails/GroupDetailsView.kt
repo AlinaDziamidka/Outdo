@@ -55,8 +55,37 @@ class GroupDetailsView : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreate(savedInstanceState)
+        _binding = FragmentGroupDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initViews()
         setUpGroupName()
         observeCurrentGroup()
+        setUpChallenges()
+        observeChallenges()
+        setUpChallengesHistory()
+        observeChallengesHistory()
+        setUpSwitchParticipantsAction()
+    }
+
+    private fun initViews() {
+        groupNameView = binding.groupNameView
+        createChallengeAction = binding.createChallengeAction
+        challengesView = binding.challengesRecyclerView
+        switchParticipantsAction = binding.selectParticipantsAction
+        challengesHistoryView = binding.challengeHistoryRecyclerView
     }
 
     private fun setUpGroupName() {
@@ -88,6 +117,10 @@ class GroupDetailsView : Fragment() {
         }
     }
 
+    private fun setGroupName(group: Group) {
+        groupNameView.text = group.groupName
+    }
+
     private fun initAdapter(group: Group) {
         initChallengesAdapter(group)
         initChallengeHistoryAdapter(group)
@@ -112,41 +145,8 @@ class GroupDetailsView : Fragment() {
     }
 
     private fun moveToChallengeDetailsScreen(challenge: Challenge) {
-//        val action = GroupViewDirections.actionGroupViewToGroupDetailsView(groupParticipants.group.groupId)
-//        findNavController().navigate(action)
-    }
-
-    private fun setGroupName(group: Group) {
-        groupNameView.text = group.groupName
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreate(savedInstanceState)
-        _binding = FragmentGroupDetailsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initViews()
-        setUpChallenges()
-        observeChallenges()
-        setUpChallengesHistory()
-        observeChallengesHistory()
-        setUpSwitchParticipantsAction()
-    }
-
-    private fun initViews() {
-        groupNameView = binding.groupNameView
-        createChallengeAction = binding.createChallengeAction
-        challengesView = binding.challengesRecyclerView
-        switchParticipantsAction = binding.selectParticipantsAction
-        challengesHistoryView = binding.challengeHistoryRecyclerView
+        val action = GroupDetailsViewDirections.actionGroupDetailsViewToChallengeDetailsView(challenge.challengeId)
+        findNavController().navigate(action)
     }
 
     private fun setUpChallenges() {

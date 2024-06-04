@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <RelativeLayout
+        android:id="@+id/participantsViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/achievementNameView"
+            style="@style/achievement_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Очисти планету" />
+
+        <ImageView
+            android:id="@+id/achievementPersonView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/achievementProgressView"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/ic_person"/>
+
+        <TextView
+            android:id="@+id/achievementProgressView"
+            style="@style/default_grey_text_color_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12/24"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

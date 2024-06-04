@@ -49,8 +49,34 @@ class GroupParticipantsView : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        super.onCreate(savedInstanceState)
+        _binding = FragmentGroupParticipantsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initViews()
         setUpGroupName()
         observeCurrentGroup()
+        setUpParticipants()
+        observeParticipants()
+        setUpSwitchChallengesAction()
+    }
+
+    private fun initViews() {
+        groupNameView = binding.groupNameView
+        addFriendsAction = binding.addFriendsAction
+        participantsView = binding.participantsRecyclerView
+        switchChallengesAction = binding.selectChallengesAction
     }
 
     private fun setUpGroupName() {
@@ -67,7 +93,7 @@ class GroupParticipantsView : Fragment() {
                         is GroupParticipantsViewState.Success -> {
                             group = it.data
                             setGroupName(it.data)
-                            initAdapter(it.data)
+                            initAdapter()
                             Log.d("observeCurrentGroup in GroupParticipants", "Success view state, data: ${it.data}")
                         }
 
@@ -86,37 +112,11 @@ class GroupParticipantsView : Fragment() {
         groupNameView.text = group.groupName
     }
 
-    private fun initAdapter(group: Group) {
+    private fun initAdapter() {
         participantsView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         groupParticipantsAdapter = GroupParticipantsAdapter(mutableListOf())
         participantsView.adapter = groupParticipantsAdapter
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreate(savedInstanceState)
-        _binding = FragmentGroupParticipantsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initViews()
-        setUpParticipants()
-        observeParticipants()
-        setUpSwitchChallengesAction()
-    }
-
-    private fun initViews() {
-        groupNameView = binding.groupNameView
-        addFriendsAction = binding.addFriendsAction
-        participantsView = binding.participantsRecyclerView
-        switchChallengesAction = binding.selectChallengesAction
     }
 
     private fun setUpParticipants() {

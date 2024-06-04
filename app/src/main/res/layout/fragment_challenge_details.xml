@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/rootContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="70dp"
+        android:orientation="vertical">
+
+      <TextView
+          android:id="@+id/challengeNameView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          style="@style/screen_header_text"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:layout_marginBottom="12dp"
+          tools:text="Челленж «12 мгновений весны»"/>
+
+
+        <include
+            android:id="@+id/challengeDetailsContainer"
+            layout="@layout/challenge_details_card" />
+
+        <TextView
+            android:id="@+id/achievementsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/challenges_name_title"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/challenge_details_screen_achievements_title"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/achievementRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:listitem="@layout/achievement_card" />
+
+
+    </LinearLayout>
+</ScrollView>
