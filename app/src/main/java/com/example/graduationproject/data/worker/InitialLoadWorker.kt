@@ -31,6 +31,7 @@ class InitialLoadWorker @AssistedInject constructor(
             challenges.map { challenge ->
                 remoteLoadManager.fetchAchievementsByChallengeId(challenge.challengeId)
             }
+            remoteLoadManager.fetchFriendsByUserId(userId)
             Log.d("InitialLoadWorker", "Work completed successfully")
             Result.success()
         } catch (e: Exception) {

@@ -2,19 +2,16 @@ package com.example.graduationproject.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.graduationproject.App
 import com.example.graduationproject.data.local.database.UserDatabase
 import com.example.graduationproject.data.local.database.dao.AchievementDao
-import com.example.graduationproject.data.local.database.dao.AwardDao
 import com.example.graduationproject.data.local.database.dao.CategoryDao
 import com.example.graduationproject.data.local.database.dao.ChallengeAchievementDao
 import com.example.graduationproject.data.local.database.dao.ChallengeDao
-import com.example.graduationproject.data.local.database.dao.CompetitionDao
 import com.example.graduationproject.data.local.database.dao.GroupChallengeDao
 import com.example.graduationproject.data.local.database.dao.GroupDao
-import com.example.graduationproject.data.local.database.dao.UserAwardDao
-import com.example.graduationproject.data.local.database.dao.UserCompetitionDao
+import com.example.graduationproject.data.local.database.dao.UserAchievementDao
 import com.example.graduationproject.data.local.database.dao.UserDao
+import com.example.graduationproject.data.local.database.dao.UserFriendDao
 import com.example.graduationproject.data.local.database.dao.UserGroupDao
 import dagger.Module
 import dagger.Provides
@@ -44,11 +41,6 @@ object LocalDatabaseModule {
     }
 
     @Provides
-    fun provideAwardDao(database: UserDatabase): AwardDao {
-        return database.awardDao()
-    }
-
-    @Provides
     fun provideCategoryDao(database: UserDatabase): CategoryDao {
         return database.categoryDao()
     }
@@ -64,11 +56,6 @@ object LocalDatabaseModule {
     }
 
     @Provides
-    fun provideCompetitionDao(database: UserDatabase): CompetitionDao {
-        return database.competitionDao()
-    }
-
-    @Provides
     fun provideGroupChallengeDao(database: UserDatabase): GroupChallengeDao {
         return database.groupChallengeDao()
     }
@@ -79,16 +66,6 @@ object LocalDatabaseModule {
     }
 
     @Provides
-    fun provideUserAwardDao(database: UserDatabase): UserAwardDao {
-        return database.userAwardDao()
-    }
-
-    @Provides
-    fun provideUserCompetitionDao(database: UserDatabase): UserCompetitionDao {
-        return database.userCompetitionDao()
-    }
-
-    @Provides
     fun provideUserGroupDao(database: UserDatabase): UserGroupDao {
         return database.userGroupDao()
     }
@@ -96,6 +73,16 @@ object LocalDatabaseModule {
     @Provides
     fun provideAchievementDao(database: UserDatabase): AchievementDao {
         return database.achievementDao()
+    }
+
+    @Provides
+    fun provideUserAchievementDao(database: UserDatabase): UserAchievementDao {
+        return database.userAchievementDao()
+    }
+
+    @Provides
+    fun provideUserFriendDao(database: UserDatabase): UserFriendDao {
+        return database.userFriendDao()
     }
 
 }

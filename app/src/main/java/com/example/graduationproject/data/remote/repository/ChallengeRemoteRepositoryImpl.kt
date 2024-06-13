@@ -7,8 +7,9 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
+import javax.inject.Inject
 
-class ChallengeRemoteRepositoryImpl(private val challengeApiService: ChallengeApiService) :
+class ChallengeRemoteRepositoryImpl @Inject constructor(private val challengeApiService: ChallengeApiService) :
     ChallengeRemoteRepository {
 
     override suspend fun fetchChallengesById(challengeIdQuery: String): Event<Challenge> {

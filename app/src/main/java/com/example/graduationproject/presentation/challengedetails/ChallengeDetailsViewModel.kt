@@ -6,8 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.usecase.FetchChallengeAchievementUseCase
-import com.example.graduationproject.domain.usecase.FetchChallengeNameUseCase
+import com.example.graduationproject.domain.usecase.FetchChallengeDescriptionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class ChallengeDetailsViewModel @Inject constructor(
     context: Application,
     private val fetchChallengeAchievementUseCase: FetchChallengeAchievementUseCase,
-    private val fetchChallengeNameUseCase: FetchChallengeNameUseCase
+    private val fetchChallengeDescriptionUseCase: FetchChallengeDescriptionUseCase
 ) :
     AndroidViewModel(context) {
 
@@ -32,14 +33,14 @@ class ChallengeDetailsViewModel @Inject constructor(
         _viewStateAchievements
 
     private val _viewStateCurrentChallenge =
-        MutableStateFlow<ChallengeDetailsViewState<Challenge>>(ChallengeDetailsViewState.Loading)
-    val viewStateCurrentChallenge: StateFlow<ChallengeDetailsViewState<Challenge>> =
+        MutableStateFlow<ChallengeDetailsViewState<Pair<Challenge, UserProfile?>>>(ChallengeDetailsViewState.Loading)
+    val viewStateCurrentChallenge: StateFlow<ChallengeDetailsViewState<Pair<Challenge, UserProfile?>>> =
         _viewStateCurrentChallenge
 
     fun setCurrentChallenge(challengeId: String) {
         viewModelScope.launch {
-            fetchChallengeNameUseCase(
-                FetchChallengeNameUseCase.Params(challengeId)
+            fetchChallengeDescriptionUseCase(
+                FetchChallengeDescriptionUseCase.Params(challengeId)
             )
                 .onStart {
                     _viewStateCurrentChallenge.value = ChallengeDetailsViewState.Loading
@@ -50,9 +51,9 @@ class ChallengeDetailsViewModel @Inject constructor(
                     )
                     _viewStateCurrentChallenge.value =
                         ChallengeDetailsViewState.Failure(it.message ?: "Something went wrong.")
-                }.collect { group ->
+                }.collect {
                     Log.d("ChallengeDetailsViewModel", "Fetching challenge: Success")
-                    _viewStateCurrentChallenge.value = ChallengeDetailsViewState.Success(group)
+                    _viewStateCurrentChallenge.value = ChallengeDetailsViewState.Success(it)
                 }
         }
     }

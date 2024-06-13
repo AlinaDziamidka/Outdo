@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentGroupsBinding
 import com.example.graduationproject.domain.entity.GroupParticipants
 import com.example.graduationproject.presentation.group.adapter.GroupAdapter
+import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -58,6 +59,7 @@ class GroupView : Fragment() {
         initAdapter()
         setUpGroups()
         observeGroups()
+        setUpCreateGroupAction()
     }
 
     private fun initViews() {
@@ -72,7 +74,10 @@ class GroupView : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         Log.d("GroupFragment", "initAdapter: Creating adapter")
         adapter = GroupAdapter(mutableListOf()) { groupParticipants ->
-            Log.d("GroupFragment", "initAdapter: Adapter item clicked, moving to group details screen")
+            Log.d(
+                "GroupFragment",
+                "initAdapter: Adapter item clicked, moving to group details screen"
+            )
             moveToGroupDetailsScreen(groupParticipants)
         }
         Log.d("GroupFragment", "initAdapter: Setting adapter to RecyclerView")
@@ -80,7 +85,8 @@ class GroupView : Fragment() {
     }
 
     private fun moveToGroupDetailsScreen(groupParticipants: GroupParticipants) {
-        val action =GroupViewDirections.actionGroupViewToGroupDetailsView(groupParticipants.group.groupId)
+        val action =
+            GroupViewDirections.actionGroupViewToGroupDetailsView(groupParticipants.group.groupId)
         findNavController().navigate(action)
     }
 
@@ -133,5 +139,13 @@ class GroupView : Fragment() {
                 return true
             }
         })
+    }
+
+    private fun setUpCreateGroupAction() {
+        createGroupAction.setOnClickListener {
+            val action =
+                GroupViewDirections.actionGroupViewToCreateGroupView()
+            findNavController().navigate(action)
+        }
     }
 }

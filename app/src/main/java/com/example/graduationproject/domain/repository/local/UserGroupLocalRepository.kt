@@ -1,6 +1,5 @@
 package com.example.graduationproject.domain.repository.local
 
-import com.example.graduationproject.data.local.database.model.UserGroupModel
 import com.example.graduationproject.domain.entity.UserGroup
 
 interface UserGroupLocalRepository {
@@ -13,8 +12,7 @@ interface UserGroupLocalRepository {
 
     suspend fun insertOne(userGroup: UserGroup)
 
-    suspend fun deleteById(userGroup: UserGroup)
+    suspend fun deleteOne(userGroup: UserGroup)
 
     suspend fun updateOne(userGroup: UserGroup)
-
 }

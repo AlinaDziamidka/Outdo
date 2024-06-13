@@ -9,6 +9,8 @@ import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupChallenge
+import com.example.graduationproject.domain.entity.UserAchievement
+import com.example.graduationproject.domain.entity.UserFriend
 import com.example.graduationproject.domain.entity.UserGroup
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
@@ -16,6 +18,8 @@ import com.example.graduationproject.domain.repository.local.ChallengeAchievemen
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
+import com.example.graduationproject.domain.repository.local.UserAchievementLocalRepository
+import com.example.graduationproject.domain.repository.local.UserFriendLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
 import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
@@ -23,6 +27,8 @@ import com.example.graduationproject.domain.repository.remote.ChallengeAchieveme
 import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
+import com.example.graduationproject.domain.repository.remote.UserAchievementRemoteRepository
+import com.example.graduationproject.domain.repository.remote.UserFriendRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.util.Event
@@ -46,7 +52,11 @@ class RemoteLoadManager @Inject constructor(
     private val achievementRemoteRepository: AchievementRemoteRepository,
     private val achievementLocalRepository: AchievementLocalRepository,
     private val challengeAchievementRemoteRepository: ChallengeAchievementRemoteRepository,
-    private val challengeAchievementLocalRepository: ChallengeAchievementsLocalRepository
+    private val challengeAchievementLocalRepository: ChallengeAchievementsLocalRepository,
+    private val userFriendRemoteRepository: UserFriendRemoteRepository,
+    private val userFriendLocalRepository: UserFriendLocalRepository,
+    private val userAchievementRemoteRepository: UserAchievementRemoteRepository,
+    private val userAchievementLocalRepository: UserAchievementLocalRepository
 ) : LoadManager {
 
     override suspend fun fetchGroupsByUserId(userId: String): List<Group> {
@@ -183,7 +193,7 @@ class RemoteLoadManager @Inject constructor(
             challengeStatus.stringValue
         )
         Log.d("RemoteLoadManager", "Received challenges: ${event}")
-       return when (event) {
+        return when (event) {
             is Event.Success -> {
                 Log.d("RemoteLoadManager", "Received challenges: ${event.data}")
                 saveChallengesToLocalDatabase(event, groupId)
@@ -214,12 +224,13 @@ class RemoteLoadManager @Inject constructor(
         withContext(
             Dispatchers.IO
         ) {
-            val event = challengeAchievementRemoteRepository.fetchAllAchievementsByChallengeId(challengeId)
+            val event =
+                challengeAchievementRemoteRepository.fetchAllAchievementsByChallengeId(challengeId)
             Log.d("RemoteLoadManager", "Received achievements: ${event}")
             when (event) {
                 is Event.Success -> {
                     Log.d("RemoteLoadManager", "Received achievements: ${event.data}")
-                    saveAchievementsToLocalDatabase(event, challengeId)
+                    saveChallengeAchievementsToLocalDatabase(event, challengeId)
                     event.data
                 }
 
@@ -230,7 +241,7 @@ class RemoteLoadManager @Inject constructor(
             }
         }
 
-    private suspend fun saveAchievementsToLocalDatabase(
+    private suspend fun saveChallengeAchievementsToLocalDatabase(
         event: Event.Success<List<Achievement>>,
         challengeId: String
     ) {
@@ -272,6 +283,78 @@ class RemoteLoadManager @Inject constructor(
                 is Event.Failure -> {
                     val error = event.exception
                     Event.Failure(error)
+                }
+            }
+        }
+
+    override suspend fun fetchFriendsByUserId(userId: String): List<UserProfile> =
+        withContext(Dispatchers.IO) {
+            val friends = mutableListOf<UserProfile>()
+            val event = userFriendRemoteRepository.fetchFriendsByUserId(userId)
+            Log.d("RemoteLoadManager", "Received friends: ${event}")
+            when (event) {
+                is Event.Success -> {
+                    Log.d("RemoteLoadManager", "Received friends: ${event.data}")
+                    event.data.map { userFriend ->
+                        writeToLocalDatabase(userFriendLocalRepository::insertOne, userFriend)
+                        val friendEvent = userRemoteRepository.fetchUserById(userFriend.userId)
+                        if (friendEvent is Event.Success) {
+                            friends.add(friendEvent.data)
+                            writeToLocalDatabase(
+                                userLocalRepository::insertOne,
+                                friendEvent.data
+                            )
+                        } else Log.e(
+                            "RemoteLoadManager",
+                            "Failed to fetch friend with ID: ${userFriend.friendId}"
+                        )
+                        Event.Failure("Not found friend")
+                    }
+                    friends
+                }
+
+                is Event.Failure -> {
+                    Log.e("RemoteLoadManager", "Failed to fetch friends: ${event.exception}")
+                    throw Exception(event.exception)
+                }
+            }
+        }
+
+    override suspend fun fetchAchievementsByUserId(userId: String): List<Achievement> =
+        withContext(
+            Dispatchers.IO
+        ) {
+            val achievements = mutableListOf<Achievement>()
+            val event = userAchievementRemoteRepository.fetchUserAchievementByUserId(userId)
+            Log.d("RemoteLoadManager", "Received achievements: ${event}")
+            when (event) {
+                is Event.Success -> {
+                    Log.d("RemoteLoadManager", "Received achievements: ${event.data}")
+                    event.data.map { userAchievement ->
+                        writeToLocalDatabase(
+                            userAchievementLocalRepository::insertOne,
+                            userAchievement
+                        )
+                        val achievementEvent =
+                            achievementRemoteRepository.fetchAchievementById(userAchievement.achievementId)
+                        if (achievementEvent is Event.Success) {
+                            achievements.add(achievementEvent.data)
+                            writeToLocalDatabase(
+                                achievementLocalRepository::insertOne,
+                                achievementEvent.data
+                            )
+                        } else Log.e(
+                            "RemoteLoadManager",
+                            "Failed to fetch achievement with ID: ${userAchievement.achievementId}"
+                        )
+                        Event.Failure("Not found achievements")
+                    }
+                    achievements
+                }
+
+                is Event.Failure -> {
+                    Log.e("RemoteLoadManager", "Failed to fetch achievements: ${event.exception}")
+                    throw Exception(event.exception)
                 }
             }
         }

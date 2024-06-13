@@ -21,6 +21,7 @@ import com.example.graduationproject.databinding.FragmentGroupDetailsBinding
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
+import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.challengedetails.adapter.AchievementsAdapter
 import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewState
 import com.example.graduationproject.presentation.groupdetails.adapter.ChallengesHistoryAdapter
@@ -90,8 +91,8 @@ class ChallengeDetailsView : Fragment() {
                     Log.d("observeCurrentChallenge", "New view state: $it")
                     when (it) {
                         is ChallengeDetailsViewState.Success -> {
-                            challenge = it.data
-                            setChallengeName(it.data)
+                            challenge = it.data.first
+                            setChallengeName(it.data.first)
                             setChallengeDescription(it.data)
                             Log.d("observeCurrentChallenge", "Success view state, data: ${it.data}")
                         }
@@ -113,8 +114,8 @@ class ChallengeDetailsView : Fragment() {
         challengeNameView.text = challengeTitle
     }
 
-    private fun setChallengeDescription(challenge: Challenge) {
-        challengeDescription.updateChallengeDescription(challenge)
+    private fun setChallengeDescription(challengeDetails: Pair<Challenge, UserProfile?>) {
+        challengeDescription.updateChallengeDescription(challengeDetails.first, challengeDetails.second)
     }
 
     private fun initAdapter() {

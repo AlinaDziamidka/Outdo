@@ -23,5 +23,7 @@ data class ChallengeModel(
     @ColumnInfo("iconPath")
     val challengeIcon: String?,
     @ColumnInfo("challengeStatus")
-    val challengeStatus: String
+    val challengeStatus: String,
+    @ColumnInfo("creatorId")
+    val creatorId: String?
 )

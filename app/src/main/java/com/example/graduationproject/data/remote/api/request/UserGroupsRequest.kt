@@ -1,6 +1,10 @@
 package com.example.graduationproject.data.remote.api.request
 
+import com.google.gson.annotations.SerializedName
+
 data class UserGroupsRequest(
-    val groupId: String,
-    val userId: String
+    @SerializedName("userId")
+    val userId: String,
+    @SerializedName("groupId")
+    val groupId: String
 )

@@ -49,6 +49,9 @@
             android:name="groupId"
             app:argType="string"/>
         </action>
+        <action
+            android:id="@+id/action_groupView_to_createGroupView"
+            app:destination="@id/createGroupView" />
     </fragment>
     <fragment
         android:id="@+id/groupDetailsView"
@@ -89,6 +92,31 @@
             <argument
                 android:name="groupId"
                 app:argType="string"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/createGroupView"
+        android:name="com.example.graduationproject.presentation.creategroup.CreateGroupView"
+        android:label="CreateGroupView" >
+        <action
+            android:id="@+id/action_createGroupView_to_addFriendsView"
+            app:destination="@id/addFriendsView">
+        </action>
+        <action
+            android:id="@+id/action_createGroupView_to_groupDetailsView"
+            app:destination="@id/groupDetailsView">
+            <argument
+                android:name="groupId"
+                app:argType="string"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/addFriendsView"
+        android:name="com.example.graduationproject.presentation.addfriends.AddFriendsView"
+        android:label="AddFriendsView" >
+        <action
+            android:id="@+id/action_addFriendsView_to_createGroupView"
+            app:destination="@id/createGroupView">
         </action>
     </fragment>
 </navigation>

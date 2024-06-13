@@ -4,17 +4,15 @@ package com.example.graduationproject.di
 import com.example.graduationproject.data.remote.api.NetworkClientConfig
 import com.example.graduationproject.data.remote.api.service.AchievementApiService
 import com.example.graduationproject.data.remote.api.service.AuthApiService
-import com.example.graduationproject.data.remote.api.service.AwardApiService
 import com.example.graduationproject.data.remote.api.service.CategoryApiService
 import com.example.graduationproject.data.remote.api.service.ChallengeAchievementApiService
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
-import com.example.graduationproject.data.remote.api.service.CompetitionApiService
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
-import com.example.graduationproject.data.remote.api.service.UserAwardApiService
-import com.example.graduationproject.data.remote.api.service.UserCompetitionApiService
+import com.example.graduationproject.data.remote.api.service.UserAchievementApiService
 import com.example.graduationproject.data.remote.api.service.UserGroupApiService
 import com.example.graduationproject.data.remote.api.service.UserApiService
+import com.example.graduationproject.data.remote.api.service.UserFriendApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,10 +57,6 @@ object NetworkModule {
         retrofit.create(AchievementApiService::class.java)
 
     @Provides
-    fun provideAwardApiService(retrofit: Retrofit): AwardApiService =
-        retrofit.create(AwardApiService::class.java)
-
-    @Provides
     fun provideCategoryApiService(retrofit: Retrofit): CategoryApiService =
         retrofit.create(CategoryApiService::class.java)
 
@@ -75,24 +69,12 @@ object NetworkModule {
         retrofit.create(ChallengeApiService::class.java)
 
     @Provides
-    fun provideCompetitionApiService(retrofit: Retrofit): CompetitionApiService =
-        retrofit.create(CompetitionApiService::class.java)
-
-    @Provides
     fun provideGroupApiService(retrofit: Retrofit): GroupApiService =
         retrofit.create(GroupApiService::class.java)
 
     @Provides
     fun provideGroupChallengeApiService(retrofit: Retrofit): GroupChallengeApiService =
         retrofit.create(GroupChallengeApiService::class.java)
-
-    @Provides
-    fun provideUserAwardApiService(retrofit: Retrofit): UserAwardApiService =
-        retrofit.create(UserAwardApiService::class.java)
-
-    @Provides
-    fun provideUserCompetitionApiService(retrofit: Retrofit): UserCompetitionApiService =
-        retrofit.create(UserCompetitionApiService::class.java)
 
     @Provides
     fun provideUserGroupApiService(retrofit: Retrofit): UserGroupApiService =
@@ -106,4 +88,11 @@ object NetworkModule {
     fun provideUsernameService(retrofit: Retrofit): UserApiService =
         retrofit.create(UserApiService::class.java)
 
+    @Provides
+    fun provideUserFriendService(retrofit: Retrofit): UserFriendApiService =
+        retrofit.create(UserFriendApiService::class.java)
+
+    @Provides
+    fun provideUserAchievementService(retrofit: Retrofit): UserAchievementApiService =
+        retrofit.create(UserAchievementApiService::class.java)
 }

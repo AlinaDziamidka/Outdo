@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -41,6 +42,7 @@
         android:text="@string/group_screen_group_name" />
 
     <EditText
+        android:id="@+id/groupNameContent"
         style="@style/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,11 +94,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/group_screen_participants_title" />
 
-    <Spinner
+ <include
+     android:id="@+id/addFriendsAction"
+     layout="@layout/add_friends_button"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dropDownSelector="@drawable/ic_arrow_bottom"
-        android:background="@drawable/bg_edit_text"/>
+        android:layout_marginTop="6dp"
+        tools:listitem="@layout/friends_card" />
 </LinearLayout>

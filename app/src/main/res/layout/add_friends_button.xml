@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootButtonContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_edit_text"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
+
+    <TextView
+        android:id="@+id/addFriendsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/hint_text"
+        android:text="@string/group_participants_screen_add_friends"/>
+
+    <ImageView
+        android:id="@+id/searchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_search"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>

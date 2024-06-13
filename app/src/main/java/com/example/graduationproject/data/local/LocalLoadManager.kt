@@ -7,12 +7,15 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
+import com.example.graduationproject.domain.entity.UserFriend
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeAchievementsLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
+import com.example.graduationproject.domain.repository.local.UserAchievementLocalRepository
+import com.example.graduationproject.domain.repository.local.UserFriendLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
 import com.example.graduationproject.domain.util.Event
@@ -29,7 +32,9 @@ class LocalLoadManager @Inject constructor(
     private val userLocalRepository: UserLocalRepository,
     private val achievementLocalRepository: AchievementLocalRepository,
     private val challengeAchievementsLocalRepository: ChallengeAchievementsLocalRepository,
-    private val achievementsLocalRepository: AchievementLocalRepository
+    private val achievementsLocalRepository: AchievementLocalRepository,
+    private val userFriendLocalRepository: UserFriendLocalRepository,
+    private val userAchievementLocalRepository: UserAchievementLocalRepository
 ) : LoadManager {
     override suspend fun fetchGroupsByUserId(userId: String): List<Group> =
         withContext(Dispatchers.IO) {
@@ -119,6 +124,27 @@ class LocalLoadManager @Inject constructor(
                 challengeAchievementsLocalRepository.fetchAchievementsByChallengeId(challengeId)
             return@withContext challengeAchievements.map { challengeAchievement ->
                 achievementsLocalRepository.fetchById(challengeAchievement.achievementId)
+            }
+        }
+
+    override suspend fun fetchFriendsByUserId(userId: String): List<UserProfile> =
+        withContext(
+            Dispatchers.IO
+        ) {
+            val userFriends =
+                userFriendLocalRepository.fetchFriendsByUserId(userId)
+            return@withContext userFriends.map { userFriend ->
+                userLocalRepository.fetchById(userFriend.friendId)
+            }
+        }
+
+    override suspend fun fetchAchievementsByUserId(userId: String): List<Achievement> =
+        withContext(
+            Dispatchers.IO
+        ) {
+            val userAchievements = userAchievementLocalRepository.fetchAchievementsByUserId(userId)
+            return@withContext userAchievements.map { userAchievement ->
+                achievementLocalRepository.fetchById(userAchievement.achievementId)
             }
         }
 }

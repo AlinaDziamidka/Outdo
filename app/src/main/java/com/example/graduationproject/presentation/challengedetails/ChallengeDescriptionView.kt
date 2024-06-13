@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import com.example.graduationproject.databinding.ChallengeDetailsCardBinding
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.UserProfile
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -30,13 +31,14 @@ class ChallengeDescriptionView(rootView: ChallengeDetailsCardBinding) {
         dateOfFinishView = rootView.dateOfFinishView
     }
 
-    fun updateChallengeDescription(challenge: Challenge) {
+    fun updateChallengeDescription(challenge: Challenge, userProfile: UserProfile?) {
         val challengeDescription = challenge.challengeDescription
         val endTime = challenge.endTime
         val currentLocale: Locale = Locale.getDefault()
         val (formattedFinishTime, formattedDateOfFinish) = formatDateAndTime(endTime, currentLocale)
         finishTimeView.text = formattedFinishTime
         dateOfFinishView.text = formattedDateOfFinish
+        creatorNameView.text = userProfile?.username
 
         if (challengeDescription == null) {
             descriptionView.visibility = View.GONE

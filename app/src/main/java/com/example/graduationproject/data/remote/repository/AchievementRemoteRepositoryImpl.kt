@@ -7,8 +7,9 @@ import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
+import javax.inject.Inject
 
-class AchievementRemoteRepositoryImpl(private val achievementApiService: AchievementApiService) :
+class AchievementRemoteRepositoryImpl @Inject constructor(private val achievementApiService: AchievementApiService) :
     AchievementRemoteRepository {
     override suspend fun fetchAchievementById(achievementIdQuery: String): Event<Achievement> {
         val idQuery = "objectId=\'$achievementIdQuery\'"

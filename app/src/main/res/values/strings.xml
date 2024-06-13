@@ -62,5 +62,9 @@
     <string name="challenge_details_card_creator">Creator:</string>
     <string name="challenge_details_card_start_date">Start:</string>
     <string name="challenge_details_card_finish_date">Finish:</string>
+    <string name="add_friends_screen_header">Friends</string>
+    <string name="add_friends_screen_back">Back</string>
+    <string name="add_friends_screen_confirm_action">Confirm</string>
+    <string name="friend_card_delete_friend">Delete</string>
 
 </resources>

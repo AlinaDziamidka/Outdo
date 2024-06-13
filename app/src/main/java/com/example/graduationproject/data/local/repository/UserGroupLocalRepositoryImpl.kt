@@ -40,7 +40,7 @@ class UserGroupLocalRepositoryImpl @Inject constructor(private val userGroupDao:
         return userGroupDao.insertOne(model)
     }
 
-    override suspend fun deleteById(userGroup: UserGroup) {
+    override suspend fun deleteOne(userGroup: UserGroup) {
         val model = userGroupTransformer.toModel(userGroup)
         return userGroupDao.deleteOne(model)
     }

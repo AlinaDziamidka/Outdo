@@ -64,4 +64,10 @@
     <string name="challenge_details_card_creator">Создатель:</string>
     <string name="challenge_details_card_start_date">Время старта:</string>
     <string name="challenge_details_card_finish_date">Время окончания:</string>
+    <string name="add_friends_screen_header">Друзья</string>
+    <string name="add_friends_screen_back">Назад</string>
+    <string name="add_friends_screen_confirm_action">Подтвердить</string>
+    <string name="friend_card_delete_friend">Убрать</string>
+
+
 </resources>

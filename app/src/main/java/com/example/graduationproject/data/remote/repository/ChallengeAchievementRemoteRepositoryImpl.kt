@@ -18,8 +18,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import retrofit2.http.Query
+import javax.inject.Inject
 
-class ChallengeAchievementRemoteRepositoryImpl(
+class ChallengeAchievementRemoteRepositoryImpl @Inject constructor(
     private val challengeAchievementApiService: ChallengeAchievementApiService,
     private val achievementApiService: AchievementApiService
 ) :

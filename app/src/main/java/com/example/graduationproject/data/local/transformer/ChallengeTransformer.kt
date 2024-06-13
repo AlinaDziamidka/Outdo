@@ -15,7 +15,8 @@ public class ChallengeTransformer {
             challengeDescription = model.challengeDescription,
             endTime = model.endTime,
             challengeIcon = model.challengeIcon,
-            challengeStatus = ChallengeStatus.valueOf(model.challengeStatus)
+            challengeStatus = ChallengeStatus.valueOf(model.challengeStatus),
+            creatorId = model.creatorId
         )
     }
 
@@ -28,7 +29,8 @@ public class ChallengeTransformer {
             challengeDescription = challenge.challengeDescription,
             endTime = challenge.endTime,
             challengeIcon = challenge.challengeIcon,
-            challengeStatus = challenge.challengeStatus.stringValue
+            challengeStatus = challenge.challengeStatus.stringValue,
+            creatorId = challenge.creatorId
         )
     }
 }

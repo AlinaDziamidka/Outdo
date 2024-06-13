@@ -19,5 +19,7 @@ data class ChallengeResponse(
     @SerializedName("iconPath")
     val challengeIcon: String?,
     @SerializedName("challengeStatus")
-    val challengeStatus: String
+    val challengeStatus: String,
+    @SerializedName("creatorId")
+    val creatorId: String?
 )

@@ -10,4 +10,5 @@ data class Challenge(
     val endTime: Long,
     val challengeIcon: String?,
     val challengeStatus: ChallengeStatus,
+    val creatorId: String?
 )

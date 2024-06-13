@@ -39,7 +39,6 @@ class SignUpViewModel @Inject constructor(
                 .catch { exception ->
 
                     Log.d("SignUpViewModel", "Exception $exception")
-                    // TODO: you need to decide which text you want to show or change it in use case
                     _viewState.value = SignUpViewState.Failure(
                         exception.localizedMessage ?: "Something went wrong"
                     )

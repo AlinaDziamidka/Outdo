@@ -16,8 +16,6 @@ suspend fun <T : Any> doCall(call: suspend () -> Response<T>): Event<T> {
         val errorBody = response.errorBody()?.string()
         if (!errorBody.isNullOrBlank()) {
             val apiError = errorBody.toApiError()
-            // TODO: by default we take backendless message, but you can write any code to use you custom message.
-            //  This is the right place to do it
             Event.Failure(apiError.message)
         } else {
             Event.Failure("Unknown error")

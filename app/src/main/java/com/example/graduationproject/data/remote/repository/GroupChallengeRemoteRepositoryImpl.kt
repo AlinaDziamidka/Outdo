@@ -9,8 +9,9 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
+import javax.inject.Inject
 
-class GroupChallengeRemoteRepositoryImpl(
+class GroupChallengeRemoteRepositoryImpl @Inject constructor(
     private val groupChallengeApiService: GroupChallengeApiService,
     private val challengeApiService: ChallengeApiService
 ) :
