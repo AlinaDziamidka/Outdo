@@ -66,5 +66,9 @@
     <string name="add_friends_screen_back">Back</string>
     <string name="add_friends_screen_confirm_action">Confirm</string>
     <string name="friend_card_delete_friend">Delete</string>
-
+    <string name="notification_screen_header">Notifications</string>
+    <string name="notification_screen_notification_title">You have been added to the group</string>
+    <string name="notification_screen_description">User «%1$s» added you to the «%2$s» group!</string>
+    <string name="notification_screen_to_group_action">Go to group</string>
+    <string name="notification_screen_leave_action">Leave the group</string>
 </resources>

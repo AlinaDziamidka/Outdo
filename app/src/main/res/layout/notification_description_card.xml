@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notificationDetailsRootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:focusable="true"
+    app:cardCornerRadius="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/headerView"
+            style="@style/notification_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notification_screen_notification_title" />
+
+        <TextView
+            android:id="@+id/descriptionView"
+            style="@style/description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:text="Пользователь «Pandochka» добавил вас в группу «Любители пива»!" />
+
+        <LinearLayout
+            android:id="@+id/buttonActionContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/actionToGroupView"
+                style="@style/simple_button_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_simple_action"
+                android:backgroundTint="@null"
+                android:text="@string/notification_screen_to_group_action" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/actionLeaveGroupView"
+                style="@style/unselected_simple_button_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_unselected_simple_action"
+                android:text="@string/notification_screen_leave_action" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

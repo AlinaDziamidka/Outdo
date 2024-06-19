@@ -2,6 +2,7 @@ package com.example.graduationproject.presentation.signup
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -117,6 +118,7 @@ class SignUpViewFragment : Fragment() {
                 viewModel.viewState.collect {
                     when (it) {
                         is SignUpViewState.Success -> {
+                            registerUserDevice()
                             moveToHomeScreen()
                         }
 
@@ -133,6 +135,16 @@ class SignUpViewFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun registerUserDevice() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
+        Log.d("SignInViewFragment", userId)
+        val registrationId = sharedPreferences.getString("current_user_device_id", "  ") ?: "  "
+        Log.d("SignInViewFragment", registrationId)
+        viewModel.registerDevice(userId, registrationId)
     }
 
 
@@ -216,10 +228,8 @@ class SignUpViewFragment : Fragment() {
         confirmPasswordErrorNotification.visibility = View.VISIBLE
     }
 
-
     private fun moveToHomeScreen() {
         val action = SignUpViewFragmentDirections.actionSignUpViewFragmentToHomeActivity()
-//        val action = SignUpViewFragmentDirections.actionSignUpViewFragmentToHomeActivity(username.toString(), false)
         findNavController().navigate(action)
     }
 

@@ -27,7 +27,7 @@
 
             <TextView
                 android:id="@+id/creatorView"
-                style="@style/challenge_description_text"
+                style="@style/description_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/challenge_details_card_creator" />
@@ -43,7 +43,7 @@
 
         <TextView
             android:id="@+id/descriptionView"
-            style="@style/challenge_description_text"
+            style="@style/description_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -58,7 +58,7 @@
 
             <TextView
                 android:id="@+id/startChallengeTextView"
-                style="@style/challenge_description_text"
+                style="@style/description_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/challenge_details_card_start_date" />
@@ -97,7 +97,7 @@
 
             <TextView
                 android:id="@+id/finishChallengeView"
-                style="@style/challenge_description_text"
+                style="@style/description_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/challenge_details_card_finish_date" />

@@ -38,12 +38,24 @@ class PrefsDataSourceImpl @Inject constructor(private val context: Context) : Pr
         }
     }
 
+    override fun saveRegistrationId(registrationId: String) {
+        val prefs = context.getSharedPreferences(
+            sessionPrefs, Context.MODE_PRIVATE
+        )
+
+        with(prefs.edit()) {
+            putString(userDeviceId, registrationId)
+            apply()
+        }
+    }
+
     companion object {
         const val sessionPrefs = "session_prefs"
         const val tokenKey = "token_key"
         const val userIdKey = "current_user_id"
         const val usernameKey = "current_username"
         const val userIdentity = "current_user_userIdentity"
+        const val userDeviceId = "current_user_device_id"
     }
 }
 
@@ -52,4 +64,5 @@ interface PrefsDataSource {
     fun fetchToken(): String?
 
     fun saveUserProfile(userProfile: UserProfile)
+    fun saveRegistrationId (registrationId: String)
 }

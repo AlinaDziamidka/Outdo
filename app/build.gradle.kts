@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -91,4 +92,7 @@ dependencies {
     implementation("io.coil-kt:coil-svg:2.6.0")
     implementation("io.coil-kt:coil:2.6.0")
 
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation ("com.google.firebase:firebase-messaging:24.0.0")
+    implementation("com.google.firebase:firebase-iid:21.1.0")
 }

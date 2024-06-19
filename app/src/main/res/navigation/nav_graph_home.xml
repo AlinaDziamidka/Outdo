@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_homeViewFragment_to_groupView"
             app:destination="@id/groupView" />
+        <action
+            android:id="@+id/action_homeViewFragment_to_notificationView3"
+            app:destination="@id/notificationView" />
     </fragment>
     <fragment
         android:id="@+id/challengeDetailsView"
@@ -118,5 +121,17 @@
             android:id="@+id/action_addFriendsView_to_createGroupView"
             app:destination="@id/createGroupView">
         </action>
+    </fragment>
+    <fragment
+        android:id="@+id/notificationView"
+        android:name="com.example.graduationproject.presentation.notifications.NotificationView"
+        android:label="NotificationView" >
+        <action
+            android:id="@+id/action_notificationView3_to_groupDetailsView"
+            app:destination="@id/groupDetailsView">
+        <argument
+            android:name="groupId"
+            app:argType="string"/>
+    </action>
     </fragment>
 </navigation>

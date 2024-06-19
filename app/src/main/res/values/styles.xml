@@ -114,8 +114,8 @@
 
     <style name="scores_text" parent="switch_action_name" />
 
-    <style name="challenge_description_text">
-        <item name="android:textColor">@color/challenge_description_text_color</item>
+    <style name="description_text">
+        <item name="android:textColor">@color/description_text_color</item>
     </style>
 
     <style name="achievement_title">
@@ -136,6 +136,19 @@
     <style name="friend_card_delete">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/error_text_color_red</item>
+    </style>
+
+    <style name="notification_title" parent="friend_card_text_style"/>
+
+    <style name="simple_button_action">
+        <item name="fontFamily">@font/gilroy_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="unselected_simple_button_action" parent="simple_button_action">
+      <item name="android:textColor">@color/color_primary</item>
     </style>
 
 </resources>

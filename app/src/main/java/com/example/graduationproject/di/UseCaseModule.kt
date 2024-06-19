@@ -6,11 +6,13 @@ import com.example.graduationproject.domain.repository.local.ChallengeLocalRepos
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
+import com.example.graduationproject.domain.repository.remote.DeviceRegistrationRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.usecase.CreateGroupUseCase
+import com.example.graduationproject.domain.usecase.DeviceRegistrationUseCase
 import com.example.graduationproject.domain.usecase.FetchChallengeAchievementUseCase
 import com.example.graduationproject.domain.usecase.FetchChallengeDescriptionUseCase
 import com.example.graduationproject.domain.usecase.SignInUseCase
@@ -164,4 +166,13 @@ object UseCaseModule {
         )
     }
 
+    @Provides
+    @ViewModelScoped
+    fun provideDeviceRegistrationUseCase(
+        deviseRegistrationRepository: DeviceRegistrationRepository
+    ): DeviceRegistrationUseCase {
+        return DeviceRegistrationUseCase(
+            deviseRegistrationRepository
+        )
+    }
 }

@@ -6,17 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.example.graduationproject.App
 import com.example.graduationproject.R
 import com.example.graduationproject.data.worker.InitialLoadWorker
-//import com.example.graduationproject.data.worker.InitialLoadWorker
 import com.example.graduationproject.presentation.home.HomeView
 import com.example.graduationproject.presentation.signin.SignInView
 import dagger.hilt.android.AndroidEntryPoint

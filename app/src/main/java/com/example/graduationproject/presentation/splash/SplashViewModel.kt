@@ -1,8 +1,11 @@
 package com.example.graduationproject.presentation.splash
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.graduationproject.domain.usecase.DeviceRegistrationUseCase
 import com.example.graduationproject.domain.usecase.FetchSessionUseCase
+import com.example.graduationproject.domain.usecase.SetGroupParticipantsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +19,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val fetchSessionUseCase: FetchSessionUseCase,
+    private val fetchSessionUseCase: FetchSessionUseCase
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow<SplashViewState>(SplashViewState.Loading)

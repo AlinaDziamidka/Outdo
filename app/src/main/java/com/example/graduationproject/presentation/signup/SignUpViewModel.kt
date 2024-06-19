@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.graduationproject.domain.usecase.DeviceRegistrationUseCase
 import com.example.graduationproject.domain.usecase.SignInUseCase
 import com.example.graduationproject.domain.usecase.SignUpUseCase
 import com.example.graduationproject.domain.util.EventDomain
@@ -23,6 +24,7 @@ class SignUpViewModel @Inject constructor(
     context: Application,
     private val signUpUseCase: SignUpUseCase,
     private val signInUseCase: SignInUseCase,
+    private val deviceRegistrationUseCase: DeviceRegistrationUseCase
 ) :
     AndroidViewModel(context) {
 
@@ -72,6 +74,18 @@ class SignUpViewModel @Inject constructor(
                     _viewState.value = SignUpViewState.Success
                     Log.d("SignUpViewModel", "SignIn $viewState.value")
                 }
+        }
+    }
+
+    fun registerDevice(userId: String, registrationId: String?) {
+        viewModelScope.launch {
+            runCatching {
+                deviceRegistrationUseCase(DeviceRegistrationUseCase.Params(userId, registrationId))
+            }.onSuccess {
+                Log.d("SignInViewModel", "Device register successfully")
+            }.onFailure { e ->
+                Log.e("SignInViewModel", "Error register device: ${e.message}")
+            }
         }
     }
 }

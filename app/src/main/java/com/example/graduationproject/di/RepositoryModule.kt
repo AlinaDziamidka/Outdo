@@ -21,15 +21,18 @@ import com.example.graduationproject.data.local.repository.UserLocalRepositoryIm
 import com.example.graduationproject.data.remote.api.service.AchievementApiService
 import com.example.graduationproject.data.remote.api.service.ChallengeAchievementApiService
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
+import com.example.graduationproject.data.remote.api.service.DeviceRegistrationApiService
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
 import com.example.graduationproject.data.remote.api.service.UserAchievementApiService
 import com.example.graduationproject.data.remote.api.service.UserApiService
 import com.example.graduationproject.data.remote.api.service.UserFriendApiService
 import com.example.graduationproject.data.remote.api.service.UserGroupApiService
+import com.example.graduationproject.data.remote.prefs.PrefsDataSource
 import com.example.graduationproject.data.remote.repository.AchievementRemoteRepositoryImpl
 import com.example.graduationproject.data.remote.repository.ChallengeAchievementRemoteRepositoryImpl
 import com.example.graduationproject.data.remote.repository.ChallengeRemoteRepositoryImpl
+import com.example.graduationproject.data.remote.repository.DeviceRegistrationRepositoryImpl
 import com.example.graduationproject.data.remote.repository.GroupChallengeRemoteRepositoryImpl
 import com.example.graduationproject.data.remote.repository.GroupRemoteRepositoryImpl
 import com.example.graduationproject.data.remote.repository.SessionRepositoryImpl
@@ -49,6 +52,7 @@ import com.example.graduationproject.domain.repository.local.UserLocalRepository
 import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.ChallengeAchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
+import com.example.graduationproject.domain.repository.remote.DeviceRegistrationRepository
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
@@ -185,6 +189,16 @@ object RepositoryModule {
     fun provideUserAchievementLocalRepository(userAchievementDao: UserAchievementDao): UserAchievementLocalRepository {
         return UserAchievementLocalRepositoryImpl(userAchievementDao)
     }
+
+    @Provides
+    @Singleton
+    fun provideDeviceRegistrationRepository(
+        prefsDataSource: PrefsDataSource,
+        deviceRegistrationApiService: DeviceRegistrationApiService,
+    ): DeviceRegistrationRepository {
+        return DeviceRegistrationRepositoryImpl(prefsDataSource, deviceRegistrationApiService)
+    }
+
 }
 
 @Module

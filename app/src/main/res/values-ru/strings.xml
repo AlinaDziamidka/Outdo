@@ -68,6 +68,13 @@
     <string name="add_friends_screen_back">Назад</string>
     <string name="add_friends_screen_confirm_action">Подтвердить</string>
     <string name="friend_card_delete_friend">Убрать</string>
+    <string name="notification_screen_header">Уведомления</string>
+    <string name="notification_screen_notification_title">Вас добавили в группу</string>
+    <string name="notification_screen_description">Пользователь «%1$s» добавил вас в группу «%2$s»!</string>
+    <string name="notification_screen_to_group_action">К группе</string>
+    <string name="notification_screen_leave_action">Выйти из группы</string>
+
+
 
 
 </resources>
