@@ -13,6 +13,7 @@ import com.example.graduationproject.data.local.database.dao.UserAchievementDao
 import com.example.graduationproject.data.local.database.dao.UserDao
 import com.example.graduationproject.data.local.database.dao.UserFriendDao
 import com.example.graduationproject.data.local.database.dao.UserGroupDao
+import com.example.graduationproject.data.local.database.dao.UserNotificationDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,15 +25,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object LocalDatabaseModule {
 
-        @Provides
-        @Singleton
-        fun provideDatabase(@ApplicationContext context: Context): UserDatabase {
-            return Room.databaseBuilder(
-                context,
-                UserDatabase::class.java,
-                "userdb"
-            ).build()
-        }
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): UserDatabase {
+        return Room.databaseBuilder(
+            context,
+            UserDatabase::class.java,
+            "userdb"
+        ).build()
+    }
 
 
     @Provides
@@ -85,4 +86,8 @@ object LocalDatabaseModule {
         return database.userFriendDao()
     }
 
+    @Provides
+    fun provideUserNotificationDao(database: UserDatabase): UserNotificationDao {
+        return database.userNotificationDao()
+    }
 }

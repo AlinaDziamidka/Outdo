@@ -12,6 +12,7 @@ import com.example.graduationproject.data.local.database.dao.UserAchievementDao
 import com.example.graduationproject.data.local.database.dao.UserDao
 import com.example.graduationproject.data.local.database.dao.UserFriendDao
 import com.example.graduationproject.data.local.database.dao.UserGroupDao
+import com.example.graduationproject.data.local.database.dao.UserNotificationDao
 import com.example.graduationproject.data.local.database.model.AchievementModel
 import com.example.graduationproject.data.local.database.model.CategoryModel
 import com.example.graduationproject.data.local.database.model.ChallengeModel
@@ -22,11 +23,13 @@ import com.example.graduationproject.data.local.database.model.UserAchievementMo
 import com.example.graduationproject.data.local.database.model.UserFriendModel
 import com.example.graduationproject.data.local.database.model.UserModel
 import com.example.graduationproject.data.local.database.model.UserGroupModel
+import com.example.graduationproject.data.local.database.model.UserNotificationModel
 
 @Database(
     entities = [UserModel::class, GroupModel::class, ChallengeModel::class, AchievementModel::class,
         CategoryModel::class, GroupChallengeModel::class, UserGroupModel::class, ChallengeAchievementModel::class,
-        UserFriendModel::class, UserAchievementModel::class], version = 2
+        UserFriendModel::class, UserAchievementModel::class, UserNotificationModel::class],
+    version = 3
 )
 
 abstract class UserDatabase : RoomDatabase() {
@@ -39,6 +42,6 @@ abstract class UserDatabase : RoomDatabase() {
     abstract fun userGroupDao(): UserGroupDao
     abstract fun challengeAchievementDao(): ChallengeAchievementDao
     abstract fun userFriendDao(): UserFriendDao
-
     abstract fun userAchievementDao(): UserAchievementDao
+    abstract fun userNotificationDao(): UserNotificationDao
 }

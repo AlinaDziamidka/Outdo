@@ -7,14 +7,10 @@ data class DeviceRegistrationRequest(
     val deviceToken: String,
     @SerializedName("deviceId")
     val deviceId: String,
-    @SerializedName("operatingSystemName")
+    @SerializedName("os")
     val os: String,
-    @SerializedName("operatingSystemVersion")
+    @SerializedName("osVersion")
     val osVersion: String,
-    @SerializedName("channelName")
-    val channels: List<String>? = null,
-    @SerializedName("expiration")
-    val expiration: Long? = null,
-    @SerializedName("userId")
-    val userId: String
+    @SerializedName("channels")
+    val channels: List<String>? = null
 )

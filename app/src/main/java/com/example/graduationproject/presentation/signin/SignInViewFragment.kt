@@ -29,9 +29,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SignInViewFragment : Fragment() {
 
-//    @Inject
-//    lateinit var pushNotificationRegistrar: PushNotificationRegistrar
-
     private val viewModel: SignInViewModel by viewModels()
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
@@ -105,13 +102,7 @@ class SignInViewFragment : Fragment() {
     }
 
     private fun registerUserDevice() {
-        val sharedPreferences =
-            requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
-        Log.d("SignInViewFragment", userId)
-        val registrationId = sharedPreferences.getString("current_user_device_id", "  ") ?: "  "
-        Log.d("SignInViewFragment", registrationId)
-        viewModel.registerDevice(userId, registrationId)
+        viewModel.registerDevice()
     }
 
     private fun runWorker() {

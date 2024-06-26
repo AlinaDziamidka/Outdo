@@ -6,6 +6,5 @@ data class UserDevice(
     val os: String,
     val osVersion: String,
     val channels: List<String>? = null,
-    val expiration: Long? = null,
     val registrationId: String
 )

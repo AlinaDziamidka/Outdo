@@ -54,9 +54,9 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("com.firework.external.imageloading:glide:6.11.0")
@@ -81,7 +81,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation ("com.backendless:backendless:6.1.1")
-
     implementation("com.google.dagger:hilt-android:2.51")
     kapt("com.google.dagger:hilt-android-compiler:2.51")
     implementation("androidx.hilt:hilt-work:1.2.0")
@@ -92,7 +91,8 @@ dependencies {
     implementation("io.coil-kt:coil-svg:2.6.0")
     implementation("io.coil-kt:coil:2.6.0")
 
-    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
-    implementation ("com.google.firebase:firebase-messaging:24.0.0")
-    implementation("com.google.firebase:firebase-iid:21.1.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation ("com.google.firebase:firebase-messaging")
+//    implementation ("com.android.support:support-compat:28.0.0")
+
 }

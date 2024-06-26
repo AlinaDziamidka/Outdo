@@ -1,11 +1,11 @@
 package com.example.graduationproject.data.remote.repository
 
 import android.os.Build
+import android.util.Log
 import com.example.graduationproject.data.remote.api.request.DeviceRegistrationRequest
 import com.example.graduationproject.data.remote.api.service.DeviceRegistrationApiService
 import com.example.graduationproject.data.remote.api.util.DeviceInfoUtil
 import com.example.graduationproject.data.remote.prefs.PrefsDataSource
-import com.example.graduationproject.data.remote.transormer.UserDeviceTransformer
 import com.example.graduationproject.domain.entity.UserDevice
 import com.example.graduationproject.domain.repository.remote.DeviceRegistrationRepository
 import com.example.graduationproject.domain.util.Event
@@ -18,16 +18,18 @@ class DeviceRegistrationRepositoryImpl @Inject constructor(
     private val deviceRegistrationApiService: DeviceRegistrationApiService,
 ) : DeviceRegistrationRepository {
 
-    val userDeviceTransformer = UserDeviceTransformer()
-
-    override suspend fun registerDevice(userId: String): Event<UserDevice> {
+    override suspend fun registerDevice() {
         val deviceId = DeviceInfoUtil.getDeviceId()
         val deviceToken = DeviceInfoUtil.getDeviceToken()
         val os = "ANDROID"
         val osVersion = Build.VERSION.RELEASE
         val channels = listOf("default")
-        val expiration = Date().time
-        val userId = userId
+        val userToken = prefsDataSource.fetchToken()
+
+        Log.d(
+            "DeviceRegistrationRepositoryImpl",
+            "Registering device with ID: $deviceId and token: $deviceToken"
+        )
 
         val event = doCall {
             val request = DeviceRegistrationRequest(
@@ -35,18 +37,45 @@ class DeviceRegistrationRepositoryImpl @Inject constructor(
                 deviceId,
                 os,
                 osVersion,
-                channels,
-                expiration,
-                userId
+                channels
             )
-            return@doCall deviceRegistrationApiService.registerDevice(request)
+            return@doCall deviceRegistrationApiService.registerDevice(userToken, request)
+        }
+
+        when (event) {
+            is Event.Success -> {
+                val response = event.data
+                saveRegistrationId(response.registrationId)
+                Log.d(
+                    "DeviceRegistration",
+                    "Device registered with registrationId: ${response.registrationId}"
+                )
+            }
+
+            is Event.Failure -> {
+                Log.e("DeviceRegistration", "Error register device: ${event.exception}")
+            }
+        }
+    }
+
+    override suspend fun saveRegistrationId(registrationId: String) {
+        Log.d("DeviceRegistrationRepositoryImpl", "Saving registrationId: $registrationId")
+        prefsDataSource.saveRegistrationId(registrationId)
+
+    }
+
+    override suspend fun getRegisteredDevice(): Event<String> {
+        val registrationId = prefsDataSource.fetchRegistrationId()
+        val userToken = prefsDataSource.fetchToken()
+        val query = "objectId=\'$registrationId\'"
+        val event = doCall {
+            return@doCall deviceRegistrationApiService.getRegisteredDevice(userToken, query)
         }
 
         return when (event) {
             is Event.Success -> {
-                val response = event.data
-                val userDevice = userDeviceTransformer.fromResponse(response)
-                Event.Success(userDevice)
+                val response = event.data.first()
+                Event.Success(response.registrationId)
             }
 
             is Event.Failure -> {
@@ -54,26 +83,18 @@ class DeviceRegistrationRepositoryImpl @Inject constructor(
                 Event.Failure(error)
             }
         }
-
     }
 
-    override suspend fun saveRegistrationId(registrationId: String) =
-        prefsDataSource.saveRegistrationId(registrationId)
-
-
-    override suspend fun getRegisteredDevice(userIdQuery: String): Event<List<UserDevice>> {
-        val query = "userId=\'$userIdQuery\'"
+    override suspend fun getDeviceId(userIdQuery: String): Event<String> {
+        val query = "user.objectId=\'$userIdQuery\'"
         val event = doCall {
-            return@doCall deviceRegistrationApiService.getRegisteredDevice(query)
+            return@doCall deviceRegistrationApiService.getDeviceId(query)
         }
 
         return when (event) {
             is Event.Success -> {
-                val response = event.data
-                val userDevices = response.map {
-                    userDeviceTransformer.fromResponse(it)
-                }
-                Event.Success(userDevices)
+                val response = event.data.first()
+                Event.Success(response.deviceId)
             }
 
             is Event.Failure -> {

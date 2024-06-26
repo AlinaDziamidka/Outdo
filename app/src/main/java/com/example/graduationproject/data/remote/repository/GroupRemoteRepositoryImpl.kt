@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 class GroupRemoteRepositoryImpl @Inject constructor(private val groupApiService: GroupApiService) : GroupRemoteRepository {
 
-
     private val groupTransformer = GroupTransformer()
+
     override suspend fun fetchGroupsByGroupId(groupIdQuery: String): Event<Group> {
         val query = "objectId=\'$groupIdQuery\'"
         val event = doCall {

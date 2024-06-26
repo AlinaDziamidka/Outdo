@@ -8,6 +8,7 @@ import com.example.graduationproject.domain.usecase.DeviceRegistrationUseCase
 import com.example.graduationproject.domain.usecase.SignInUseCase
 import com.example.graduationproject.domain.usecase.SignUpUseCase
 import com.example.graduationproject.domain.util.EventDomain
+import com.example.graduationproject.domain.util.NonReturningUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,10 +78,10 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun registerDevice(userId: String, registrationId: String?) {
+    fun registerDevice() {
         viewModelScope.launch {
             runCatching {
-                deviceRegistrationUseCase(DeviceRegistrationUseCase.Params(userId, registrationId))
+                deviceRegistrationUseCase(NonReturningUseCase.None)
             }.onSuccess {
                 Log.d("SignInViewModel", "Device register successfully")
             }.onFailure { e ->

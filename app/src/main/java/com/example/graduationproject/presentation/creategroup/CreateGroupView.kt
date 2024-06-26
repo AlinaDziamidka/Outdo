@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -20,6 +21,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.graduationproject.R
 import com.example.graduationproject.databinding.FragmentCreateGroupBinding
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
@@ -46,6 +48,7 @@ class CreateGroupView : Fragment() {
     private lateinit var addFriendsAction: RelativeLayout
     private lateinit var friendsView: RecyclerView
     private lateinit var adapter: CreateGroupAdapter
+    private lateinit var participants: MutableList<UserProfile>
 
     companion object {
         const val ADDED_FRIENDS_REQUEST_KEY = "ADDED_FRIENDS_REQUEST_KEY"
@@ -164,8 +167,6 @@ class CreateGroupView : Fragment() {
         createGroupAction.setOnClickListener {
             setGroup()
             handleOnGroupSet()
-
-
         }
     }
 
@@ -191,6 +192,7 @@ class CreateGroupView : Fragment() {
                         is CreateGroupViewState.Success -> {
                             val group = it.data
                             setUserGroup(group)
+                            notificateGroupParticipants(participants, group)
                             moveToGroupDetailsScreen(group)
                             Log.d("observeAddedGroups", "Success view state, data: ${it.data}")
                         }
@@ -208,8 +210,20 @@ class CreateGroupView : Fragment() {
         }
     }
 
+    private fun notificateGroupParticipants(participants: MutableList<UserProfile>, group: Group) {
+        val creatorName = sharedPreferences.getString("current_username", "  ") ?: "  "
+        val message = "{ \"creatorName\": \"$creatorName\", \"groupName\": \"${group.groupName}\", \"groupId\": \"${group.groupId}\" }"
+//        val message = getString(
+//            R.string.notification_screen_description,
+//            creatorName,
+//            group.groupName
+//        )
+        val title = getString(R.string.notification_screen_notification_title)
+        viewModel.notificateParticipants(participants, message, title)
+    }
+
     private fun setUserGroup(group: Group) {
-        val participants = viewModel.addedFriends.value
+        participants = viewModel.addedFriends.value
         viewModel.addGroupParticipants(group.groupId, participants)
     }
 

@@ -10,26 +10,20 @@ import javax.inject.Inject
 
 class DeviceRegistrationUseCase @Inject constructor(
     private val deviseRegistrationRepository: DeviceRegistrationRepository
-) : NonReturningUseCase<DeviceRegistrationUseCase.Params> {
+) : NonReturningUseCase<NonReturningUseCase.None> {
 
-    data class Params(
-        val userId: String,
-        val registrationId: String?
-    )
 
-    override suspend fun invoke(params: Params) {
-        val userId = params.userId
-        val registrationId = params.registrationId
-        val userDevices = getUserDevices(userId)
+    override suspend fun invoke(params: NonReturningUseCase.None) {
+//        val userDevices = checkUserDevices()
 
-        if (registrationId.isNullOrEmpty() || userDevices is Event.Failure) {
-            deviseRegistrationRepository.registerDevice(userId)
-        }
+//        if (userDevices is Event.Failure) {
+        deviseRegistrationRepository.registerDevice()
+//        }
     }
 
 
-    private suspend fun getUserDevices(userId: String): Event<List<UserDevice>> {
-        val userDeviceEvent = deviseRegistrationRepository.getRegisteredDevice(userId)
+    private suspend fun checkUserDevices(): Event<String> {
+        val userDeviceEvent = deviseRegistrationRepository.getRegisteredDevice()
         return when (userDeviceEvent) {
             is Event.Success -> {
                 Log.d("DeviceRegistrationUseCase", "Received userDevices: ${userDeviceEvent.data}")
@@ -38,7 +32,7 @@ class DeviceRegistrationUseCase @Inject constructor(
 
             is Event.Failure -> {
                 Log.e(
-                    "RemoteLoadManager",
+                    "DeviceRegistrationUseCase",
                     "Failed to fetch user device: ${userDeviceEvent.exception}"
                 )
                 val error = userDeviceEvent.exception

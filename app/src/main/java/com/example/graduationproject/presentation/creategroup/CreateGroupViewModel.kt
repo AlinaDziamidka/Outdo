@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.usecase.CreateGroupUseCase
+import com.example.graduationproject.domain.usecase.NotificationUseCase
 import com.example.graduationproject.domain.usecase.SetGroupParticipantsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import javax.inject.Inject
 class CreateGroupViewModel @Inject constructor(
     context: Application,
     private val createGroupUseCase: CreateGroupUseCase,
-    private val setGroupParticipantsUseCase: SetGroupParticipantsUseCase
+    private val setGroupParticipantsUseCase: SetGroupParticipantsUseCase,
+    private val notificationUseCase: NotificationUseCase
 ) : AndroidViewModel(context) {
 
     private val _viewState =
@@ -46,8 +48,7 @@ class CreateGroupViewModel @Inject constructor(
 
     fun addFriends(newFriends: List<UserProfile>) {
         _addedFriends.value.addAll(newFriends)
-}
-
+    }
 
 
     fun setGroup(groupName: String, creatorId: String, groupAvatarPath: String?) {
@@ -76,9 +77,21 @@ class CreateGroupViewModel @Inject constructor(
             runCatching {
                 setGroupParticipantsUseCase(SetGroupParticipantsUseCase.Params(groupId, friends))
             }.onSuccess {
-                Log.d("AddFriendsViewModel", "Friend added successfully")
+                Log.d("CreateGroupViewModel", "User groups added successfully")
             }.onFailure { e ->
-                Log.e("AddFriendsViewModel", "Error adding friend: ${e.message}")
+                Log.e("CreateGroupViewModel", "Error adding user groups: ${e.message}")
+            }
+        }
+    }
+
+    fun notificateParticipants(friends: MutableList<UserProfile>, message: String, title: String) {
+        viewModelScope.launch {
+            runCatching {
+                notificationUseCase(NotificationUseCase.Params(friends, message, title))
+            }.onSuccess {
+                Log.d("CreateGroupViewModel", "Notification sent successfully")
+            }.onFailure { e ->
+                Log.e("CreateGroupViewModel", "Error sending notification: ${e.message}")
             }
         }
     }

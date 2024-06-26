@@ -7,12 +7,15 @@ import com.example.graduationproject.data.remote.api.service.AuthApiService
 import com.example.graduationproject.data.remote.api.service.CategoryApiService
 import com.example.graduationproject.data.remote.api.service.ChallengeAchievementApiService
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
+import com.example.graduationproject.data.remote.api.service.DeviceRegistrationApiService
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
+import com.example.graduationproject.data.remote.api.service.PushNotificationApiService
 import com.example.graduationproject.data.remote.api.service.UserAchievementApiService
 import com.example.graduationproject.data.remote.api.service.UserGroupApiService
 import com.example.graduationproject.data.remote.api.service.UserApiService
 import com.example.graduationproject.data.remote.api.service.UserFriendApiService
+import com.example.graduationproject.data.remote.api.service.UserNotificationsApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -95,4 +98,16 @@ object NetworkModule {
     @Provides
     fun provideUserAchievementService(retrofit: Retrofit): UserAchievementApiService =
         retrofit.create(UserAchievementApiService::class.java)
+
+    @Provides
+    fun provideDeviceRegistrationApiService(retrofit: Retrofit): DeviceRegistrationApiService =
+        retrofit.create(DeviceRegistrationApiService::class.java)
+
+    @Provides
+    fun providePushNotificationApiService(retrofit: Retrofit): PushNotificationApiService =
+        retrofit.create(PushNotificationApiService::class.java)
+
+    @Provides
+    fun provideUserNotificationApiService(retrofit: Retrofit): UserNotificationsApiService =
+        retrofit.create(UserNotificationsApiService::class.java)
 }

@@ -8,6 +8,7 @@ import com.example.graduationproject.domain.repository.local.UserGroupLocalRepos
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
 import com.example.graduationproject.domain.repository.remote.DeviceRegistrationRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
+import com.example.graduationproject.domain.repository.remote.PushNotificationRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
@@ -25,6 +26,7 @@ import com.example.graduationproject.domain.usecase.FetchGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupNameUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupParticipantsUseCase
 import com.example.graduationproject.domain.usecase.FetchWeekChallengeUseCase
+import com.example.graduationproject.domain.usecase.NotificationUseCase
 import com.example.graduationproject.domain.usecase.SetGroupParticipantsUseCase
 import com.example.graduationproject.domain.util.LoadManager
 import dagger.Module
@@ -169,10 +171,22 @@ object UseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideDeviceRegistrationUseCase(
-        deviseRegistrationRepository: DeviceRegistrationRepository
+        deviceRegistrationRepository: DeviceRegistrationRepository
     ): DeviceRegistrationUseCase {
         return DeviceRegistrationUseCase(
-            deviseRegistrationRepository
+            deviceRegistrationRepository
+        )
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideNotificationUseCase(
+        deviceRegistrationRepository: DeviceRegistrationRepository,
+        pushNotificationRepository: PushNotificationRepository
+    ): NotificationUseCase {
+        return NotificationUseCase(
+            deviceRegistrationRepository,
+            pushNotificationRepository
         )
     }
 }

@@ -17,15 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.FragmentChallengeDetailsBinding
-import com.example.graduationproject.databinding.FragmentGroupDetailsBinding
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Challenge
-import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.challengedetails.adapter.AchievementsAdapter
-import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewState
-import com.example.graduationproject.presentation.groupdetails.adapter.ChallengesHistoryAdapter
-import com.example.graduationproject.presentation.home.DailyView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

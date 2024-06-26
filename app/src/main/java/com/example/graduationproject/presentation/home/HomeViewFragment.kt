@@ -240,9 +240,5 @@ class HomeViewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        if (!App.isLoaded) {
-//            App.isLoaded = true
-//    }
-//        App.isLoaded = true
         }
     }

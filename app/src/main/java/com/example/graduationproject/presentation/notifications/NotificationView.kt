@@ -20,4 +20,5 @@ class NotificationView : Fragment() {
 //    private lateinit var adapter: CreateGroupAdapter
 
 
+
 }

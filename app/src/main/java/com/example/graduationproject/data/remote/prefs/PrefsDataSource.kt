@@ -1,6 +1,7 @@
 package com.example.graduationproject.data.remote.prefs
 
 import android.content.Context
+import android.util.Log
 import com.example.graduationproject.domain.entity.UserProfile
 import javax.inject.Inject
 
@@ -44,9 +45,19 @@ class PrefsDataSourceImpl @Inject constructor(private val context: Context) : Pr
         )
 
         with(prefs.edit()) {
+            Log.d("PrefsDataSourceImpl", "Saving registrationId: $registrationId")
             putString(userDeviceId, registrationId)
             apply()
         }
+    }
+
+    override fun fetchRegistrationId(): String? {
+        val prefs = context.getSharedPreferences(
+            sessionPrefs, Context.MODE_PRIVATE
+        )
+        val registrationId = prefs.getString(userDeviceId, null)
+        Log.d("PrefsDataSourceImpl", "Fetched registrationId: $registrationId")
+        return registrationId
     }
 
     companion object {
@@ -65,4 +76,6 @@ interface PrefsDataSource {
 
     fun saveUserProfile(userProfile: UserProfile)
     fun saveRegistrationId (registrationId: String)
+    fun fetchRegistrationId(): String?
 }
+

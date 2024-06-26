@@ -37,7 +37,7 @@ class SplashView : AppCompatActivity(R.layout.activity_splash) {
                     when (it) {
                         SplashViewState.Success -> {
                             Log.d("SplashView", "Navigating to HomeView")
-                            runWorker()
+//                            runWorker()
                             val intent = Intent(this@SplashView, HomeView::class.java)
                             startActivity(intent)
                             finish()
