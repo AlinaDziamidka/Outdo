@@ -13,4 +13,6 @@ interface UserGroupRemoteRepository {
     suspend fun fetchAllUsersByGroupId(groupIdQuery: String): Event<List<UserGroup>>
 
     suspend fun insertUserGroup(userId: String, groupId: String): Event<UserGroup>
+
+    suspend fun deleteUserGroup(userIdQuery: String, groupIdQuery: String): Event<Long>
 }

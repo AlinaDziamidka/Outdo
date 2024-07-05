@@ -6,13 +6,17 @@ import com.example.graduationproject.domain.repository.local.ChallengeLocalRepos
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
+import com.example.graduationproject.domain.repository.local.UserNotificationsLocalRepository
 import com.example.graduationproject.domain.repository.remote.DeviceRegistrationRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.PushNotificationRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
+import com.example.graduationproject.domain.repository.remote.UserNotificationsRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.usecase.CreateGroupUseCase
+import com.example.graduationproject.domain.usecase.DeleteNotificationUseCase
+import com.example.graduationproject.domain.usecase.DeleteUserGroupUseCase
 import com.example.graduationproject.domain.usecase.DeviceRegistrationUseCase
 import com.example.graduationproject.domain.usecase.FetchChallengeAchievementUseCase
 import com.example.graduationproject.domain.usecase.FetchChallengeDescriptionUseCase
@@ -182,11 +186,37 @@ object UseCaseModule {
     @ViewModelScoped
     fun provideNotificationUseCase(
         deviceRegistrationRepository: DeviceRegistrationRepository,
-        pushNotificationRepository: PushNotificationRepository
+        pushNotificationRepository: PushNotificationRepository,
+        userNotificationsRemoteRepository: UserNotificationsRemoteRepository
     ): NotificationUseCase {
         return NotificationUseCase(
             deviceRegistrationRepository,
-            pushNotificationRepository
+            pushNotificationRepository,
+            userNotificationsRemoteRepository
+        )
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideDeleteUserGroupUseCase(
+        userGroupRemoteRepository: UserGroupRemoteRepository,
+        userGroupLocalRepository: UserGroupLocalRepository
+    ): DeleteUserGroupUseCase {
+        return DeleteUserGroupUseCase(
+            userGroupRemoteRepository,
+            userGroupLocalRepository
+        )
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideDeleteNotificationUseCase(
+        userNotificationsRemoteRepository: UserNotificationsRemoteRepository,
+        userNotificationsLocalRepository: UserNotificationsLocalRepository
+    ): DeleteNotificationUseCase {
+        return DeleteNotificationUseCase(
+            userNotificationsRemoteRepository,
+            userNotificationsLocalRepository
         )
     }
 }

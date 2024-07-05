@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -25,6 +26,7 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupAndChallenges
+import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.home.adapter.ChallengesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -42,9 +44,12 @@ class HomeViewFragment : Fragment() {
     private lateinit var currentChallengeView: TextView
     private lateinit var showAllChallengesView: TextView
     private lateinit var userName: TextView
+    private lateinit var userId: String
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var weekChallengeView: WeekView
     private lateinit var dailyAchievementView: DailyView
+    private lateinit var notificationView: ImageView
+    private lateinit var notificationCountView: TextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -74,10 +79,25 @@ class HomeViewFragment : Fragment() {
         setUpChallenges()
         setUpWeekChallenge()
         setUpDailyAchievement()
+        setUpNotification()
         observeChallenges()
         observeWeekChallenge()
         observeDailyAchievement()
+        observeNotification()
         moveToAllChallengesScreen()
+        moveToNotificationScreen()
+    }
+
+    private fun initViews() {
+        progressView = binding.progressView
+        challengeView = binding.challengeRecyclerView
+        currentChallengeView = binding.currentChallengesView
+        showAllChallengesView = binding.showAllChallenges
+        userName = binding.userNameView
+        notificationView = binding.notificationView
+        notificationCountView = binding.notificationCountView
+        weekChallengeView = WeekView(binding.weekChallengeContainer)
+        dailyAchievementView = DailyView(binding.dailyAchievementContainer)
     }
 
     private fun initAdapter() {
@@ -90,18 +110,9 @@ class HomeViewFragment : Fragment() {
     }
 
     private fun moveToChallengeDetailsScreen(challenge: Challenge) {
-        val action = HomeViewFragmentDirections.actionHomeViewFragmentToChallengeDetailsView(challenge.challengeId)
+        val action =
+            HomeViewFragmentDirections.actionHomeViewFragmentToChallengeDetailsView(challenge.challengeId)
         findNavController().navigate(action)
-    }
-
-    private fun initViews() {
-        progressView = binding.progressView
-        challengeView = binding.challengeRecyclerView
-        currentChallengeView = binding.currentChallengesView
-        showAllChallengesView = binding.showAllChallenges
-        userName = binding.userNameView
-        weekChallengeView = WeekView(binding.weekChallengeContainer)
-        dailyAchievementView = DailyView(binding.dailyAchievementContainer)
     }
 
     private fun setUserName() {
@@ -113,7 +124,7 @@ class HomeViewFragment : Fragment() {
     }
 
     private fun setUpChallenges() {
-        val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
+        userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
         viewModel.setUpUserChallenges(userId)
     }
 
@@ -123,6 +134,10 @@ class HomeViewFragment : Fragment() {
 
     private fun setUpDailyAchievement() {
         viewModel.setUpDailyAchievement(AchievementType.DAILY)
+    }
+
+    private fun setUpNotification() {
+        viewModel.setNotifications(userId)
     }
 
     private fun observeChallenges() {
@@ -231,6 +246,48 @@ class HomeViewFragment : Fragment() {
         dailyAchievementView.updateDailyAchievement(achievement)
     }
 
+    private fun observeNotification() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewStateNotification.collect {
+                    Log.d("observeNotificationCount", "New view state: $it")
+                    when (it) {
+                        is HomeViewState.Success -> {
+                            showNotificationCount(it.data.size)
+                            Log.d(
+                                "observeNotificationCount",
+                                "Success view state, data: ${it.data}"
+                            )
+                        }
+
+                        is HomeViewState.Loading -> {
+                            Log.d("observeChallenges", "Loading view state")
+                            hideNotificationCount()
+                        }
+
+                        is HomeViewState.Failure -> {
+                            Log.d("observeChallenges", "Failure view state")
+                            hideNotificationCount()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showNotificationCount(notificationCount: Int) {
+//        if (notificationCount != 0) {
+            notificationCountView.text = notificationCount.toString()
+            notificationCountView.visibility = View.VISIBLE
+//        } else {
+//            hideNotificationCount()
+//        }
+    }
+
+    private fun hideNotificationCount() {
+        notificationCountView.visibility = View.GONE
+    }
+
     private fun moveToAllChallengesScreen() {
         showAllChallengesView.setOnClickListener {
             val action = HomeViewFragmentDirections.actionHomeViewFragmentToAllChallengesView()
@@ -238,7 +295,10 @@ class HomeViewFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun moveToNotificationScreen() {
+        notificationView.setOnClickListener {
+            val action = HomeViewFragmentDirections.actionHomeViewFragmentToNotificationView()
+            findNavController().navigate(action)
         }
     }
+}

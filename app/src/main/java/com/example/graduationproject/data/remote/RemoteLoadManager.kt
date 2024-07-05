@@ -12,6 +12,7 @@ import com.example.graduationproject.domain.entity.GroupChallenge
 import com.example.graduationproject.domain.entity.UserAchievement
 import com.example.graduationproject.domain.entity.UserFriend
 import com.example.graduationproject.domain.entity.UserGroup
+import com.example.graduationproject.domain.entity.UserNotifications
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeAchievementsLocalRepository
@@ -22,6 +23,7 @@ import com.example.graduationproject.domain.repository.local.UserAchievementLoca
 import com.example.graduationproject.domain.repository.local.UserFriendLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
+import com.example.graduationproject.domain.repository.local.UserNotificationsLocalRepository
 import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.ChallengeAchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
@@ -30,6 +32,7 @@ import com.example.graduationproject.domain.repository.remote.GroupRemoteReposit
 import com.example.graduationproject.domain.repository.remote.UserAchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserFriendRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
+import com.example.graduationproject.domain.repository.remote.UserNotificationsRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.LoadManager
@@ -56,7 +59,9 @@ class RemoteLoadManager @Inject constructor(
     private val userFriendRemoteRepository: UserFriendRemoteRepository,
     private val userFriendLocalRepository: UserFriendLocalRepository,
     private val userAchievementRemoteRepository: UserAchievementRemoteRepository,
-    private val userAchievementLocalRepository: UserAchievementLocalRepository
+    private val userAchievementLocalRepository: UserAchievementLocalRepository,
+    private val userNotificationsRemoteRepository: UserNotificationsRemoteRepository,
+    private val usrUserNotificationsLocalRepository: UserNotificationsLocalRepository
 ) : LoadManager {
 
     override suspend fun fetchGroupsByUserId(userId: String): List<Group> {
@@ -297,7 +302,7 @@ class RemoteLoadManager @Inject constructor(
                     Log.d("RemoteLoadManager", "Received friends: ${event.data}")
                     event.data.map { userFriend ->
                         writeToLocalDatabase(userFriendLocalRepository::insertOne, userFriend)
-                        val friendEvent = userRemoteRepository.fetchUserById(userFriend.userId)
+                        val friendEvent = userRemoteRepository.fetchUserById(userFriend.friendId)
                         if (friendEvent is Event.Success) {
                             friends.add(friendEvent.data)
                             writeToLocalDatabase(
@@ -358,4 +363,83 @@ class RemoteLoadManager @Inject constructor(
                 }
             }
         }
+
+    override suspend fun fetchNotificationsByUserId(userId: String): List<Pair<UserProfile, Group>> =
+        withContext(Dispatchers.IO) {
+            val notificationPair = mutableListOf<Pair<UserProfile, Group>>()
+            val event = getUserNotifications(userId)
+
+            when (event) {
+                is Event.Success -> {
+                    val notifications = event.data
+                    notifications.forEach { notification ->
+                        val creator = getCreatorProfile(notification)
+                        val group = getGroupById(notification)
+                        notificationPair.add(Pair(creator, group))
+                    }
+                    notificationPair.toList()
+                }
+
+                is Event.Failure -> {
+                    Log.e("RemoteLoadManager", "Failed to fetch notifications: ${event.exception}")
+                    throw Exception(event.exception)
+                }
+            }
+        }
+
+    private suspend fun getUserNotifications(userId: String): Event<List<UserNotifications>> {
+        val event = userNotificationsRemoteRepository.fetchNotificationsByUserId(userId)
+        return when (event) {
+            is Event.Success -> {
+                Log.d("RemoteLoadManager", "Received user notifications: ${event.data}")
+                event.data.map {
+                    writeToLocalDatabase(usrUserNotificationsLocalRepository::insertOne, it)
+                }
+                Event.Success(event.data)
+            }
+
+            is Event.Failure -> {
+                Log.e("Failed to get user notifications", "Not found for user: $userId")
+                Event.Failure(event.exception)
+            }
+        }
+    }
+
+    private suspend fun getCreatorProfile(notification: UserNotifications): UserProfile {
+        val creatorId = notification.userId
+        return getRemoteProfile(creatorId)
+    }
+
+    private suspend fun getRemoteProfile(creatorId: String): UserProfile {
+        val event = userRemoteRepository.fetchUserById(creatorId)
+        return when (event) {
+            is Event.Success -> {
+                writeToLocalDatabase(userLocalRepository::insertOne, event.data)
+                event.data
+            }
+            is Event.Failure -> {
+                Log.e("CreatorProfile for Notification", "Not found this user: $creatorId")
+                throw Exception(event.exception)
+            }
+        }
+    }
+
+    private suspend fun getGroupById(notification: UserNotifications): Group {
+        val groupId = notification.groupId
+        return getRemoteGroup(groupId)
+    }
+
+    private suspend fun getRemoteGroup(groupId: String): Group {
+        val event = groupRemoteRepository.fetchGroupsByGroupId(groupId)
+        return when (event) {
+            is Event.Success -> {
+                writeToLocalDatabase(groupLocalRepository::insertOne, event.data)
+                event.data
+            }
+            is Event.Failure -> {
+                Log.e("Group for Notification", "Not found this user: $groupId")
+                throw Exception(event.exception)
+            }
+        }
+    }
 }

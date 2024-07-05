@@ -23,10 +23,8 @@ class UserNotificationsLocalRepositoryImpl @Inject constructor(private val userN
         return userNotificationDao.insertOne(model)
     }
 
-    override suspend fun deleteOne(userNotification: UserNotifications) {
-        val model = userNotificationTransformer.toModel(userNotification)
-        return userNotificationDao.deleteOne(model)
-    }
+    override suspend fun deleteById(userId: String, groupId: String) =
+        userNotificationDao.deleteById(userId, groupId)
 
     override suspend fun updateOne(userNotification: UserNotifications) {
         val model = userNotificationTransformer.toModel(userNotification)

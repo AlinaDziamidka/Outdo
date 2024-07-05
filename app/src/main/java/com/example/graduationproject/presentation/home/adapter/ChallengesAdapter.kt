@@ -12,8 +12,6 @@ import com.example.graduationproject.R
 import com.example.graduationproject.databinding.ChallengeCardBinding
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
-import java.time.Duration
-import java.time.LocalDateTime
 import java.util.Locale
 
 

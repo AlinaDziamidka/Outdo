@@ -77,4 +77,23 @@ class UserGroupRemoteRepositoryImpl @Inject constructor(private val userGroupApi
             }
         }
     }
+
+    override suspend fun deleteUserGroup(userIdQuery: String, groupIdQuery: String): Event<Long> {
+        val query = "userId='$userIdQuery' AND groupId='$groupIdQuery'"
+        val event = doCall {
+            return@doCall userGroupApiService.deleteUserGroup(query)
+        }
+
+        return when (event) {
+            is Event.Success -> {
+                val response = event.data
+                Event.Success(response)
+            }
+
+            is Event.Failure -> {
+                val error = event.exception
+                Event.Failure(error)
+            }
+        }
+    }
 }

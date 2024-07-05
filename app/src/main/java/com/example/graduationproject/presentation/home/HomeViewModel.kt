@@ -10,10 +10,14 @@ import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
+import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupAndChallenges
+import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.usecase.FetchDailyAchievementUseCase
+import com.example.graduationproject.domain.usecase.FetchNotificationsUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchWeekChallengeUseCase
+import com.example.graduationproject.presentation.notifications.NotificationsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +31,8 @@ class HomeViewModel @Inject constructor(
     context: Application,
     private val fetchUserGroupChallengesUseCase: FetchUserGroupChallengesUseCase,
     private val fetchWeekChallengeUseCase: FetchWeekChallengeUseCase,
-    private val fetchDailyAchievementUseCase: FetchDailyAchievementUseCase
+    private val fetchDailyAchievementUseCase: FetchDailyAchievementUseCase,
+    private val fetchNotificationsUseCase: FetchNotificationsUseCase
 ) :
     AndroidViewModel(context) {
 
@@ -43,6 +48,13 @@ class HomeViewModel @Inject constructor(
     private val _viewStateDaily =
         MutableStateFlow<HomeViewState<Achievement>>(HomeViewState.Loading)
     val viewStateDaily: StateFlow<HomeViewState<Achievement>> = _viewStateDaily
+
+    private val _viewStateNotification =
+        MutableStateFlow<HomeViewState<MutableList<Pair<UserProfile, Group>>>>(
+            HomeViewState.Loading
+        )
+    val viewStateNotification: StateFlow<HomeViewState<MutableList<Pair<UserProfile, Group>>>> =
+        _viewStateNotification
 
     fun setUpUserChallenges(userId: String) {
         viewModelScope.launch {
@@ -97,6 +109,27 @@ class HomeViewModel @Inject constructor(
                         HomeViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { achievement ->
                     _viewStateDaily.value = HomeViewState.Success(achievement)
+                }
+        }
+    }
+
+    fun setNotifications(userId: String) {
+        viewModelScope.launch {
+            fetchNotificationsUseCase(
+                FetchNotificationsUseCase.Params(userId)
+            )
+                .onStart {
+                    _viewStateNotification.value = HomeViewState.Loading
+                }.catch {
+                    Log.e(
+                        "HomeViewModel",
+                        "Fetching notifications: Error - ${it.message}"
+                    )
+                    _viewStateNotification.value =
+                        HomeViewState.Failure(it.message ?: "Something went wrong.")
+                }.collect { notifications ->
+                    Log.d("HomeViewModel", "Fetching notifications: Success")
+                    _viewStateNotification.value = HomeViewState.Success(notifications)
                 }
         }
     }

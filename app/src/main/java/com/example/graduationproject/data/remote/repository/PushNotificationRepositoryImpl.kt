@@ -14,8 +14,7 @@ class PushNotificationRepositoryImpl @Inject constructor(
 
     override suspend fun sendPushNotification(
         deviceIds: List<String>,
-        message: String,
-        title: String
+        message: String
     ): Event<String> {
 
         Log.d("PushNotificationRepositoryImpl", "Starting sendPushNotification")
@@ -25,7 +24,7 @@ class PushNotificationRepositoryImpl @Inject constructor(
                 pushSinglecast = deviceIds,
                 headers = mapOf(
                     "android-ticker-text" to "You just got a private push notification!",
-                    "android-content-title" to title,
+                    "android-content-title" to "",
                     "android-content-text" to message
                 )
             )

@@ -1,5 +1,6 @@
 package com.example.graduationproject.data.local.repository
 
+import android.util.Log
 import com.example.graduationproject.data.local.database.dao.UserDao
 import com.example.graduationproject.data.local.transformer.UserTransformer
 
@@ -21,6 +22,7 @@ class UserLocalRepositoryImpl @Inject constructor(private val userDao: UserDao) 
 
     override suspend fun fetchById(userId: String): UserProfile {
         val model = userDao.fetchById(userId)
+            Log.d("UserLocalRepositoryImpl", "${model.userId}, ${model.userEmail}, ${model.userAvatarPath}, ${model.username} ")
         return userTransformer.fromModel(model)
     }
 

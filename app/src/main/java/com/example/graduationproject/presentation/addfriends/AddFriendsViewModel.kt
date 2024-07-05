@@ -59,7 +59,7 @@ class AddFriendsViewModel @Inject constructor(
                     _viewState.value =
                         AddFriendsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { friends ->
-                    Log.d("GroupDetailsViewModel", "Fetching challenges: Success")
+                    Log.d("AddFriendsViewModel", "Fetching friends: Success")
                     _viewState.value = AddFriendsViewState.Success(friends)
                 }
         }

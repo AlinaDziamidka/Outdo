@@ -8,6 +8,7 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
+import com.example.graduationproject.domain.usecase.DeleteUserGroupUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupNameUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupParticipantsUseCase
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class GroupParticipantsViewModel @Inject constructor(
     context: Application,
     private val fetchGroupNameUseCase: FetchGroupNameUseCase,
+    private val deleteUserGroupUseCase: DeleteUserGroupUseCase,
     private val fetchGroupParticipantsUseCase: FetchGroupParticipantsUseCase
 ) :
     AndroidViewModel(context) {
@@ -83,6 +85,20 @@ class GroupParticipantsViewModel @Inject constructor(
                     Log.d("GroupParticipantsViewModel", "Fetching participants: Success")
                     _viewStateParticipants.value = GroupParticipantsViewState.Success(participants)
                 }
+        }
+    }
+
+    fun deleteUserGroup(userId: String, groupId: String) {
+        viewModelScope.launch {
+            runCatching {
+                deleteUserGroupUseCase(
+                    DeleteUserGroupUseCase.Params(userId, groupId)
+                )
+            }.onSuccess {
+                Log.d("GroupParticipantsViewModel", "User groups deleted successfully")
+            }.onFailure { e ->
+                Log.e("GroupParticipantsViewModel", "Error deleting user groups: ${e.message}")
+            }
         }
     }
 }

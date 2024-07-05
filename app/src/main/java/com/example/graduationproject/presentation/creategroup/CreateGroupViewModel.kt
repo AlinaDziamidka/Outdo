@@ -84,10 +84,10 @@ class CreateGroupViewModel @Inject constructor(
         }
     }
 
-    fun notificateParticipants(friends: MutableList<UserProfile>, message: String, title: String) {
+    fun notifyParticipants(friends: MutableList<UserProfile>, message: String, group: Group, creatorId: String) {
         viewModelScope.launch {
             runCatching {
-                notificationUseCase(NotificationUseCase.Params(friends, message, title))
+                notificationUseCase(NotificationUseCase.Params(friends, message, group, creatorId))
             }.onSuccess {
                 Log.d("CreateGroupViewModel", "Notification sent successfully")
             }.onFailure { e ->

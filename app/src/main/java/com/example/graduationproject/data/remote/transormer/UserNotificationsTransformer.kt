@@ -8,6 +8,7 @@ class UserNotificationsTransformer {
     fun fromResponse(response: UserNotificationsResponse): UserNotifications {
         return UserNotifications(
             userId = response.userId,
+            creatorId = response.creatorId,
             groupId = response.groupId,
             created = response.created
         )

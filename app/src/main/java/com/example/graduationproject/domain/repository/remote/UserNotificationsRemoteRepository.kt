@@ -5,7 +5,9 @@ import com.example.graduationproject.domain.util.Event
 
 interface UserNotificationsRemoteRepository {
 
-    suspend fun insertNotification(userId: String, groupId: String): Event<UserNotifications>
+    suspend fun insertNotification(userId: String, creatorId: String, groupId: String): Event<UserNotifications>
 
     suspend fun fetchNotificationsByUserId(userIdQuery: String): Event<List<UserNotifications>>
+
+    suspend fun deleteNotification(userIdQuery: String, groupIdQuery: String): Event<Long>
 }

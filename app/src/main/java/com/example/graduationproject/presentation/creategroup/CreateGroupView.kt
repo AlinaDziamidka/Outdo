@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -192,7 +191,7 @@ class CreateGroupView : Fragment() {
                         is CreateGroupViewState.Success -> {
                             val group = it.data
                             setUserGroup(group)
-                            notificateGroupParticipants(participants, group)
+                            notifyGroupParticipants(participants, group)
                             moveToGroupDetailsScreen(group)
                             Log.d("observeAddedGroups", "Success view state, data: ${it.data}")
                         }
@@ -210,16 +209,12 @@ class CreateGroupView : Fragment() {
         }
     }
 
-    private fun notificateGroupParticipants(participants: MutableList<UserProfile>, group: Group) {
+    private fun notifyGroupParticipants(participants: MutableList<UserProfile>, group: Group) {
         val creatorName = sharedPreferences.getString("current_username", "  ") ?: "  "
-        val message = "{ \"creatorName\": \"$creatorName\", \"groupName\": \"${group.groupName}\", \"groupId\": \"${group.groupId}\" }"
-//        val message = getString(
-//            R.string.notification_screen_description,
-//            creatorName,
-//            group.groupName
-//        )
-        val title = getString(R.string.notification_screen_notification_title)
-        viewModel.notificateParticipants(participants, message, title)
+        val creatorId = getCreatorId()
+        val message =
+            "{ \"creatorName\": \"$creatorName\", \"groupName\": \"${group.groupName}\", \"groupId\": \"${group.groupId}\" }"
+        viewModel.notifyParticipants(participants, message, group, creatorId)
     }
 
     private fun setUserGroup(group: Group) {

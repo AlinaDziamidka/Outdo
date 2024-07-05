@@ -55,6 +55,7 @@
     <string name="group_info_switch_challenge">Challenges</string>
     <string name="group_info_switch_participants">Participants</string>
     <string name="group_info_challenge_history">Challenge history</string>
+    <string name="group_info_leave_action">Leave the group</string>
     <string name="participants_card_scores">scores</string>
     <string name="group_participants_screen_add_friends">Add friends</string>
     <string name="challenge_details_screen_challenge_title">Challenge «%1$s»</string>

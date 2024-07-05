@@ -57,6 +57,7 @@
     <string name="group_info_switch_challenge">Челленджи</string>
     <string name="group_info_switch_participants">Участники</string>
     <string name="group_info_challenge_history">История челленджей</string>
+    <string name="group_info_leave_action">Выйти из группы</string>
     <string name="participants_card_scores">очков</string>
     <string name="group_participants_screen_add_friends">Добавить друзей</string>
     <string name="challenge_details_screen_challenge_title">Челлендж «%1$s»</string>

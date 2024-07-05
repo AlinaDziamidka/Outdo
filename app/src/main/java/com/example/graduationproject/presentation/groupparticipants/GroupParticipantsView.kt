@@ -1,6 +1,7 @@
 package com.example.graduationproject.presentation.groupparticipants
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,6 +40,8 @@ class GroupParticipantsView : Fragment() {
     private lateinit var groupNameView: TextView
     private lateinit var addFriendsAction: Button
     private lateinit var switchChallengesAction: TextView
+    private lateinit var leaveGroupAction: Button
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var groupId: String
     private lateinit var group: Group
 
@@ -70,6 +73,7 @@ class GroupParticipantsView : Fragment() {
         setUpParticipants()
         observeParticipants()
         setUpSwitchChallengesAction()
+        setUpLeaveGroupAction()
     }
 
     private fun initViews() {
@@ -77,6 +81,7 @@ class GroupParticipantsView : Fragment() {
         addFriendsAction = binding.addFriendsAction
         participantsView = binding.participantsRecyclerView
         switchChallengesAction = binding.selectChallengesAction
+        leaveGroupAction = binding.leaveGroupAction
     }
 
     private fun setUpGroupName() {
@@ -94,7 +99,10 @@ class GroupParticipantsView : Fragment() {
                             group = it.data
                             setGroupName(it.data)
                             initAdapter()
-                            Log.d("observeCurrentGroup in GroupParticipants", "Success view state, data: ${it.data}")
+                            Log.d(
+                                "observeCurrentGroup in GroupParticipants",
+                                "Success view state, data: ${it.data}"
+                            )
                         }
 
                         is GroupParticipantsViewState.Loading -> {
@@ -155,8 +163,24 @@ class GroupParticipantsView : Fragment() {
     private fun setUpSwitchChallengesAction() {
         switchChallengesAction.setOnClickListener {
             val action =
-                GroupParticipantsViewDirections.actionGroupParticipantsViewToGroupDetailsView(groupId)
+                GroupParticipantsViewDirections.actionGroupParticipantsViewToGroupDetailsView(
+                    groupId
+                )
             findNavController().navigate(action)
         }
+    }
+
+    private fun setUpLeaveGroupAction() {
+        leaveGroupAction.setOnClickListener {
+            val userId = getCurrentUserId()
+            viewModel.deleteUserGroup(userId, groupId)
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+
+    private fun getCurrentUserId(): String {
+        sharedPreferences =
+            requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("current_user_id", "  ") ?: "  "
     }
 }

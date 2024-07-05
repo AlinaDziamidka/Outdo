@@ -8,6 +8,7 @@ import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserFriend
+import com.example.graduationproject.domain.entity.UserNotifications
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeAchievementsLocalRepository
@@ -18,6 +19,7 @@ import com.example.graduationproject.domain.repository.local.UserAchievementLoca
 import com.example.graduationproject.domain.repository.local.UserFriendLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
+import com.example.graduationproject.domain.repository.local.UserNotificationsLocalRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.LoadManager
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +36,8 @@ class LocalLoadManager @Inject constructor(
     private val challengeAchievementsLocalRepository: ChallengeAchievementsLocalRepository,
     private val achievementsLocalRepository: AchievementLocalRepository,
     private val userFriendLocalRepository: UserFriendLocalRepository,
-    private val userAchievementLocalRepository: UserAchievementLocalRepository
+    private val userAchievementLocalRepository: UserAchievementLocalRepository,
+    private val userNotificationsLocalRepository: UserNotificationsLocalRepository
 ) : LoadManager {
     override suspend fun fetchGroupsByUserId(userId: String): List<Group> =
         withContext(Dispatchers.IO) {
@@ -146,5 +149,20 @@ class LocalLoadManager @Inject constructor(
             return@withContext userAchievements.map { userAchievement ->
                 achievementLocalRepository.fetchById(userAchievement.achievementId)
             }
+        }
+
+    override suspend fun fetchNotificationsByUserId(userId: String): List<Pair<UserProfile, Group>> =
+        withContext(Dispatchers.IO) {
+            val notificationPair = mutableListOf<Pair<UserProfile, Group>>()
+            val userNotifications = userNotificationsLocalRepository.fetchAll()
+            userNotifications.sortedBy { it.created }
+            userNotifications.forEach { notification ->
+                val creator = userLocalRepository.fetchById(notification.userId)
+                val group = groupLocalRepository.fetchById(notification.groupId)
+                if (creator != null && group != null) {
+                    notificationPair.add(Pair(creator, group))
+                }
+            }
+            return@withContext notificationPair.toList()
         }
 }

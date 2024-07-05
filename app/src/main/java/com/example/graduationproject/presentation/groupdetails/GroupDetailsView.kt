@@ -1,6 +1,7 @@
 package com.example.graduationproject.presentation.groupdetails
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,8 +23,6 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupParticipants
 import com.example.graduationproject.presentation.group.GroupViewDirections
-import com.example.graduationproject.presentation.group.GroupViewState
-import com.example.graduationproject.presentation.group.adapter.GroupAdapter
 import com.example.graduationproject.presentation.groupdetails.adapter.ChallengesAdapter
 import com.example.graduationproject.presentation.groupdetails.adapter.ChallengesHistoryAdapter
 import com.example.graduationproject.presentation.home.HomeViewState
@@ -44,7 +43,9 @@ class GroupDetailsView : Fragment() {
     private lateinit var groupNameView: TextView
     private lateinit var createChallengeAction: Button
     private lateinit var switchParticipantsAction: TextView
+    private lateinit var leaveGroupAction: Button
     private lateinit var challengesHistoryView: RecyclerView
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var groupId: String
     private lateinit var group: Group
 
@@ -78,6 +79,7 @@ class GroupDetailsView : Fragment() {
         setUpChallengesHistory()
         observeChallengesHistory()
         setUpSwitchParticipantsAction()
+        setUpLeaveGroupAction()
     }
 
     private fun initViews() {
@@ -86,10 +88,12 @@ class GroupDetailsView : Fragment() {
         challengesView = binding.challengesRecyclerView
         switchParticipantsAction = binding.selectParticipantsAction
         challengesHistoryView = binding.challengeHistoryRecyclerView
+        leaveGroupAction = binding.leaveGroupAction
     }
 
     private fun setUpGroupName() {
         groupId = args.groupId
+        Log.d("GroupDetailsView", groupId)
         viewModel.setCurrentGroup(groupId)
     }
 
@@ -118,10 +122,12 @@ class GroupDetailsView : Fragment() {
     }
 
     private fun setGroupName(group: Group) {
+        Log.d("GroupDetailsView", group.groupName)
         groupNameView.text = group.groupName
     }
 
     private fun initAdapter(group: Group) {
+        Log.d("GroupDetailsView", group.groupName)
         initChallengesAdapter(group)
         initChallengeHistoryAdapter(group)
     }
@@ -224,5 +230,19 @@ class GroupDetailsView : Fragment() {
                 GroupDetailsViewDirections.actionGroupDetailsViewToGroupParticipantsView(groupId)
             findNavController().navigate(action)
         }
+    }
+
+    private fun setUpLeaveGroupAction() {
+        leaveGroupAction.setOnClickListener {
+            val userId = getCurrentUserId()
+            viewModel.deleteUserGroup(userId, groupId)
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+
+    private fun getCurrentUserId() : String {
+        sharedPreferences =
+            requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
+       return sharedPreferences.getString("current_user_id", "  ") ?: "  "
     }
 }

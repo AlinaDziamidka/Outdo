@@ -10,6 +10,7 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.util.LoadManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.delay
 
 @HiltWorker
 class InitialLoadWorker @AssistedInject constructor(
@@ -26,17 +27,29 @@ class InitialLoadWorker @AssistedInject constructor(
             var challenges = listOf<Challenge>()
             groups.map { group ->
                 remoteLoadManager.fetchUsersByGroupId(group.groupId)
+                delay(SMALL_DELAY_MILLIS)
                 challenges = remoteLoadManager.fetchUserChallengesByGroupId(group.groupId)
+                delay(SMALL_DELAY_MILLIS)
             }
+            delay(LARGE_DELAY_MILLIS)
             challenges.map { challenge ->
                 remoteLoadManager.fetchAchievementsByChallengeId(challenge.challengeId)
             }
+            delay(LARGE_DELAY_MILLIS)
+            remoteLoadManager.fetchNotificationsByUserId(userId)
+            delay(SMALL_DELAY_MILLIS)
             remoteLoadManager.fetchFriendsByUserId(userId)
+            delay(LARGE_DELAY_MILLIS)
             Log.d("InitialLoadWorker", "Work completed successfully")
             Result.success()
         } catch (e: Exception) {
             Log.e("InitialLoadWorker", "Error in doWork", e)
             Result.retry()
         }
+    }
+
+    companion object {
+        const val LARGE_DELAY_MILLIS = 30000L
+        const val SMALL_DELAY_MILLIS = 3000L
     }
 }

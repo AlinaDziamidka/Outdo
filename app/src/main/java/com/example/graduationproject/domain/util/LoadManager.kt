@@ -8,6 +8,7 @@ import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserAchievement
 import com.example.graduationproject.domain.entity.UserFriend
+import com.example.graduationproject.domain.entity.UserNotifications
 import com.example.graduationproject.domain.entity.UserProfile
 
 interface LoadManager {
@@ -32,4 +33,6 @@ interface LoadManager {
     suspend fun fetchFriendsByUserId(userId: String): List<UserProfile>
 
     suspend fun fetchAchievementsByUserId(userId: String): List<Achievement>
+
+    suspend fun fetchNotificationsByUserId(userId: String): List<Pair<UserProfile, Group>>
 }

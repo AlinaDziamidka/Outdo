@@ -5,7 +5,8 @@
     android:id="@+id/notificationDetailsRootContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
     android:focusable="true"
     app:cardCornerRadius="16dp">
 

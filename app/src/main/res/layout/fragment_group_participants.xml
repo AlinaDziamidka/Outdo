@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:orientation="vertical"
-        android:layout_marginBottom="70dp">
+        android:paddingBottom="30dp">
 
         <RelativeLayout
             android:id="@+id/groupNameContainer"
@@ -79,5 +79,16 @@
             android:layout_marginTop="20dp"
             tools:listitem="@layout/participants_card" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/leaveGroupAction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_unselected_simple_action"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/group_info_leave_action"
+            style="@style/unselected_simple_button_action"/>
     </LinearLayout>
 </ScrollView>

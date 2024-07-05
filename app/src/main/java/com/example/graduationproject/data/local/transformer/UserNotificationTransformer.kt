@@ -8,6 +8,7 @@ class UserNotificationTransformer {
     fun fromModel(model: UserNotificationModel): UserNotifications {
         return UserNotifications(
             userId = model.userId,
+            creatorId = model.creatorId,
             groupId = model.groupId,
             created = model.created
         )
@@ -16,6 +17,7 @@ class UserNotificationTransformer {
     fun toModel(userNotification: UserNotifications): UserNotificationModel {
         return UserNotificationModel(
             userId = userNotification.userId,
+            creatorId = userNotification.creatorId,
             groupId = userNotification.groupId,
             created = userNotification.created
         )
