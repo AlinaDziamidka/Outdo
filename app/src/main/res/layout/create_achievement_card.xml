@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/achievementRootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:orientation="vertical"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:id="@+id/achievementView"
+        style="@style/card_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Ачивка №1" />
+
+    <EditText
+        android:id="@+id/achievementNameView"
+        style="@style/hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_edit_text"
+        android:hint="@string/create_challenge_screen_achievement_name_hint"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp" />
+
+    <EditText
+        android:id="@+id/descriptionView"
+        style="@style/hint_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_edit_text"
+        android:hint="@string/create_challenge_screen_description"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp" />
+</LinearLayout>

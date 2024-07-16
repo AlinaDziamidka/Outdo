@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:id="@+id/rootContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="16dp"
+        android:paddingBottom="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/createChallengeView"
+            style="@style/screen_header_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_challenge_screen_header" />
+
+        <TextView
+            android:id="@+id/challengeNameView"
+            style="@style/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/create_challenge_screen_challenge_name" />
+
+        <EditText
+            android:id="@+id/challengeNameContent"
+            style="@style/hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_edit_text"
+            android:hint="@string/create_challenge_screen_enter_text_hint"
+            android:paddingLeft="16dp" />
+
+        <TextView
+            android:id="@+id/startDateView"
+            style="@style/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/create_challenge_screen_start_date" />
+
+        <EditText
+            android:id="@+id/startDateContent"
+            style="@style/hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_edit_text"
+            android:drawableEnd="@drawable/ic_calendar"
+            android:hint="@string/create_challenge_screen_date_format_hint"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp" />
+
+        <TextView
+            android:id="@+id/finishDateView"
+            style="@style/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/create_challenge_screen_finish_date" />
+
+        <EditText
+            android:id="@+id/finishDateContent"
+            style="@style/hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_edit_text"
+            android:drawableEnd="@drawable/ic_calendar"
+            android:hint="@string/create_challenge_screen_date_format_hint"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp" />
+
+        <TextView
+            android:id="@+id/addExactTimeView"
+            style="@style/create_challenge_screen_set_exact_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/create_challenge_screen_set_exact_time" />
+
+        <TextView
+            android:id="@+id/challengeDescriptionView"
+            style="@style/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/create_challenge_screen_description" />
+
+        <EditText
+            android:id="@+id/challengeDescriptionContent"
+            style="@style/hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_edit_text"
+            android:hint="@string/create_challenge_screen_enter_text_hint"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp" />
+
+        <TextView
+            android:id="@+id/participantsView"
+            style="@style/card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/create_challenge_screen_participants" />
+
+        <include
+            android:id="@+id/addFriendsAction"
+            layout="@layout/add_friends_button" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/friendsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            tools:listitem="@layout/friends_card" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/achievementRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            tools:listitem="@layout/create_achievement_card" />
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/achievementContainer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical" />-->
+
+        <TextView
+            android:id="@+id/addOneMoreAchievement"
+            style="@style/create_challenge_screen_set_exact_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="@string/create_challenge_screen_add_achievement" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/saveChallengeAction"
+            style="@style/simple_button_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/bg_simple_action"
+            android:text="@string/create_challenge_screen_save" />
+    </LinearLayout>
+</ScrollView>

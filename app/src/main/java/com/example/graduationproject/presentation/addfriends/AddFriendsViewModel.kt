@@ -11,6 +11,7 @@ import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.usecase.FetchFriendsUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupNameUseCase
+import com.example.graduationproject.domain.usecase.FetchGroupParticipantsUseCase
 import com.example.graduationproject.domain.usecase.SetGroupParticipantsUseCase
 import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddFriendsViewModel @Inject constructor(
     context: Application,
-    private val fetchFriendsUseCase: FetchFriendsUseCase
+    private val fetchFriendsUseCase: FetchFriendsUseCase,
+    private val fetchGroupParticipantsUseCase: FetchGroupParticipantsUseCase
 ) :
     AndroidViewModel(context) {
 
@@ -46,6 +48,31 @@ class AddFriendsViewModel @Inject constructor(
             fetchFriendsUseCase(
                 FetchFriendsUseCase.Params(
                     userId
+                )
+            )
+                .onStart {
+                    Log.d("AddFriendsViewModel", "Fetching friends: Loading state")
+                    _viewState.value = AddFriendsViewState.Loading
+                }.catch {
+                    Log.e(
+                        "AddFriendsViewModel",
+                        "Fetching friends: Error - ${it.message}"
+                    )
+                    _viewState.value =
+                        AddFriendsViewState.Failure(it.message ?: "Something went wrong.")
+                }.collect { friends ->
+                    Log.d("AddFriendsViewModel", "Fetching friends: Success")
+                    _viewState.value = AddFriendsViewState.Success(friends)
+                }
+        }
+    }
+
+    fun setUpGroupFriends(groupId: String) {
+        viewModelScope.launch {
+            Log.d("AddFriendsViewModel", "Fetching friends $groupId")
+            fetchGroupParticipantsUseCase(
+                FetchGroupParticipantsUseCase.Params(
+                    groupId
                 )
             )
                 .onStart {

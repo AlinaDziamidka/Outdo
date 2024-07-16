@@ -72,4 +72,19 @@
     <string name="notification_screen_description">User «%1$s» added you to the «%2$s» group!</string>
     <string name="notification_screen_to_group_action">Go to group</string>
     <string name="notification_screen_leave_action">Leave the group</string>
+    <string name="create_challenge_screen_header">Create a challenge</string>
+    <string name="create_challenge_screen_challenge_name">Challenge name</string>
+    <string name="create_challenge_screen_start_date">Start date</string>
+    <string name="create_challenge_screen_finish_date">Finish date</string>
+    <string name="create_challenge_screen_description">Description</string>
+    <string name="create_challenge_screen_enter_text_hint">Enter text</string>
+    <string name="create_challenge_screen_date_format_hint">DD/MM/YYYY</string>
+    <string name="create_challenge_screen_set_exact_time">+ Set exact time</string>
+    <string name="create_challenge_screen_participants">Participants</string>
+    <string name="create_challenge_screen_add_participants">Add participants</string>
+    <string name="create_challenge_screen_achievement">Achievement №%1$s </string>
+    <string name="create_challenge_screen_achievement_name_hint">Name </string>
+    <string name="create_challenge_screen_add_achievement">+ Add one more achievement</string>
+    <string name="create_challenge_screen_save">Save</string>
+    <string name="create_challenge_delete_participant">Delete</string>
 </resources>

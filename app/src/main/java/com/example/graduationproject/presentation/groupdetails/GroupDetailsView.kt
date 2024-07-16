@@ -59,9 +59,7 @@ class GroupDetailsView : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
         _binding = FragmentGroupDetailsBinding.inflate(inflater, container, false)
@@ -80,6 +78,7 @@ class GroupDetailsView : Fragment() {
         observeChallengesHistory()
         setUpSwitchParticipantsAction()
         setUpLeaveGroupAction()
+        setUpCreateChallengeAction()
     }
 
     private fun initViews() {
@@ -151,7 +150,8 @@ class GroupDetailsView : Fragment() {
     }
 
     private fun moveToChallengeDetailsScreen(challenge: Challenge) {
-        val action = GroupDetailsViewDirections.actionGroupDetailsViewToChallengeDetailsView(challenge.challengeId)
+        val action =
+            GroupDetailsViewDirections.actionGroupDetailsViewToChallengeDetailsView(challenge.challengeId)
         findNavController().navigate(action)
     }
 
@@ -201,8 +201,7 @@ class GroupDetailsView : Fragment() {
                         is GroupDetailsViewState.Success -> {
                             loadChallengesHistory(it.data)
                             Log.d(
-                                "observeChallengesHistory",
-                                "Success view state, data: ${it.data}"
+                                "observeChallengesHistory", "Success view state, data: ${it.data}"
                             )
                         }
 
@@ -240,9 +239,21 @@ class GroupDetailsView : Fragment() {
         }
     }
 
-    private fun getCurrentUserId() : String {
+    private fun getCurrentUserId(): String {
         sharedPreferences =
             requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
-       return sharedPreferences.getString("current_user_id", "  ") ?: "  "
+        return sharedPreferences.getString("current_user_id", "  ") ?: "  "
+    }
+
+    private fun setUpCreateChallengeAction() {
+        createChallengeAction.setOnClickListener {
+            moveToCreateChallengeScreen()
+        }
+    }
+
+    private fun moveToCreateChallengeScreen() {
+        val action = GroupDetailsViewDirections.actionGroupDetailsViewToCreateChallengeView(groupId)
+        Log.d("GroupDetailsView", groupId)
+        findNavController().navigate(action)
     }
 }

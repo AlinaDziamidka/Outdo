@@ -13,7 +13,7 @@
             app:destination="@id/challengeDetailsView" />
         <action
             android:id="@+id/action_homeViewFragment_to_allChallengesView"
-            app:destination="@id/allChallengesView"/>
+            app:destination="@id/allChallengesView" />
         <action
             android:id="@+id/action_homeViewFragment_to_groupView"
             app:destination="@id/groupView" />
@@ -24,33 +24,33 @@
     <fragment
         android:id="@+id/challengeDetailsView"
         android:name="com.example.graduationproject.presentation.challengedetails.ChallengeDetailsView"
-        android:label="ChallengeDetailsView" >
+        android:label="ChallengeDetailsView">
         <argument
             android:name="chalengeId"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/allChallengesView"
         android:name="com.example.graduationproject.presentation.challenges.AllChallengesView"
-        android:label="AllChallengesView" >
+        android:label="AllChallengesView">
         <action
             android:id="@+id/action_allChallengesView_to_challengeDetailsView"
             app:destination="@id/challengeDetailsView">
             <argument
                 android:name="chalengeId"
-                app:argType="string"/>
+                app:argType="string" />
         </action>
     </fragment>
     <fragment
         android:id="@+id/groupView"
         android:name="com.example.graduationproject.presentation.group.GroupView"
-        android:label="GroupView" >
+        android:label="GroupView">
         <action
             android:id="@+id/action_groupView_to_groupDetailsView"
             app:destination="@id/groupDetailsView">
             <argument
-            android:name="groupId"
-            app:argType="string"/>
+                android:name="groupId"
+                app:argType="string" />
         </action>
         <action
             android:id="@+id/action_groupView_to_createGroupView"
@@ -70,14 +70,21 @@
             app:popUpToInclusive="true">
             <argument
                 android:name="groupId"
-                app:argType="string"/>
+                app:argType="string" />
         </action>
         <action
             android:id="@+id/action_groupDetailsView_to_challengeDetailsView"
             app:destination="@id/challengeDetailsView">
             <argument
                 android:name="chalengeId"
-                app:argType="string"/>
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_groupDetailsView_to_createChallengeView"
+            app:destination="@id/createChallengeView">
+            <argument
+                android:name="groupId"
+                app:argType="string" />
         </action>
     </fragment>
     <fragment
@@ -94,13 +101,20 @@
             app:popUpToInclusive="true">
             <argument
                 android:name="groupId"
-                app:argType="string"/>
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_groupParticipantsView_to_createChallengeView"
+            app:destination="@id/createChallengeView">
+            <argument
+                android:name="groupId"
+                app:argType="string" />
         </action>
     </fragment>
     <fragment
         android:id="@+id/createGroupView"
         android:name="com.example.graduationproject.presentation.creategroup.CreateGroupView"
-        android:label="CreateGroupView" >
+        android:label="CreateGroupView">
         <action
             android:id="@+id/action_createGroupView_to_addFriendsView"
             app:destination="@id/addFriendsView">
@@ -110,28 +124,50 @@
             app:destination="@id/groupDetailsView">
             <argument
                 android:name="groupId"
-                app:argType="string"/>
+                app:argType="string" />
         </action>
     </fragment>
     <fragment
         android:id="@+id/addFriendsView"
         android:name="com.example.graduationproject.presentation.addfriends.AddFriendsView"
-        android:label="AddFriendsView" >
+        android:label="AddFriendsView">
+        <argument
+            android:name="groupId"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_addFriendsView_to_createGroupView"
             app:destination="@id/createGroupView">
         </action>
+        <action
+            android:id="@+id/action_addFriendsView_to_createChallengeView"
+            app:destination="@id/createChallengeView" />
     </fragment>
     <fragment
         android:id="@+id/notificationView"
         android:name="com.example.graduationproject.presentation.notifications.NotificationView"
-        android:label="NotificationView" >
+        android:label="NotificationView">
         <action
             android:id="@+id/action_notificationView_to_groupDetailsView"
             app:destination="@id/groupDetailsView">
+            <argument
+                android:name="groupId"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/createChallengeView"
+        android:name="com.example.graduationproject.presentation.createchallenge.CreateChallengeView"
+        android:label="CreateChallengeView">
         <argument
             android:name="groupId"
-            app:argType="string"/>
-    </action>
+            app:argType="string" />
+        <action
+            android:id="@+id/action_createChallengeView_to_addFriendsView"
+            app:destination="@id/addFriendsView">
+            <argument
+                android:name="groupId"
+                app:argType="string"/>
+        </action>
     </fragment>
 </navigation>

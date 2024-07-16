@@ -17,12 +17,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentAddFriendsBinding
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.addfriends.adapter.AddFriendsAdapter
+import com.example.graduationproject.presentation.createchallenge.CreateChallengeView
 import com.example.graduationproject.presentation.creategroup.CreateGroupView
+import com.example.graduationproject.presentation.groupparticipants.GroupParticipantsViewArgs
 import com.example.graduationproject.presentation.util.getSerializableCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -40,6 +43,7 @@ class AddFriendsView : Fragment() {
     private lateinit var confirmAction: Button
     private lateinit var friendsCheckView: RecyclerView
     private lateinit var sharedPreferences: SharedPreferences
+    private val args: AddFriendsViewArgs by navArgs()
 
     companion object {
         const val SELECTED_FRIENDS_REQUEST_KEY = "SELECTED_FRIENDS_REQUEST_KEY"
@@ -71,7 +75,7 @@ class AddFriendsView : Fragment() {
         initAdapter()
         getSelectedFriends()
         observeSelectedFriends()
-        setUpFriends()
+//        setUpFriends()
         observeFriends()
         setUpConfirmAction()
         onPressedBackAction()
@@ -91,17 +95,40 @@ class AddFriendsView : Fragment() {
     }
 
     private fun getSelectedFriends() {
+        Log.d("AddFriendsView", "Setting up FragmentResultListeners")
         parentFragmentManager.setFragmentResultListener(
-            CreateGroupView.ADDED_FRIENDS_REQUEST_KEY,
+            CreateGroupView.ADDED_FRIENDS_TO_GROUP_REQUEST_KEY,
             this
         ) { _, bundle ->
+            Log.d("AddFriendsView", "Triggered by CreateGroupView result")
             val friendsArrayList = bundle.getSerializableCompat(
-                CreateGroupView.ADDED_FRIENDS_LIST_KEY,
+                CreateGroupView.ADDED_FRIENDS_TO_GROUP_LIST_KEY,
                 ArrayList::class.java
             ) as? ArrayList<UserProfile>
             friendsArrayList?.let {
+                Log.d("AddFriendsView", "Adding friends from CreateGroupView: ${it.size} friends")
                 viewModel.addFriends(it)
             }
+            setUpFriends()
+        }
+
+        parentFragmentManager.setFragmentResultListener(
+            CreateChallengeView.ADDED_FRIENDS_TO_CHALLENGE_REQUEST_KEY,
+            this
+        ) { _, bundle ->
+            Log.d("AddFriendsView", "Triggered by CreateChallengeView result")
+            val friendsArrayList = bundle.getSerializableCompat(
+                CreateChallengeView.ADDED_FRIENDS_TO_CHALLENGE_LIST_KEY,
+                ArrayList::class.java
+            ) as? ArrayList<UserProfile>
+            friendsArrayList?.let {
+                Log.d(
+                    "AddFriendsView",
+                    "Adding friends from CreateChallengeView: ${it.size} friends"
+                )
+                viewModel.addFriends(it)
+            }
+            setUpGroupFriends()
         }
     }
 
@@ -116,7 +143,9 @@ class AddFriendsView : Fragment() {
     }
 
     private fun setUpFriends() {
+        Log.d("AddFriendsView", "SetUpFriends method is starting")
         val userId = getUserId()
+        Log.d("AddFriendsView", "Setting up friends for userId: $userId")
         viewModel.setUpFriends(userId)
     }
 
@@ -125,6 +154,17 @@ class AddFriendsView : Fragment() {
             requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("current_user_id", "  ") ?: "  "
     }
+
+    private fun setUpGroupFriends() {
+        Log.d("AddFriendsView", "SetUpGroupFriends method is starting")
+        args.groupId?.let { groupId ->
+            Log.d("AddFriendsView", "Setting up group friends for groupId: $groupId")
+            viewModel.setUpGroupFriends(groupId)
+        } ?: run {
+            Log.e("CreateGroupView", "Group ID is null. Cannot set up group friends.")
+        }
+    }
+
 
     private fun observeFriends() {
         lifecycleScope.launch {

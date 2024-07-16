@@ -18,6 +18,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.R
@@ -26,6 +27,7 @@ import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.addfriends.AddFriendsView.Companion.SELECTED_FRIENDS_LIST_KEY
 import com.example.graduationproject.presentation.addfriends.AddFriendsView.Companion.SELECTED_FRIENDS_REQUEST_KEY
+import com.example.graduationproject.presentation.createchallenge.CreateChallengeViewArgs
 import com.example.graduationproject.presentation.creategroup.adapter.CreateGroupAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.graduationproject.presentation.util.getSerializableCompat
@@ -50,8 +52,8 @@ class CreateGroupView : Fragment() {
     private lateinit var participants: MutableList<UserProfile>
 
     companion object {
-        const val ADDED_FRIENDS_REQUEST_KEY = "ADDED_FRIENDS_REQUEST_KEY"
-        const val ADDED_FRIENDS_LIST_KEY = "ADDED_FRIENDS_LIST_KEY"
+        const val ADDED_FRIENDS_TO_GROUP_REQUEST_KEY = "ADDED_FRIENDS_TO_GROUP_REQUEST_KEY"
+        const val ADDED_FRIENDS_TO_GROUP_LIST_KEY = "ADDED_FRIENDS_TO_GROUP_LIST_KEY"
     }
 
     override fun onAttach(context: Context) {
@@ -152,13 +154,13 @@ class CreateGroupView : Fragment() {
 
     private fun setArgumentsToAddFriendsView() {
         val arrayList = ArrayList(viewModel.addedFriends.value)
-        this.putArguments(ADDED_FRIENDS_LIST_KEY to arrayList as Serializable)
-        setFragmentResult(ADDED_FRIENDS_REQUEST_KEY, arguments ?: Bundle())
+        this.putArguments(ADDED_FRIENDS_TO_GROUP_LIST_KEY to arrayList as Serializable)
+        setFragmentResult(ADDED_FRIENDS_TO_GROUP_REQUEST_KEY, arguments ?: Bundle())
     }
 
     private fun moveToAddFriendsView() {
         val action =
-            CreateGroupViewDirections.actionCreateGroupViewToAddFriendsView()
+            CreateGroupViewDirections.actionCreateGroupViewToAddFriendsView(null)
         findNavController().navigate(action)
     }
 

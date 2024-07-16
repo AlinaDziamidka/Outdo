@@ -74,8 +74,19 @@
     <string name="notification_screen_description">Пользователь «%1$s» добавил вас в группу «%2$s»!</string>
     <string name="notification_screen_to_group_action">К группе</string>
     <string name="notification_screen_leave_action">Выйти из группы</string>
-
-
-
-
+    <string name="create_challenge_screen_header">Создание челленджа</string>
+    <string name="create_challenge_screen_challenge_name">Название челленджа</string>
+    <string name="create_challenge_screen_start_date">Дата начала</string>
+    <string name="create_challenge_screen_finish_date">Дата окончания</string>
+    <string name="create_challenge_screen_description">Описание</string>
+    <string name="create_challenge_screen_enter_text_hint">Введите текст</string>
+    <string name="create_challenge_screen_date_format_hint">ДД/ММ/ГГГГ</string>
+    <string name="create_challenge_screen_set_exact_time">+ Задать точное время</string>
+    <string name="create_challenge_screen_participants">Участники</string>
+    <string name="create_challenge_screen_add_participants">Добавить участников</string>
+    <string name="create_challenge_screen_achievement">Ачивка №%1$s </string>
+    <string name="create_challenge_screen_achievement_name_hint">Название </string>
+    <string name="create_challenge_screen_add_achievement">+ Добавить еще ачивку</string>
+    <string name="create_challenge_screen_save">Сохранить</string>
+    <string name="create_challenge_delete_participant">Убрать</string>
 </resources>
