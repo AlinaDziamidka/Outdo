@@ -8,6 +8,7 @@ data class Challenge(
     val challengeType: ChallengeType,
     val challengeDescription: String?,
     val endTime: Long,
+    val startTime: Long?,
     val challengeIcon: String?,
     val challengeStatus: ChallengeStatus,
     val creatorId: String?

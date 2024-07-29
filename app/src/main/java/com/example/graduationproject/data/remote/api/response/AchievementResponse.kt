@@ -13,7 +13,7 @@ data class AchievementResponse(
     @SerializedName("status")
     val achievementStatus: String,
     @SerializedName("categoryId")
-    val categoryId: String,
+    val categoryId: String?,
     @SerializedName("achievementType")
     val achievementType: String,
     @SerializedName("endTime")

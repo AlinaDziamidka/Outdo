@@ -43,7 +43,7 @@
 
     <EditText
         android:id="@+id/groupNameContent"
-        style="@style/edit_text"
+        style="@style/hint_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/fileNameView"
-            style="@style/edit_text"
+            style="@style/regular_grey_text_color_text"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

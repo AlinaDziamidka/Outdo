@@ -16,6 +16,8 @@ data class ChallengeResponse(
     val challengeDescription: String,
     @SerializedName("endTime")
     val endTime: Long,
+    @SerializedName("startTime")
+    val startTime: Long,
     @SerializedName("iconPath")
     val challengeIcon: String?,
     @SerializedName("challengeStatus")

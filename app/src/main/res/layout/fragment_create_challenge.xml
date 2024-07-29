@@ -60,7 +60,11 @@
             android:drawableEnd="@drawable/ic_calendar"
             android:hint="@string/create_challenge_screen_date_format_hint"
             android:paddingStart="16dp"
-            android:paddingEnd="12dp" />
+            android:paddingEnd="12dp"
+            android:focusable="false"
+            android:inputType="none"
+            android:cursorVisible="false"
+            android:clickable="true" />
 
         <TextView
             android:id="@+id/finishDateView"
@@ -80,7 +84,11 @@
             android:drawableEnd="@drawable/ic_calendar"
             android:hint="@string/create_challenge_screen_date_format_hint"
             android:paddingStart="16dp"
-            android:paddingEnd="12dp" />
+            android:paddingEnd="12dp"
+            android:focusable="false"
+            android:inputType="none"
+            android:cursorVisible="false"
+            android:clickable="true" />
 
         <TextView
             android:id="@+id/addExactTimeView"

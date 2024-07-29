@@ -18,7 +18,7 @@ data class AchievementModel(
     @ColumnInfo("status")
     val achievementStatus: String,
     @ColumnInfo("categoryId")
-    val categoryId: String,
+    val categoryId: String?,
     @ColumnInfo("achievementType")
     val achievementType: String,
     @ColumnInfo("endTime")

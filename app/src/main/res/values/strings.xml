@@ -87,4 +87,5 @@
     <string name="create_challenge_screen_add_achievement">+ Add one more achievement</string>
     <string name="create_challenge_screen_save">Save</string>
     <string name="create_challenge_delete_participant">Delete</string>
+    <string name="create_challenge_date_format">%1$02d/%2$02d/%3$04d</string>
 </resources>

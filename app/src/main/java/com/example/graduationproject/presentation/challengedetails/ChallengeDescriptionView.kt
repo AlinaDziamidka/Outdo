@@ -33,11 +33,6 @@ class ChallengeDescriptionView(rootView: ChallengeDetailsCardBinding) {
 
     fun updateChallengeDescription(challenge: Challenge, userProfile: UserProfile?) {
         val challengeDescription = challenge.challengeDescription
-        val endTime = challenge.endTime
-        val currentLocale: Locale = Locale.getDefault()
-        val (formattedFinishTime, formattedDateOfFinish) = formatDateAndTime(endTime, currentLocale)
-        finishTimeView.text = formattedFinishTime
-        dateOfFinishView.text = formattedDateOfFinish
         creatorNameView.text = userProfile?.username
 
         if (challengeDescription == null) {
@@ -46,15 +41,36 @@ class ChallengeDescriptionView(rootView: ChallengeDetailsCardBinding) {
             descriptionView.visibility = View.VISIBLE
             descriptionView.text = challengeDescription
         }
+
+        setUpTime(challenge)
+    }
+
+    private fun setUpTime(challenge: Challenge) {
+        val startTime = challenge.startTime
+        val endTime = challenge.endTime
+        val currentLocale: Locale = Locale.getDefault()
+        val (formattedFinishTime, formattedDateOfFinish) = formatDateAndTime(endTime, currentLocale)
+        var formattedStartTime: String? = null
+        var formattedDateOfStart: String? = null
+        startTime?.let { time ->
+            val (timeStr, dateStr) = formatDateAndTime(time, currentLocale)
+            formattedStartTime = timeStr
+            formattedDateOfStart = dateStr
+        }
+
+        startTimeView.text = formattedStartTime
+        dateOfStartView.text = formattedDateOfStart
+        finishTimeView.text = formattedFinishTime
+        dateOfFinishView.text = formattedDateOfFinish
     }
 
     private fun formatDateAndTime(timestamp: Long, locale: Locale): Pair<String, String> {
         val date = Date(timestamp)
         val timeFormat = SimpleDateFormat("HH:mm:ss", locale)
-        val timeFinishView = timeFormat.format(date)
+        val timeView = timeFormat.format(date)
         val dateFormat = SimpleDateFormat("dd MMMM", locale)
-        val dateOfFinishView = dateFormat.format(date)
+        val dateView = dateFormat.format(date)
 
-        return Pair(timeFinishView, dateOfFinishView)
+        return Pair(timeView, dateView)
     }
 }

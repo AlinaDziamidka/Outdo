@@ -1,14 +1,19 @@
 package com.example.graduationproject.data.remote.repository
 
 import android.util.Log
+import com.example.graduationproject.data.remote.api.request.GroupChallengeRequest
+import com.example.graduationproject.data.remote.api.request.UserGroupsRequest
 import com.example.graduationproject.data.remote.api.response.ChallengeResponse
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
 import com.example.graduationproject.data.remote.transormer.ChallengeTransformer
+import com.example.graduationproject.data.remote.transormer.GroupChallengeTransformer
 import com.example.graduationproject.domain.entity.Challenge
+import com.example.graduationproject.domain.entity.GroupChallenge
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
+import retrofit2.Response
 import javax.inject.Inject
 
 class GroupChallengeRemoteRepositoryImpl @Inject constructor(
@@ -163,6 +168,30 @@ class GroupChallengeRemoteRepositoryImpl @Inject constructor(
                     "GroupChallengeRepositoryImpl",
                     "Failed to fetch challenges with STATUS: ${event.exception}"
                 )
+                val error = event.exception
+                Event.Failure(error)
+            }
+        }
+    }
+
+    override suspend fun insertGroupChallenge(
+        groupId: String,
+        challengeId: String
+    ): Event<GroupChallenge> {
+        val event = doCall {
+            val request = GroupChallengeRequest(groupId, challengeId)
+            return@doCall groupChallengeApiService.insertGroupChallenge(request)
+        }
+
+        return when (event) {
+            is Event.Success -> {
+                val response = event.data
+                val groupChallengeTransformer = GroupChallengeTransformer()
+                val groupChallenge = groupChallengeTransformer.fromResponse(response)
+                Event.Success(groupChallenge)
+            }
+
+            is Event.Failure -> {
                 val error = event.exception
                 Event.Failure(error)
             }

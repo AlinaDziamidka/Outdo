@@ -16,7 +16,7 @@
     </style>
 
     <style name="hint_text" parent="edit_text">
-        <item name="android:textColor">@color/grey_text_color</item>
+        <item name="android:textColorHint">@color/grey_text_color</item>
         <item name="fontFamily">@font/gilroy_regular</item>
     </style>
 
@@ -49,6 +49,11 @@
 
     <style name="default_grey_text_color_text">
         <item name="android:textColor">@color/grey_text_color</item>
+    </style>
+
+    <style name="regular_grey_text_color_text" parent="default_grey_text_color_text">
+        <item name="fontFamily">@font/gilroy_regular</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="challenges_name" parent="button_action">
@@ -153,6 +158,10 @@
 
     <style name="create_challenge_screen_set_exact_time">
         <item name="android:textColor">@color/blue_text_color</item>
+    </style>
+
+    <style name="DatePickerDialog" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorAccent">@color/color_primary</item>
     </style>
 
 </resources>

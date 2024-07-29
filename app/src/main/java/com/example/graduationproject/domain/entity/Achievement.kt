@@ -5,7 +5,7 @@ data class Achievement(
     val achievementName: String,
     val description: String?,
     val achievementStatus: AchievementStatus,
-    val categoryId: String,
+    val categoryId: String?,
     val achievementType: AchievementType,
     val endTime: Long,
     val achievementIcon: String?

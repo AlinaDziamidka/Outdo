@@ -20,6 +20,8 @@ data class ChallengeModel(
     val challengeDescription: String?,
     @ColumnInfo("endTime")
     val endTime: Long,
+    @ColumnInfo("startTime")
+    val startTime: Long?,
     @ColumnInfo("iconPath")
     val challengeIcon: String?,
     @ColumnInfo("challengeStatus")

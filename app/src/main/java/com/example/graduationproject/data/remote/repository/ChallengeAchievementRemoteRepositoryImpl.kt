@@ -1,6 +1,8 @@
 package com.example.graduationproject.data.remote.repository
 
 import android.util.Log
+import com.example.graduationproject.data.remote.api.request.ChallengeAchievementRequest
+import com.example.graduationproject.data.remote.api.request.GroupChallengeRequest
 import com.example.graduationproject.data.remote.api.response.AchievementResponse
 import com.example.graduationproject.data.remote.api.response.ChallengeResponse
 import com.example.graduationproject.data.remote.api.service.AchievementApiService
@@ -8,6 +10,7 @@ import com.example.graduationproject.data.remote.api.service.ChallengeAchievemen
 import com.example.graduationproject.data.remote.transormer.AchievementTransformer
 import com.example.graduationproject.data.remote.transormer.ChallengeAchievementTransformer
 import com.example.graduationproject.data.remote.transormer.ChallengeTransformer
+import com.example.graduationproject.data.remote.transormer.GroupChallengeTransformer
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeAchievement
@@ -28,7 +31,10 @@ class ChallengeAchievementRemoteRepositoryImpl @Inject constructor(
 
     override suspend fun fetchAllAchievementsByChallengeId(challengeIdQuery: String): Event<List<Achievement>> {
         val query = "challengeId=\'$challengeIdQuery\'"
-        Log.d("ChallengeAchievementRepositoryImpl", "Fetching all achievements by challenge ID: $challengeIdQuery")
+        Log.d(
+            "ChallengeAchievementRepositoryImpl",
+            "Fetching all achievements by challenge ID: $challengeIdQuery"
+        )
         val event = doCall {
             return@doCall challengeAchievementApiService.fetchAllAchievementsByChallengeId(query)
         }
@@ -39,7 +45,8 @@ class ChallengeAchievementRemoteRepositoryImpl @Inject constructor(
                 val response = event.data
 
                 response.forEach { challengeAchievementResponse ->
-                    val achievementEvent = getAchievementsById(challengeAchievementResponse.achievementId)
+                    val achievementEvent =
+                        getAchievementsById(challengeAchievementResponse.achievementId)
                     if (achievementEvent is Event.Success) {
                         achievements.add(achievementEvent.data)
                     } else {
@@ -62,7 +69,6 @@ class ChallengeAchievementRemoteRepositoryImpl @Inject constructor(
                 Event.Failure(error)
             }
         }
-
     }
 
     private suspend fun getAchievementsById(achievementId: String): Event<Achievement> {
@@ -88,6 +94,30 @@ class ChallengeAchievementRemoteRepositoryImpl @Inject constructor(
                     "Transformed response to achievement: $achievement"
                 )
                 Event.Success(achievement)
+            }
+
+            is Event.Failure -> {
+                val error = event.exception
+                Event.Failure(error)
+            }
+        }
+    }
+
+    override suspend fun insertChallengeAchievement(
+        challengeId: String,
+        achievementId: String
+    ): Event<ChallengeAchievement> {
+        val event = doCall {
+            val request = ChallengeAchievementRequest(challengeId, achievementId)
+            return@doCall challengeAchievementApiService.insertChallengeAchievement(request)
+        }
+
+        return when (event) {
+            is Event.Success -> {
+                val response = event.data
+                val challengeAchievementTransformer = ChallengeAchievementTransformer()
+                val challengeAchievement = challengeAchievementTransformer.fromResponse(response)
+                Event.Success(challengeAchievement)
             }
 
             is Event.Failure -> {

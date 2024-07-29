@@ -1,8 +1,12 @@
 package com.example.graduationproject.data.remote.api.service
 
+import com.example.graduationproject.data.remote.api.request.UserAchievementRequest
 import com.example.graduationproject.data.remote.api.response.UserAchievementResponse
+import com.example.graduationproject.domain.entity.ChallengeAchievement
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface UserAchievementApiService {
@@ -12,4 +16,7 @@ interface UserAchievementApiService {
 
     @GET("data/userAchievements")
     suspend fun fetchUsersByAchievementId(@Query("where") achievementIdQuery: String): Response<List<UserAchievementResponse>>
+
+    @POST("data/userAchievements")
+    suspend fun insertUserAchievements(@Body request: UserAchievementRequest): Response<UserAchievementResponse>
 }
