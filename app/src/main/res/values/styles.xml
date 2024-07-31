@@ -152,11 +152,17 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="simple_button_action_caps" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="fontFamily">@font/gilroy_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="unselected_simple_button_action" parent="simple_button_action">
       <item name="android:textColor">@color/color_primary</item>
     </style>
 
-    <style name="create_challenge_screen_set_exact_time">
+    <style name="default_blue_text_color">
         <item name="android:textColor">@color/blue_text_color</item>
     </style>
 

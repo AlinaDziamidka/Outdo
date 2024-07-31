@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true">
+
+    <LinearLayout
+        android:id="@+id/rootContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/achievementNameView"
+            style="@style/screen_header_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            tools:text="Ачивка «12 мгновений весны»" />
+
+        <TextView
+            android:id="@+id/achievementDescriptionView"
+            style="@style/description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="И нет сомнений, что элементы политического процесса являются только методом политического участия и преданы социально-демократической анафеме." />
+
+        <TextView
+            android:id="@+id/completedTextView"
+            style="@style/challenges_name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/achievement_details_completed" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/completedRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/completed_achievement_card" />
+
+        <TextView
+            android:id="@+id/uncompletedTextView"
+            style="@style/challenges_name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/achievement_details_uncompleted" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/uncompletedRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/uncompleted_achievement_card" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/completeAchievementAction"
+            style="@style/simple_button_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_simple_action"
+            android:text="@string/achievement_details_complete_achievement" />
+
+        <TextView
+            android:id="@+id/addPhotoHintView"
+            style="@style/regular_grey_text_color_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:text="@string/achievement_details_hint_photo" />
+    </LinearLayout>
+</ScrollView>

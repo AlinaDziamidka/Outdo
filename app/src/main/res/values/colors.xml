@@ -22,4 +22,5 @@
     <color name="switch_action_text_color">#99000000</color>
     <color name="description_text_color">#CC2C2727</color>
     <color name="action_blue">#007AFF</color>
+    <color name="green_stroke">#5BD323</color>
 </resources>

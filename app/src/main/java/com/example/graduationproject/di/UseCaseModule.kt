@@ -2,8 +2,10 @@ package com.example.graduationproject.di
 
 import com.example.graduationproject.di.qualifiers.Local
 import com.example.graduationproject.di.qualifiers.Remote
+import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
+import com.example.graduationproject.domain.repository.local.UserAchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserLocalRepository
 import com.example.graduationproject.domain.repository.local.UserNotificationsLocalRepository
@@ -11,6 +13,7 @@ import com.example.graduationproject.domain.repository.remote.DeviceRegistration
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.PushNotificationRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
+import com.example.graduationproject.domain.repository.remote.UserAchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserNotificationsRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
@@ -18,8 +21,10 @@ import com.example.graduationproject.domain.usecase.CreateGroupUseCase
 import com.example.graduationproject.domain.usecase.DeleteNotificationUseCase
 import com.example.graduationproject.domain.usecase.DeleteUserGroupUseCase
 import com.example.graduationproject.domain.usecase.DeviceRegistrationUseCase
+import com.example.graduationproject.domain.usecase.FetchAchievementDescriptionUseCase
 import com.example.graduationproject.domain.usecase.FetchChallengeAchievementUseCase
 import com.example.graduationproject.domain.usecase.FetchChallengeDescriptionUseCase
+import com.example.graduationproject.domain.usecase.FetchCompletedFriendsUseCase
 import com.example.graduationproject.domain.usecase.SignInUseCase
 import com.example.graduationproject.domain.usecase.SignUpUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
@@ -217,6 +222,30 @@ object UseCaseModule {
         return DeleteNotificationUseCase(
             userNotificationsRemoteRepository,
             userNotificationsLocalRepository
+        )
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideFetchAchievementDescriptionUseCase(
+        achievementLocalRepository: AchievementLocalRepository
+    ): FetchAchievementDescriptionUseCase {
+        return FetchAchievementDescriptionUseCase(achievementLocalRepository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideFetchCompletedFriendsUseCase(
+        userAchievementRemoteRepository: UserAchievementRemoteRepository,
+        userAchievementLocalRepository: UserAchievementLocalRepository,
+        userRemoteRepository: UserRemoteRepository,
+        userLocalRepository: UserLocalRepository
+    ): FetchCompletedFriendsUseCase {
+        return FetchCompletedFriendsUseCase(
+            userAchievementRemoteRepository,
+            userAchievementLocalRepository,
+            userRemoteRepository,
+            userLocalRepository
         )
     }
 }

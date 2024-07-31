@@ -90,4 +90,13 @@
     <string name="create_challenge_screen_save">Сохранить</string>
     <string name="create_challenge_delete_participant">Убрать</string>
     <string name="create_challenge_date_format">%1$02d/%2$02d/%3$04d</string>
+    <string name="achievement_details_title">Ачивка «%1$s»</string>
+    <string name="achievement_details_completed">Выполнили</string>
+    <string name="achievement_details_show_details">Подробнее</string>
+    <string name="achievement_details_uncompleted">Не выполнили</string>
+    <string name="achievement_details_complete_achievement">Выполнить</string>
+    <string name="achievement_details_hint_photo">Для подтверждения выполнения нужно будет загрузить фото</string>
+    <string name="dialog_add_photo_choose_the_way">Выберите способ</string>
+    <string name="dialog_add_photo_choose_open_camera">Включить камеру</string>
+    <string name="dialog_add_photo_choose_from_gallery">Выбрать из галереи</string>
 </resources>

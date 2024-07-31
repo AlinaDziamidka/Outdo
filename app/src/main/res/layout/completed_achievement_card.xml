@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_completed_achievement"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="8dp"
+    android:layout_marginTop="10dp">
+
+    <LinearLayout
+        android:id="@+id/friendNameViewContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/friendNameView"
+            style="@style/friend_card_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Trezor" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/detailsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/detailsView"
+            style="@style/default_blue_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/achievement_details_show_details" />
+    </LinearLayout>
+</LinearLayout>

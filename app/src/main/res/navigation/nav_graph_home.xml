@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_homeViewFragment_to_notificationView"
             app:destination="@id/notificationView" />
+        <action
+            android:id="@+id/action_homeViewFragment_to_achievementDetailsView"
+            app:destination="@id/achievementDetailsView" />
     </fragment>
     <fragment
         android:id="@+id/challengeDetailsView"
@@ -28,6 +31,9 @@
         <argument
             android:name="chalengeId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_challengeDetailsView_to_achievementDetailsView"
+            app:destination="@id/achievementDetailsView" />
     </fragment>
     <fragment
         android:id="@+id/allChallengesView"
@@ -173,5 +179,13 @@
             android:id="@+id/action_createChallengeView_to_challengeDetailsView"
             app:destination="@id/challengeDetailsView">
         </action>
+    </fragment>
+    <fragment
+        android:id="@+id/achievementDetailsView"
+        android:name="com.example.graduationproject.presentation.achievementdetails.AchievementDetailsView"
+        android:label="AchievementDetailsView" >
+        <argument
+            android:name="achievementId"
+            app:argType="string" />
     </fragment>
 </navigation>

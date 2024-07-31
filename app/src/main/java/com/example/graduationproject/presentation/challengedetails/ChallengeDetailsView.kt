@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -110,21 +111,27 @@ class ChallengeDetailsView : Fragment() {
     }
 
     private fun setChallengeDescription(challengeDetails: Pair<Challenge, UserProfile?>) {
-        challengeDescription.updateChallengeDescription(challengeDetails.first, challengeDetails.second)
+        challengeDescription.updateChallengeDescription(
+            challengeDetails.first,
+            challengeDetails.second
+        )
     }
 
     private fun initAdapter() {
         achievementView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         achievementsAdapter = AchievementsAdapter(mutableListOf()) { achievement ->
-           moveToAchievementDetailsScreen(achievement)
+            moveToAchievementDetailsScreen(achievement)
         }
         achievementView.adapter = achievementsAdapter
     }
 
     private fun moveToAchievementDetailsScreen(achievement: Achievement) {
-//        val action = GroupViewDirections.actionGroupViewToGroupDetailsView(groupParticipants.group.groupId)
-//        findNavController().navigate(action)
+        val action =
+            ChallengeDetailsViewDirections.actionChallengeDetailsViewToAchievementDetailsView(
+                achievement.achievementId
+            )
+        findNavController().navigate(action)
     }
 
     private fun setUpAchievements() {

@@ -33,6 +33,10 @@ class AchievementsAdapter(
 
         fun onBind(achievement: Achievement) {
             achievementNameView.text = achievement.achievementName
+
+            itemView.setOnClickListener {
+                onAchievementClickListener(achievement)
+            }
         }
     }
 
