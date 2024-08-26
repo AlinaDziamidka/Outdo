@@ -27,6 +27,7 @@ import com.example.graduationproject.data.remote.api.service.DeviceRegistrationA
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
 import com.example.graduationproject.data.remote.api.service.PushNotificationApiService
+import com.example.graduationproject.data.remote.api.service.UploadPhotoApiService
 import com.example.graduationproject.data.remote.api.service.UserAchievementApiService
 import com.example.graduationproject.data.remote.api.service.UserApiService
 import com.example.graduationproject.data.remote.api.service.UserFriendApiService
@@ -39,6 +40,7 @@ import com.example.graduationproject.data.remote.repository.ChallengeRemoteRepos
 import com.example.graduationproject.data.remote.repository.DeviceRegistrationRepositoryImpl
 import com.example.graduationproject.data.remote.repository.GroupChallengeRemoteRepositoryImpl
 import com.example.graduationproject.data.remote.repository.GroupRemoteRepositoryImpl
+import com.example.graduationproject.data.remote.repository.PhotoUploadRemoteRepositoryImpl
 import com.example.graduationproject.data.remote.repository.PushNotificationRepositoryImpl
 import com.example.graduationproject.data.remote.repository.SessionRepositoryImpl
 import com.example.graduationproject.data.remote.repository.UserAchievementRemoteRepositoryImpl
@@ -62,6 +64,7 @@ import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRep
 import com.example.graduationproject.domain.repository.remote.DeviceRegistrationRepository
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
+import com.example.graduationproject.domain.repository.remote.PhotoUploadRemoteRepository
 import com.example.graduationproject.domain.repository.remote.PushNotificationRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.repository.remote.UserAchievementRemoteRepository
@@ -223,6 +226,14 @@ object RepositoryModule {
         pushNotificationApiService: PushNotificationApiService
     ): PushNotificationRepository {
         return PushNotificationRepositoryImpl(pushNotificationApiService)
+    }
+
+    @Provides
+    @Singleton
+    fun providePhotoUploadRemoteRepository(
+        photoApiService: UploadPhotoApiService
+    ): PhotoUploadRemoteRepository {
+        return PhotoUploadRemoteRepositoryImpl(photoApiService)
     }
 
 }

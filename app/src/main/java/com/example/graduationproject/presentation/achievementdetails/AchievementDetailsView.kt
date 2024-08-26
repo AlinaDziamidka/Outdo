@@ -1,13 +1,22 @@
 package com.example.graduationproject.presentation.achievementdetails
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,11 +31,16 @@ import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.achievementdetails.adapter.CompletedAdapter
 import com.example.graduationproject.presentation.achievementdetails.adapter.UncompletedAdapter
+import com.google.android.gms.common.util.IOUtils.copyStream
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import com.example.graduationproject.BuildConfig
+
 
 @AndroidEntryPoint
-class AchievementDetailsView : Fragment() {
+class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener {
 
     private val viewModel: AchievementDetailsViewModel by viewModels()
     private var _binding: FragmentAchievementDetailsBinding? = null
@@ -39,9 +53,18 @@ class AchievementDetailsView : Fragment() {
     private lateinit var achievementNameView: TextView
     private lateinit var achievementDescriptionView: TextView
     private lateinit var achievementId: String
+    private lateinit var userId: String
     private lateinit var completeActionView: Button
     private lateinit var currentAchievement: Achievement
+    private lateinit var photoUri: Uri
 
+
+    companion object {
+        const val CAMERA_PERMISSION_REQUEST_CODE = 1001
+        private const val REQUEST_IMAGE_CAPTURE = 2001
+        private const val REQUEST_GALLERY_PICK = 2002
+        private const val GALLERY_PERMISSION_REQUEST_CODE = 2003
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -63,15 +86,16 @@ class AchievementDetailsView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViews()
         setUpChallengeName()
+        getUserId()
         observeCurrentAchievement()
         initAdapter()
         setUpCompletedFriends()
         setUpUncompletedFriends()
         observeCompletedFriends()
         observeUncompletedFriends()
+        setUpCompleteAction()
     }
 
     private fun initViews() {
@@ -85,6 +109,12 @@ class AchievementDetailsView : Fragment() {
     private fun setUpChallengeName() {
         achievementId = args.achievementId
         viewModel.setCurrentAchievement(achievementId)
+    }
+
+    private fun getUserId() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
+        userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
     }
 
     private fun observeCurrentAchievement() {
@@ -206,5 +236,218 @@ class AchievementDetailsView : Fragment() {
     private fun loadUncompletedFriends(uncompletedFriends: MutableList<UserProfile>) {
         Log.d("AchievementDetailsView", "Uncompleted friends $uncompletedFriends")
         uncompletedAdapter.setUncompletedFriends(uncompletedFriends)
+    }
+
+    private fun setUpCompleteAction() {
+        completeActionView.setOnClickListener {
+            showAddPhotoDialog()
+        }
+    }
+
+    private fun showAddPhotoDialog() {
+        val dialogAddPhoto = DialogAddPhoto()
+        dialogAddPhoto.show(childFragmentManager, "DialogAddPhoto")
+    }
+
+    override fun onOpenCamera() {
+        when {
+            requireContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+                startCameraActivity()
+            }
+
+            !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                showCameraPermissionRationale()
+            }
+
+            else -> {
+                requestSystemPermission()
+            }
+        }
+    }
+
+    private fun startCameraActivity() {
+        Log.d("AchievementDetailsView", "Open Camera Clicked")
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val photoFile = File(requireContext().cacheDir, "photo_${System.currentTimeMillis()}.jpg")
+        val authority = "${BuildConfig.APPLICATION_ID}.provider"
+        photoUri = FileProvider.getUriForFile(requireContext(), authority, photoFile)
+        if (takePictureIntent.resolveActivity(requireContext().packageManager) != null) {
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        } else {
+            Log.e("AchievementDetailsView", "No app available to open camera")
+        }
+    }
+
+
+    private fun showCameraPermissionRationale() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.dialog_camera_permission_title)
+            .setMessage(R.string.dialog_camera_permission_message)
+            .setPositiveButton("OK") { _, _ ->
+                requestSystemPermission()
+            }
+            .setNegativeButton("Deny") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private fun requestSystemPermission() {
+        requestPermissions(
+            arrayOf(Manifest.permission.CAMERA),
+            CAMERA_PERMISSION_REQUEST_CODE
+        )
+    }
+
+    override fun onChooseFromGallery() {
+        when {
+            isPermissionGranted() -> {
+                openGalleryPicker()
+            }
+
+            !shouldShowRequestPermissionRationale(Manifest.permission.READ_MEDIA_IMAGES) -> {
+                showGalleryPermissionRationale()
+            }
+
+            else -> {
+                requestGalleryPermission()
+            }
+        }
+    }
+
+    private fun isPermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireContext().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+        } else {
+            requireContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun openGalleryPicker() {
+        val pickPhotoIntent =
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(pickPhotoIntent, REQUEST_GALLERY_PICK)
+    }
+
+    private fun showGalleryPermissionRationale() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.dialog_gallery_permission_title)
+            .setMessage(R.string.dialog_gallery_permission_message)
+            .setPositiveButton("OK") { _, _ ->
+                requestGalleryPermission()
+            }
+            .setNegativeButton("Deny") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private fun requestGalleryPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(
+                arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                GALLERY_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            requestPermissions(
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                GALLERY_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            CAMERA_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startCameraActivity()
+                } else {
+                    Log.d("AchievementDetailsView", "Camera permission denied.")
+                }
+            }
+
+            GALLERY_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openGalleryPicker()
+                } else {
+                    Log.d("AchievementDetailsView", "Read media permission denied.")
+                }
+            }
+
+            else -> {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_IMAGE_CAPTURE -> {
+//                    val photoUri = data?.data
+                    Log.d("AchievementDetailsView", "imageUri: $photoUri")
+                    photoUri.let {
+                        Log.d("AchievementDetailsView", "imageUri not null: $photoUri")
+                        val photoFile = uriToFile(it)
+                        viewModel.setUpPhoto(userId, achievementId, photoFile)
+                    }
+                }
+
+                REQUEST_GALLERY_PICK -> {
+                    val imageUri = data?.data
+                    imageUri?.let {
+                        val imageFile = uriToFile(it)
+                        viewModel.setUpPhoto(userId, achievementId, imageFile)
+                    }
+                }
+            }
+        }
+        observePhotoUploading()
+    }
+
+    private fun uriToFile(uri: Uri): File {
+        val contentResolver = requireContext().applicationContext.contentResolver
+        val file = File(requireContext().cacheDir, "temp_${System.currentTimeMillis()}.tmp")
+        contentResolver.openInputStream(uri)?.use { inputStream ->
+            FileOutputStream(file).use { outputStream ->
+                copyStream(inputStream, outputStream)
+            }
+        }
+        return file
+    }
+
+    private fun observePhotoUploading() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewStateUpload.collect {
+                    Log.d("observeUploadingPhoto", "New view state: $it")
+                    when (it) {
+                        is AchievementDetailsViewState.Success -> {
+
+                            Log.d(
+                                "observeUploadingPhoto",
+                                "Success upload view state, data: ${it.data}"
+                            )
+                        }
+
+                        is AchievementDetailsViewState.Loading -> {
+                        }
+
+                        is AchievementDetailsViewState.Failure -> {
+                        }
+                    }
+                }
+            }
+        }
     }
 }

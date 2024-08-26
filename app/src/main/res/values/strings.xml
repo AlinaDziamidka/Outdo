@@ -97,4 +97,8 @@
     <string name="dialog_add_photo_choose_the_way">Choose the way</string>
     <string name="dialog_add_photo_choose_open_camera">Open camera</string>
     <string name="dialog_add_photo_choose_from_gallery">Choose from gallery</string>
+    <string name="dialog_camera_permission_title">"Outdo" requests access to camera</string>
+    <string name="dialog_camera_permission_message">For the app to work properly, grant Outdo permission to use the camera</string>
+    <string name="dialog_gallery_permission_title">"Outdo" requests access to gallery</string>
+    <string name="dialog_gallery_permission_message">For the app to work properly, grant Outdo permission to use the gallery</string>
 </resources>

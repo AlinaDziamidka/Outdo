@@ -59,16 +59,16 @@ class SplashView : AppCompatActivity(R.layout.activity_splash) {
     }
 
     private fun runWorker() {
-        val sharedPreferences =
-            applicationContext.getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
-        val userId = sharedPreferences.getString("current_user_id", "  ") ?: "  "
+        val sharedPreferences = getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("current_user_id", "") ?: ""
         Log.d("SplashView", userId)
         val inputData = workDataOf("USER_ID" to userId)
 
         val workRequest = OneTimeWorkRequestBuilder<InitialLoadWorker>()
             .setInputData(inputData)
             .build()
-        Log.d("SplashView", "Start WorkManager")
-        WorkManager.getInstance(applicationContext).enqueue(workRequest)
+
+        Log.d("SplashView", "Starting WorkManager")
+        WorkManager.getInstance(this).enqueue(workRequest)
     }
 }

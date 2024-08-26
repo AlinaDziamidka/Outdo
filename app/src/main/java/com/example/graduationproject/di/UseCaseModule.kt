@@ -11,6 +11,7 @@ import com.example.graduationproject.domain.repository.local.UserLocalRepository
 import com.example.graduationproject.domain.repository.local.UserNotificationsLocalRepository
 import com.example.graduationproject.domain.repository.remote.DeviceRegistrationRepository
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
+import com.example.graduationproject.domain.repository.remote.PhotoUploadRemoteRepository
 import com.example.graduationproject.domain.repository.remote.PushNotificationRepository
 import com.example.graduationproject.domain.repository.remote.SessionRepository
 import com.example.graduationproject.domain.repository.remote.UserAchievementRemoteRepository
@@ -36,6 +37,7 @@ import com.example.graduationproject.domain.usecase.FetchGroupNameUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupParticipantsUseCase
 import com.example.graduationproject.domain.usecase.FetchWeekChallengeUseCase
 import com.example.graduationproject.domain.usecase.NotificationUseCase
+import com.example.graduationproject.domain.usecase.PhotoUploadUseCase
 import com.example.graduationproject.domain.usecase.SetGroupParticipantsUseCase
 import com.example.graduationproject.domain.util.LoadManager
 import dagger.Module
@@ -248,4 +250,17 @@ object UseCaseModule {
             userLocalRepository
         )
     }
+
+    @Provides
+    @ViewModelScoped
+    fun providePhotoUploadUseCase(
+        photoUploadRemoteRepository: PhotoUploadRemoteRepository,
+        userAchievementRemoteRepository: UserAchievementRemoteRepository
+    ): PhotoUploadUseCase {
+        return PhotoUploadUseCase(
+            photoUploadRemoteRepository, userAchievementRemoteRepository
+        )
+    }
+
+
 }

@@ -2,6 +2,7 @@ package com.example.graduationproject.data.remote.repository
 
 import android.util.Log
 import com.example.graduationproject.data.remote.api.request.ChallengeAchievementRequest
+import com.example.graduationproject.data.remote.api.request.UpdatePhotoRequest
 import com.example.graduationproject.data.remote.api.request.UserAchievementRequest
 import com.example.graduationproject.data.remote.api.response.AchievementResponse
 import com.example.graduationproject.data.remote.api.service.AchievementApiService
@@ -22,6 +23,9 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
     private val userAchievementApiService: UserAchievementApiService
 ) :
     UserAchievementRemoteRepository {
+
+    private val userAchievementTransformer = UserAchievementTransformer()
+
     override suspend fun fetchUserAchievementByUserId(userIdQuery: String): Event<List<UserAchievement>> {
         val query = "userId=\'$userIdQuery\'"
         val event = doCall {
@@ -32,7 +36,6 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
             is Event.Success -> {
                 val response = event.data
                 val userAchievement = response.map { userAchievementResponse ->
-                    val userAchievementTransformer = UserAchievementTransformer()
                     userAchievementTransformer.fromResponse(userAchievementResponse)
                 }
                 Event.Success(userAchievement)
@@ -55,7 +58,6 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
             is Event.Success -> {
                 val response = event.data
                 val achievementUser = response.map { userAchievementResponse ->
-                    val userAchievementTransformer = UserAchievementTransformer()
                     userAchievementTransformer.fromResponse(userAchievementResponse)
                 }
                 Event.Success(achievementUser)
@@ -85,12 +87,43 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
         return when (event) {
             is Event.Success -> {
                 val response = event.data
-                val userAchievementTransformer = UserAchievementTransformer()
                 val userAchievement = userAchievementTransformer.fromResponse(response)
                 Event.Success(userAchievement)
             }
 
             is Event.Failure -> {
+                val error = event.exception
+                Event.Failure(error)
+            }
+        }
+    }
+
+    override suspend fun updatePhoto(
+        userIdQuery: String,
+        achievementIdQuery: String,
+        photoUrl: String
+    ): Event<Long> {
+
+        val query = "userId='$userIdQuery' AND achievementId='$achievementIdQuery'"
+
+        val event = doCall {
+            val request = UpdatePhotoRequest(photoUrl, AchievementStatus.COMPLETED.stringValue)
+            Log.d("UserAchievementRemoteRepository", "UpdatePhotoRequest: $request")
+            return@doCall userAchievementApiService.updatePhoto(
+                query,
+                request
+            )
+        }
+
+        return when (event) {
+            is Event.Success -> {
+                val response = event.data
+                Log.d("UserAchievementRemoteRepository", "Update photo success: $response")
+                Event.Success(response)
+            }
+
+            is Event.Failure -> {
+                Log.d("UserAchievementRemoteRepository", "Failed to update photo: ${event.exception}")
                 val error = event.exception
                 Event.Failure(error)
             }

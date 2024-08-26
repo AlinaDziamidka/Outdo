@@ -12,7 +12,8 @@ class UserAchievementTransformer {
             achievementId = model.achievementId,
             userId = model.userId,
             achievementStatus = AchievementStatus.valueOf(model.achievementStatus),
-            achievementType = AchievementType.valueOf(model.achievementType)
+            achievementType = AchievementType.valueOf(model.achievementType),
+            photoUrl = model.photoUrl
         )
     }
 
@@ -22,6 +23,7 @@ class UserAchievementTransformer {
             userId = userAchievement.userId,
             achievementStatus = userAchievement.achievementStatus.stringValue,
             achievementType = userAchievement.achievementType.stringValue,
+            photoUrl = userAchievement.photoUrl
         )
     }
 }

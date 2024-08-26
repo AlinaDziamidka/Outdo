@@ -187,5 +187,12 @@
         <argument
             android:name="achievementId"
             app:argType="string" />
+<!--        <action-->
+<!--            android:id="@+id/action_achievementDetailsView_to_dialogAddPhoto"-->
+<!--            app:destination="@id/dialogAddPhoto" />-->
     </fragment>
+<!--    <dialog-->
+<!--        android:id="@+id/dialogAddPhoto"-->
+<!--        android:name="com.example.graduationproject.presentation.achievementdetails.DialogAddPhoto"-->
+<!--        android:label="DialogAddPhoto"/>-->
 </navigation>

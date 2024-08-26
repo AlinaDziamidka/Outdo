@@ -23,4 +23,5 @@
     <color name="description_text_color">#CC2C2727</color>
     <color name="action_blue">#007AFF</color>
     <color name="green_stroke">#5BD323</color>
+    <color name="transparent">#00000000</color>
 </resources>

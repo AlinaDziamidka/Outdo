@@ -10,5 +10,7 @@ data class UserAchievementResponse(
     @SerializedName("status")
     val achievementStatus: String,
     @SerializedName("achievementType")
-    val achievementType: String
+    val achievementType: String,
+    @SerializedName("photo")
+    val photoUrl: String?,
 )

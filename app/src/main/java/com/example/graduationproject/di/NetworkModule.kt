@@ -11,6 +11,7 @@ import com.example.graduationproject.data.remote.api.service.DeviceRegistrationA
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.api.service.GroupChallengeApiService
 import com.example.graduationproject.data.remote.api.service.PushNotificationApiService
+import com.example.graduationproject.data.remote.api.service.UploadPhotoApiService
 import com.example.graduationproject.data.remote.api.service.UserAchievementApiService
 import com.example.graduationproject.data.remote.api.service.UserGroupApiService
 import com.example.graduationproject.data.remote.api.service.UserApiService
@@ -110,4 +111,8 @@ object NetworkModule {
     @Provides
     fun provideUserNotificationApiService(retrofit: Retrofit): UserNotificationsApiService =
         retrofit.create(UserNotificationsApiService::class.java)
+
+    @Provides
+    fun provideUploadPhotoApiService(retrofit: Retrofit): UploadPhotoApiService =
+        retrofit.create(UploadPhotoApiService::class.java)
 }

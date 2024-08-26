@@ -12,7 +12,8 @@ class UserAchievementTransformer {
             achievementId = response.achievementId,
             userId = response.userId,
             achievementStatus = AchievementStatus.valueOf(response.achievementStatus),
-            achievementType = AchievementType.valueOf(response.achievementType)
+            achievementType = AchievementType.valueOf(response.achievementType),
+            photoUrl = response.photoUrl
         )
     }
 }

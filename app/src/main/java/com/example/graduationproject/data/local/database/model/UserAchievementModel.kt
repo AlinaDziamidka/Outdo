@@ -12,5 +12,7 @@ data class UserAchievementModel(
     @ColumnInfo("achievement_status")
     val achievementStatus: String,
     @ColumnInfo("achievement_type")
-    val achievementType: String
+    val achievementType: String,
+    @ColumnInfo("photo")
+    val photoUrl: String?
 )
