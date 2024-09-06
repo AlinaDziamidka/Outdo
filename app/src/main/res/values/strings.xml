@@ -101,4 +101,5 @@
     <string name="dialog_camera_permission_message">For the app to work properly, grant Outdo permission to use the camera</string>
     <string name="dialog_gallery_permission_title">"Outdo" requests access to gallery</string>
     <string name="dialog_gallery_permission_message">For the app to work properly, grant Outdo permission to use the gallery</string>
+    <string name="photo_preview_close_action">Close</string>
 </resources>

@@ -255,10 +255,11 @@ object UseCaseModule {
     @ViewModelScoped
     fun providePhotoUploadUseCase(
         photoUploadRemoteRepository: PhotoUploadRemoteRepository,
-        userAchievementRemoteRepository: UserAchievementRemoteRepository
+        userAchievementRemoteRepository: UserAchievementRemoteRepository,
+        userAchievementLocalRepository: UserAchievementLocalRepository
     ): PhotoUploadUseCase {
         return PhotoUploadUseCase(
-            photoUploadRemoteRepository, userAchievementRemoteRepository
+            photoUploadRemoteRepository, userAchievementRemoteRepository, userAchievementLocalRepository
         )
     }
 

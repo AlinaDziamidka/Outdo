@@ -1,26 +1,36 @@
 package com.example.graduationproject.domain.usecase
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.UserAchievement
+import com.example.graduationproject.domain.repository.local.UserAchievementLocalRepository
 import com.example.graduationproject.domain.repository.remote.PhotoUploadRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserAchievementRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
+import com.example.graduationproject.domain.util.writeToLocalDatabase
+import com.google.android.gms.common.util.IOUtils.copyStream
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 class PhotoUploadUseCase @Inject constructor(
     private val photoUploadRemoteRepository: PhotoUploadRemoteRepository,
-    private val userAchievementRemoteRepository: UserAchievementRemoteRepository
+    private val userAchievementRemoteRepository: UserAchievementRemoteRepository,
+    private val userAchievementLocalRepository: UserAchievementLocalRepository
 ) : UseCase<PhotoUploadUseCase.Params, String> {
 
     data class Params(
         val userId: String,
         val achievementId: String,
-        val photo: File
+        val photo: File,
     )
 
     override suspend fun invoke(params: Params): Flow<String> =
@@ -36,22 +46,15 @@ class PhotoUploadUseCase @Inject constructor(
                     Log.d("PhotoUploadUseCase", "Upload photo url $url")
                     val updatePhotoEvent = updateUserAchievementPhoto(userId, achievementId, url)
                     if (updatePhotoEvent is Event.Success) {
-//                    withContext(Dispatchers.IO) {
-//                        writeToLocalDatabase(challengeLocalRepository::insertOne, challenge)
-//                    }
-//                    val insertedGroupChallengeEvent = insertGroupChallenge(groupId, challenge)
-//                    if (insertedGroupChallengeEvent is Event.Success) {
-//                        achievements.forEach { achievement ->
-//                            insertAchievement(challenge, friends, achievement)
-//                        }
+                        withContext(Dispatchers.IO) {
+                            userAchievementLocalRepository.updatePhoto(
+                                photo.toString(),
+                                achievementId,
+                                userId
+                            )
+                        }
                         emit(url)
                     } else {
-//                        Log.e(
-//                            "CreateGroupUseCase",
-//                            "Failed to insert challenge: ${insertedGroupChallengeEvent}"
-//                        )
-//                        throw Exception(insertedGroupChallengeEvent.toString())
-//                    }
                         Log.e(
                             "PhotoUploadUseCase",
                             "Failed2 to insert photo to userAchievement: ${updatePhotoEvent.toString()}"

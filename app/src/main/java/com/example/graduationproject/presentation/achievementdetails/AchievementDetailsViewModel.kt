@@ -1,6 +1,8 @@
 package com.example.graduationproject.presentation.achievementdetails
 
 import android.app.Application
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope

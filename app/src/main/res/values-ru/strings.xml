@@ -103,4 +103,5 @@
     <string name="dialog_camera_permission_message">Для правильной работы приложения предоставьте Outdo разрешение на использование камеры</string>
     <string name="dialog_gallery_permission_title">Приложение "Outdo" запрашивает доступ к галерее</string>
     <string name="dialog_gallery_permission_message">Для правильной работы приложения предоставьте Outdo доступ к галерее</string>
+    <string name="photo_preview_close_action">Закрыть</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.graduationproject.data.local.repository
 
 import com.example.graduationproject.data.local.database.dao.UserAchievementDao
 import com.example.graduationproject.data.local.transformer.UserAchievementTransformer
+import com.example.graduationproject.domain.entity.AchievementStatus
 import com.example.graduationproject.domain.entity.UserAchievement
 import com.example.graduationproject.domain.repository.local.UserAchievementLocalRepository
 import javax.inject.Inject
@@ -46,4 +47,12 @@ class UserAchievementLocalRepositoryImpl @Inject constructor(private val userAch
         val model = userAchievementTransformer.toModel(userAchievement)
         return userAchievementDao.updateOne(model)
     }
+
+    override suspend fun updatePhoto(photoUrl: String?, achievementId: String, userId: String) =
+        userAchievementDao.updatePhoto(
+            AchievementStatus.COMPLETED.stringValue,
+            photoUrl,
+            achievementId,
+            userId
+        )
 }

@@ -25,6 +25,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.FragmentAchievementDetailsBinding
 import com.example.graduationproject.domain.entity.Achievement
@@ -37,6 +40,10 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import com.example.graduationproject.BuildConfig
+import com.example.graduationproject.presentation.photoview.PhotoView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 @AndroidEntryPoint
@@ -75,9 +82,7 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
         _binding = FragmentAchievementDetailsBinding.inflate(inflater, container, false)
@@ -128,8 +133,7 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                             setAchievementName(currentAchievement)
                             setAchievementDescription(currentAchievement)
                             Log.d(
-                                "observeCurrentAchievement",
-                                "Success view state, data: ${it.data}"
+                                "observeCurrentAchievement", "Success view state, data: ${it.data}"
                             )
                         }
 
@@ -217,8 +221,7 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                         is AchievementDetailsViewState.Success -> {
                             loadUncompletedFriends(it.data)
                             Log.d(
-                                "observeUncompletedFriends",
-                                "Success view state, data: ${it.data}"
+                                "observeUncompletedFriends", "Success view state, data: ${it.data}"
                             )
                         }
 
@@ -281,23 +284,17 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
 
 
     private fun showCameraPermissionRationale() {
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.dialog_camera_permission_title)
-            .setMessage(R.string.dialog_camera_permission_message)
-            .setPositiveButton("OK") { _, _ ->
+        AlertDialog.Builder(requireContext()).setTitle(R.string.dialog_camera_permission_title)
+            .setMessage(R.string.dialog_camera_permission_message).setPositiveButton("OK") { _, _ ->
                 requestSystemPermission()
-            }
-            .setNegativeButton("Deny") { dialog, _ ->
+            }.setNegativeButton("Deny") { dialog, _ ->
                 dialog.dismiss()
-            }
-            .create()
-            .show()
+            }.create().show()
     }
 
     private fun requestSystemPermission() {
         requestPermissions(
-            arrayOf(Manifest.permission.CAMERA),
-            CAMERA_PERMISSION_REQUEST_CODE
+            arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE
         )
     }
 
@@ -332,37 +329,29 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
     }
 
     private fun showGalleryPermissionRationale() {
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.dialog_gallery_permission_title)
+        AlertDialog.Builder(requireContext()).setTitle(R.string.dialog_gallery_permission_title)
             .setMessage(R.string.dialog_gallery_permission_message)
             .setPositiveButton("OK") { _, _ ->
                 requestGalleryPermission()
-            }
-            .setNegativeButton("Deny") { dialog, _ ->
+            }.setNegativeButton("Deny") { dialog, _ ->
                 dialog.dismiss()
-            }
-            .create()
-            .show()
+            }.create().show()
     }
 
     private fun requestGalleryPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissions(
-                arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
-                GALLERY_PERMISSION_REQUEST_CODE
+                arrayOf(Manifest.permission.READ_MEDIA_IMAGES), GALLERY_PERMISSION_REQUEST_CODE
             )
         } else {
             requestPermissions(
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                GALLERY_PERMISSION_REQUEST_CODE
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), GALLERY_PERMISSION_REQUEST_CODE
             )
         }
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -392,30 +381,45 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == AppCompatActivity.RESULT_OK) {
-            when (requestCode) {
-                REQUEST_IMAGE_CAPTURE -> {
-//                    val photoUri = data?.data
-                    Log.d("AchievementDetailsView", "imageUri: $photoUri")
-                    photoUri.let {
-                        Log.d("AchievementDetailsView", "imageUri not null: $photoUri")
-                        val photoFile = uriToFile(it)
-                        viewModel.setUpPhoto(userId, achievementId, photoFile)
-                    }
-                }
+            lifecycleScope.launch {
+                try {
+                    when (requestCode) {
+                        REQUEST_IMAGE_CAPTURE -> {
+                            Log.d("AchievementDetailsView", "imageUri: $photoUri")
+                            photoUri.let {
+                                Log.d("AchievementDetailsView", "imageUri: $photoUri")
+                                Log.d(
+                                    "AchievementDetailsView", "imageUri not null: $photoUri"
+                                )
+                                val photoFile = uriToFile(it)
+                                Log.d(
+                                    "AchievementDetailsView",
+                                    "Photo file created: ${photoFile.absolutePath}"
+                                )
+                                showPhotoView(photoUri.toString())
+                                viewModel.setUpPhoto(userId, achievementId, photoFile)
+                            }
+                        }
 
-                REQUEST_GALLERY_PICK -> {
-                    val imageUri = data?.data
-                    imageUri?.let {
-                        val imageFile = uriToFile(it)
-                        viewModel.setUpPhoto(userId, achievementId, imageFile)
+                        REQUEST_GALLERY_PICK -> {
+                            val imageUri = data?.data
+                            imageUri?.let {
+                                val imageFile = uriToFile(it)
+                                showPhotoView(imageFile.toString())
+                                viewModel.setUpPhoto(userId, achievementId, imageFile)
+                            }
+                        }
                     }
+                } catch (e: Exception) {
+                    Log.e("AchievementDetailsView", "Error converting URI to file", e)
                 }
             }
         }
         observePhotoUploading()
     }
 
-    private fun uriToFile(uri: Uri): File {
+
+    private suspend fun uriToFile(uri: Uri): File = withContext(Dispatchers.IO) {
         val contentResolver = requireContext().applicationContext.contentResolver
         val file = File(requireContext().cacheDir, "temp_${System.currentTimeMillis()}.tmp")
         contentResolver.openInputStream(uri)?.use { inputStream ->
@@ -423,7 +427,18 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                 copyStream(inputStream, outputStream)
             }
         }
-        return file
+        file
+    }
+
+    private fun preloadImage(photoUrl: String, onSuccess: () -> Unit) {
+        val imageLoader = ImageLoader(requireContext())
+        val request = ImageRequest.Builder(requireContext()).data(photoUrl)
+            .memoryCachePolicy(CachePolicy.ENABLED).target(onSuccess = { drawable ->
+                onSuccess()
+            }, onError = {
+
+            }).build()
+        imageLoader.enqueue(request)
     }
 
     private fun observePhotoUploading() {
@@ -433,7 +448,6 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                     Log.d("observeUploadingPhoto", "New view state: $it")
                     when (it) {
                         is AchievementDetailsViewState.Success -> {
-
                             Log.d(
                                 "observeUploadingPhoto",
                                 "Success upload view state, data: ${it.data}"
@@ -441,13 +455,54 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                         }
 
                         is AchievementDetailsViewState.Loading -> {
+//                            showPhotoView(photoUri.toString())
+                            Log.d("observeUploadingPhoto", "Loading upload view state")
                         }
 
                         is AchievementDetailsViewState.Failure -> {
+                            Log.e("observeUploadingPhoto", "Failure upload view state")
+                            delay(1900)
+                            showErrorUploadingPhoto()
                         }
                     }
                 }
             }
         }
     }
+
+//    private fun showPhotoView(photoUrl: String) {
+//        val photoViewDialog = PhotoView()
+//        photoViewDialog.setPhotoUrl(photoUrl)
+//        photoViewDialog.show(childFragmentManager, "PhotoDialog")
+////        photoViewDialog.getPhotoUrl(photoUrl)
+//    }
+
+    private fun showPhotoView(photoUrl: String) {
+        val existingDialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
+        existingDialog?.let {
+            if (it.isAdded) {
+                it.dismissAllowingStateLoss()
+            }
+        }
+
+        preloadImage(photoUrl) {
+            val transaction = childFragmentManager.beginTransaction()
+            val photoViewDialog = PhotoView.newInstance(photoUrl)
+
+            transaction.add(photoViewDialog, "PhotoDialog")
+            transaction.commitNow()
+        }
+    }
+
+    private fun showErrorUploadingPhoto() {
+        Log.d("AchievementDetailsView", "Attempting to show error photo")
+        val dialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
+        dialog?.errorUploadingPhoto()
+    }
+//        val photoViewDialog = PhotoView()
+//        photoViewDialog.show(childFragmentManager, "PhotoDialog")
+//    private fun updatePhotoView(uploadedUrl: String) {
+//        val dialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
+//        dialog?.updatePhotoUrl(uploadedUrl)
+//    }
 }

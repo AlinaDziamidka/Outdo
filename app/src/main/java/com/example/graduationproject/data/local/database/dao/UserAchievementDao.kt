@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.graduationproject.data.local.database.model.UserAchievementModel
+import com.example.graduationproject.domain.entity.AchievementStatus
 
 @Dao
 interface UserAchievementDao {
@@ -28,4 +29,12 @@ interface UserAchievementDao {
 
     @Update
     fun updateOne(userAchievementModel: UserAchievementModel)
+
+    @Query("UPDATE user_achievements SET achievement_status = :achievementStatus, photo = :photoUrl WHERE achievement_id = :achievementId AND user_id = :userId")
+    fun updatePhoto(
+        achievementStatus: String,
+        photoUrl: String?,
+        achievementId: String,
+        userId: String
+    )
 }

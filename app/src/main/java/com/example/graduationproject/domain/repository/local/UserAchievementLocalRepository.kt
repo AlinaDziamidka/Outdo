@@ -1,5 +1,4 @@
 package com.example.graduationproject.domain.repository.local
-
 import com.example.graduationproject.domain.entity.UserAchievement
 
 interface UserAchievementLocalRepository {
@@ -15,4 +14,6 @@ interface UserAchievementLocalRepository {
     suspend fun deleteOne(userAchievement: UserAchievement)
 
     suspend fun updateOne(userAchievement: UserAchievement)
+
+    suspend fun updatePhoto(photoUrl: String?, achievementId: String, userId: String)
 }
