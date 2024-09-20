@@ -14,6 +14,11 @@ interface UserAchievementRemoteRepository {
 
     suspend fun fetchUsersByAchievementId(achievementIdQuery: String): Event<List<UserAchievement>>
 
+    suspend fun fetchByUserIdAndAchievementId(
+        achievementIdQuery: String,
+        userIdQuery: String
+    ): Event<UserAchievement>
+
     suspend fun insertUserAchievements(
         userId: String,
         achievementId: String

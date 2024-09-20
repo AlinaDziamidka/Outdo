@@ -5,6 +5,7 @@ import com.example.graduationproject.data.remote.api.request.ChallengeAchievemen
 import com.example.graduationproject.data.remote.api.request.UpdatePhotoRequest
 import com.example.graduationproject.data.remote.api.request.UserAchievementRequest
 import com.example.graduationproject.data.remote.api.response.AchievementResponse
+import com.example.graduationproject.data.remote.api.response.UserAchievementResponse
 import com.example.graduationproject.data.remote.api.service.AchievementApiService
 import com.example.graduationproject.data.remote.api.service.UserAchievementApiService
 import com.example.graduationproject.data.remote.transormer.AchievementTransformer
@@ -70,6 +71,36 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun fetchByUserIdAndAchievementId(
+        achievementIdQuery: String,
+        userIdQuery: String
+    ): Event<UserAchievement> {
+
+        val query = "userId='$userIdQuery' AND achievementId='$achievementIdQuery'"
+
+        val event = doCall {
+            return@doCall userAchievementApiService.fetchByUserIdAndAchievementId(query)
+        }
+
+        return when (event) {
+            is Event.Success -> {
+                val response = event.data.first()
+                val userAchievement = userAchievementTransformer.fromResponse(response)
+                Log.d("UserAchievementRemoteRepository", "Fetch user achievement: $response")
+                Event.Success(userAchievement)
+            }
+
+            is Event.Failure -> {
+                Log.d(
+                    "UserAchievementRemoteRepository",
+                    "Failed to fetch user achievement: ${event.exception}"
+                )
+                val error = event.exception
+                Event.Failure(error)
+            }
+        }
+    }
+
     override suspend fun insertUserAchievements(
         userId: String,
         achievementId: String
@@ -123,7 +154,10 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
             }
 
             is Event.Failure -> {
-                Log.d("UserAchievementRemoteRepository", "Failed to update photo: ${event.exception}")
+                Log.d(
+                    "UserAchievementRemoteRepository",
+                    "Failed to update photo: ${event.exception}"
+                )
                 val error = event.exception
                 Event.Failure(error)
             }

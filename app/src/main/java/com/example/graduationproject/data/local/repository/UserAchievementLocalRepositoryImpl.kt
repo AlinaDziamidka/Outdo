@@ -1,5 +1,6 @@
 package com.example.graduationproject.data.local.repository
 
+import android.util.Log
 import com.example.graduationproject.data.local.database.dao.UserAchievementDao
 import com.example.graduationproject.data.local.transformer.UserAchievementTransformer
 import com.example.graduationproject.domain.entity.AchievementStatus
@@ -31,6 +32,15 @@ class UserAchievementLocalRepositoryImpl @Inject constructor(private val userAch
         return models.map {
             userAchievementTransformer.fromModel(it)
         }
+    }
+
+    override suspend fun fetchByUserIdAndAchievementId(
+        achievementId: String,
+        userId: String
+    ): UserAchievement? {
+        val model = userAchievementDao.fetchByUserIdAndAchievementId(achievementId, userId)
+        Log.d("UserAchievementLocalRepository", "model: $model")
+        return model?.let { userAchievementTransformer.fromModel(it)}
     }
 
     override suspend fun insertOne(userAchievement: UserAchievement) {

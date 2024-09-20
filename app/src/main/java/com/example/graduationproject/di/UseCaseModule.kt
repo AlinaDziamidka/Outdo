@@ -31,6 +31,7 @@ import com.example.graduationproject.domain.usecase.SignUpUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupsUseCase
 import com.example.graduationproject.domain.usecase.FetchDailyAchievementUseCase
+import com.example.graduationproject.domain.usecase.FetchFriendPhotoUseCase
 import com.example.graduationproject.domain.usecase.FetchFriendsUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupNameUseCase
@@ -259,7 +260,20 @@ object UseCaseModule {
         userAchievementLocalRepository: UserAchievementLocalRepository
     ): PhotoUploadUseCase {
         return PhotoUploadUseCase(
-            photoUploadRemoteRepository, userAchievementRemoteRepository, userAchievementLocalRepository
+            photoUploadRemoteRepository,
+            userAchievementRemoteRepository,
+            userAchievementLocalRepository
+        )
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideFetchFriendPhotoUseCase(
+        userAchievementRemoteRepository: UserAchievementRemoteRepository,
+        userAchievementLocalRepository: UserAchievementLocalRepository
+    ): FetchFriendPhotoUseCase {
+        return FetchFriendPhotoUseCase(
+            userAchievementRemoteRepository, userAchievementLocalRepository
         )
     }
 

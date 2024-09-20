@@ -8,6 +8,7 @@
         <clip-path
             android:pathData="M0,0h122v97h-122z"/>
         <path
+            android:fillColor="@color/shimmerColor"
             android:pathData="M99.5,99.5m-99.5,0a99.5,99.5 0,1 1,199 0a99.5,99.5 0,1 1,-199 0" />
     </group>
 </vector>

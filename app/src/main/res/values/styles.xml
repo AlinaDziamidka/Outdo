@@ -170,4 +170,10 @@
         <item name="colorAccent">@color/color_primary</item>
     </style>
 
+    <style name="error_card_update">
+        <item name="fontFamily">@font/gilroy_semibold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/blue_error_color</item>
+    </style>
+
 </resources>

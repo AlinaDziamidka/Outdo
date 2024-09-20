@@ -21,6 +21,9 @@ interface UserAchievementDao {
     @Query("SELECT * FROM user_achievements WHERE  achievement_id = :achievementId")
     fun fetchUsersByAchievementId(achievementId: String): List<UserAchievementModel>
 
+    @Query("SELECT * FROM user_achievements WHERE  achievement_id = :achievementId AND user_id = :userId")
+    fun fetchByUserIdAndAchievementId(achievementId: String, userId: String): UserAchievementModel?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOne(userAchievementModel: UserAchievementModel)
 

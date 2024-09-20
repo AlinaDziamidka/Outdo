@@ -102,4 +102,7 @@
     <string name="dialog_gallery_permission_title">"Outdo" requests access to gallery</string>
     <string name="dialog_gallery_permission_message">For the app to work properly, grant Outdo permission to use the gallery</string>
     <string name="photo_preview_close_action">Close</string>
+    <string name="error_card_header">Error</string>
+    <string name="error_card_went_wrong">Something went wrong, please try again later</string>
+    <string name="error_card_update">Update</string>
 </resources>

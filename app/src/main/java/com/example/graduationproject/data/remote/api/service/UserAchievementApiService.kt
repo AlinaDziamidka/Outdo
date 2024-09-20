@@ -20,6 +20,9 @@ interface UserAchievementApiService {
     @GET("data/userAchievements")
     suspend fun fetchUsersByAchievementId(@Query("where") achievementIdQuery: String): Response<List<UserAchievementResponse>>
 
+    @GET("data/userAchievements")
+    suspend fun fetchByUserIdAndAchievementId(@Query("where") query: String): Response<List<UserAchievementResponse>>
+
     @POST("data/userAchievements")
     suspend fun insertUserAchievements(@Body request: UserAchievementRequest): Response<UserAchievementResponse>
 

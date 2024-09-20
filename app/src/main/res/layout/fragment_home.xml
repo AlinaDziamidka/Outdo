@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollViewContainer"
     android:layout_width="match_parent"
@@ -10,8 +11,8 @@
         android:id="@+id/homeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="70dp">
+        android:layout_marginBottom="70dp"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/welcomeContainer"
@@ -77,19 +78,31 @@
                 android:text="@string/home_show_all_action" />
         </RelativeLayout>
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:shimmer_duration="1000">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/challenge_card_shimmer" />
+
+                <include layout="@layout/challenge_card_shimmer" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/challengeRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             tools:listitem="@layout/challenge_card" />
-
-        <ProgressBar
-            android:id="@+id/progressView"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="center"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/dailyAchievementView"
@@ -101,8 +114,19 @@
             android:layout_marginBottom="8dp"
             android:text="@string/home_daily_achievement_title" />
 
-        <include android:id="@+id/dailyAchievementContainer"
-            layout="@layout/daily_achievement_card" />
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/dailyShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_duration="1000">
+
+            <include layout="@layout/daily_achievement_card_shimmer" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <include
+            android:id="@+id/dailyAchievementContainer"
+            layout="@layout/daily_achievement_card"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/weeklyChallengeView"
@@ -114,8 +138,19 @@
             android:layout_marginBottom="8dp"
             android:text="@string/home_weekly_challenge_title" />
 
-        <include android:id="@+id/weekChallengeContainer"
-            layout="@layout/weekly_challenge_card" />
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/weekShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_duration="1000">
+
+            <include layout="@layout/daily_achievement_card_shimmer" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <include
+            android:id="@+id/weekChallengeContainer"
+            layout="@layout/weekly_challenge_card"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>

@@ -43,12 +43,14 @@ class PhotoView : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
+        Log.d("PhotoView", "onCreateView called")
         _binding = PhotoPreviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+            retainInstance = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -109,7 +111,7 @@ class PhotoView : DialogFragment() {
 
     private fun setUpCloseAction() {
         closeAction.setOnClickListener {
-            dismiss()
+            dismissAllowingStateLoss()
         }
     }
 
@@ -117,6 +119,17 @@ class PhotoView : DialogFragment() {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         return dialog
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("PhotoView", "onDestroyView called")
+        _binding = null  // Clear the binding reference
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("PhotoView", "onDestroy called")
     }
 
 }

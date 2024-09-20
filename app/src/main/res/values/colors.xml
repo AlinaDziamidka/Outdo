@@ -24,4 +24,6 @@
     <color name="action_blue">#007AFF</color>
     <color name="green_stroke">#5BD323</color>
     <color name="transparent">#00000000</color>
+    <color name="shimmerColor">#C2C2C2</color>
+    <color name="blue_error_color">#6499FF</color>
 </resources>

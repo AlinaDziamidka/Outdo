@@ -42,6 +42,7 @@ import java.io.FileOutputStream
 import com.example.graduationproject.BuildConfig
 import com.example.graduationproject.presentation.photoview.PhotoView
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
@@ -167,9 +168,94 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         completedView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         completedAdapter = CompletedAdapter(mutableListOf()) { completedFriend ->
+            setUpFriendsDetailsAction(completedFriend.userId)
         }
         completedView.adapter = completedAdapter
     }
+
+    private fun setUpFriendsDetailsAction(friendId: String) {
+        lifecycleScope.launch {
+            // Start fetching the photo data
+            viewModel.getPhoto(friendId, achievementId)
+
+            // Collect the viewStateDownload flow
+            viewModel.viewStateDownload.collect { viewState ->
+                when (viewState) {
+
+                    is AchievementDetailsViewState.Success -> {
+                        // Handle success state
+                        Log.d(
+                            "observeFriendPhotoAchievement",
+                            "Success view state, data: ${viewState.data}"
+                        )
+                        showPhotoView(viewState.data)  // Pass the photo URL or data to another method
+
+                        cancel()
+                    }
+
+                    is AchievementDetailsViewState.Loading -> {
+                        // Handle loading state if necessary (e.g., show a loading spinner)
+                        Log.d("observeFriendPhotoAchievement", "Loading")
+                    }
+
+                    is AchievementDetailsViewState.Failure -> {
+                        // Handle failure state
+                        Log.e(
+                            "observeFriendPhotoAchievement",
+                            "Failure view state: ${viewState.message}"
+                        )
+                        showErrorUploadingPhoto()
+                        cancel()
+                    }
+                }
+            }
+        }
+    }
+//    }
+
+//                    // Handle the success case
+//                    if (result is AchievementDetailsViewState.Success) {
+//                        showPhotoView(result.data)
+//                    } else if (result is AchievementDetailsViewState.Failure) {
+//                        showErrorUploadingPhoto()
+//                    }
+//
+//                } catch (e: Exception) {
+//                    // Handle any exceptions or errors
+//                    showErrorUploadingPhoto()
+//                }
+//            }
+//        }
+
+
+//
+//        viewModel.getPhoto(friendId, achievementId)
+//        observeFriendPhotoAchievement()
+//    }
+
+//    private fun observeFriendPhotoAchievement() {
+//        lifecycleScope.launch {
+//                viewModel.viewStateDownload.collect {
+//                    Log.d("observeFriendPhotoAchievement", "New view state: $it")
+//                    when (it) {
+//                        is AchievementDetailsViewState.Success -> {
+//                            Log.d(
+//                                "observeFriendPhotoAchievement",
+//                                "Success view state, data: ${it.data}"
+//                            )
+//                            showPhotoView(it.data)
+//                        }
+//
+//                        is AchievementDetailsViewState.Loading -> {
+//                        }
+//
+//                        is AchievementDetailsViewState.Failure -> {
+//                            showErrorUploadingPhoto()
+//                        }
+//                }
+//            }
+//        }
+//    }
 
     private fun initUncompletedAdapter() {
         uncompletedView.layoutManager =
@@ -452,11 +538,13 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                                 "observeUploadingPhoto",
                                 "Success upload view state, data: ${it.data}"
                             )
+                            cancel()
                         }
 
                         is AchievementDetailsViewState.Loading -> {
 //                            showPhotoView(photoUri.toString())
                             Log.d("observeUploadingPhoto", "Loading upload view state")
+                            cancel()
                         }
 
                         is AchievementDetailsViewState.Failure -> {
@@ -478,12 +566,25 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
 //    }
 
     private fun showPhotoView(photoUrl: String) {
-        val existingDialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
-        existingDialog?.let {
-            if (it.isAdded) {
-                it.dismissAllowingStateLoss()
-            }
-        }
+//        val existingDialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
+//        existingDialog?.let {
+//            if (it.isAdded) {
+//                it.dismissAllowingStateLoss()
+//            }
+//        }
+//
+//
+//        val previousDialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
+//
+//
+//
+//        if (previousDialog != null) {
+//            if (previousDialog.isAdded) {
+//                Log.d("PhotoView", "Dialog already added")
+//            }
+//            childFragmentManager.beginTransaction().remove(previousDialog).commitAllowingStateLoss()
+//        }
+
 
         preloadImage(photoUrl) {
             val transaction = childFragmentManager.beginTransaction()
@@ -492,6 +593,13 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
             transaction.add(photoViewDialog, "PhotoDialog")
             transaction.commitNow()
         }
+
+
+//        Log.d("FragmentManager", "BackStackEntryCount: ${childFragmentManager.backStackEntryCount}")
+//        for (i in 0 until childFragmentManager.backStackEntryCount) {
+//            val entry = childFragmentManager.getBackStackEntryAt(i)
+//            Log.d("FragmentManager", "BackStackEntry: ${entry.name}")
+//        }
     }
 
     private fun showErrorUploadingPhoto() {

@@ -11,6 +11,7 @@ import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.usecase.FetchAchievementDescriptionUseCase
 import com.example.graduationproject.domain.usecase.FetchChallengeDescriptionUseCase
 import com.example.graduationproject.domain.usecase.FetchCompletedFriendsUseCase
+import com.example.graduationproject.domain.usecase.FetchFriendPhotoUseCase
 import com.example.graduationproject.domain.usecase.FetchUncompletedFriendsUseCase
 import com.example.graduationproject.domain.usecase.PhotoUploadUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +30,8 @@ class AchievementDetailsViewModel @Inject constructor(
     private val fetchAchievementDescriptionUseCase: FetchAchievementDescriptionUseCase,
     private val fetchCompletedFriendsUseCase: FetchCompletedFriendsUseCase,
     private val fetchUncompletedFriendsUseCase: FetchUncompletedFriendsUseCase,
-    private val photoUploadUseCase: PhotoUploadUseCase
+    private val photoUploadUseCase: PhotoUploadUseCase,
+    private val fetchFriendPhotoUseCase: FetchFriendPhotoUseCase
 ) : AndroidViewModel(context) {
 
     private val _viewStateCurrentAchievement =
@@ -43,6 +45,11 @@ class AchievementDetailsViewModel @Inject constructor(
         AchievementDetailsViewState.Loading
     )
     val viewStateUpload: StateFlow<AchievementDetailsViewState<String>> = _viewStateUpload
+
+    private val _viewStateDownload = MutableStateFlow<AchievementDetailsViewState<String>>(
+        AchievementDetailsViewState.Loading
+    )
+    val viewStateDownload: StateFlow<AchievementDetailsViewState<String>> = _viewStateDownload
 
     private val _viewStateCompletedFriends =
         MutableStateFlow<AchievementDetailsViewState<MutableList<UserProfile>>>(
@@ -138,4 +145,48 @@ class AchievementDetailsViewModel @Inject constructor(
             }
         }
     }
+
+    fun getPhoto(userId: String, achievementId: String) {
+        viewModelScope.launch {
+            fetchFriendPhotoUseCase(
+                FetchFriendPhotoUseCase.Params(userId, achievementId)
+            ).onStart {
+                _viewStateDownload.value = AchievementDetailsViewState.Loading
+            }.catch {
+                Log.e(
+                    "AchievementDetailsViewModel",
+                    "Fetching friend photo: Error - ${it.message}"
+                )
+                _viewStateDownload.value =
+                    AchievementDetailsViewState.Failure(it.message ?: "Something went wrong.")
+            }.collect {
+                Log.d("AchievementDetailsViewModel", "Fetch friend photo: Success")
+                _viewStateDownload.value = AchievementDetailsViewState.Success(it)
+            }
+        }
+    }
 }
+
+//        return try {
+//            // Start loading state
+//            _viewStateDownload.value = AchievementDetailsViewState.Loading
+//
+//            // Fetch data using the use case
+//            val photoData = fetchFriendPhotoUseCase(
+//                FetchFriendPhotoUseCase.Params(userId, achievementId)
+//            )  // Use `first()` to get the result of the flow
+//
+//            // On success, return Success state
+//            AchievementDetailsViewState.Success(photoData)
+//        } catch (e: Exception) {
+//            Log.e(
+//                "AchievementDetailsViewModel",
+//                "Fetching friend photo: Error - ${e.message}"
+//            )
+//            // On failure, return Failure state
+//            AchievementDetailsViewState.Failure(e.message ?: "Something went wrong.")
+//        }
+//    }
+//
+//    }
+//}

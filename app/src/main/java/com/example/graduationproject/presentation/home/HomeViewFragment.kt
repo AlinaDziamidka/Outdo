@@ -3,6 +3,7 @@ package com.example.graduationproject.presentation.home
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -28,7 +30,10 @@ import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.home.adapter.ChallengesAdapter
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -40,7 +45,7 @@ class HomeViewFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: ChallengesAdapter
     private lateinit var challengeView: RecyclerView
-    private lateinit var progressView: ProgressBar
+
     private lateinit var currentChallengeView: TextView
     private lateinit var showAllChallengesView: TextView
     private lateinit var userName: TextView
@@ -50,6 +55,10 @@ class HomeViewFragment : Fragment() {
     private lateinit var dailyAchievementView: DailyView
     private lateinit var notificationView: ImageView
     private lateinit var notificationCountView: TextView
+    private lateinit var shimmerLayout: ShimmerFrameLayout
+    private lateinit var dailyShimmerLayout: ShimmerFrameLayout
+    private lateinit var weekShimmerLayout: ShimmerFrameLayout
+    private lateinit var weekChallengeContainer: CardView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -89,7 +98,6 @@ class HomeViewFragment : Fragment() {
     }
 
     private fun initViews() {
-        progressView = binding.progressView
         challengeView = binding.challengeRecyclerView
         currentChallengeView = binding.currentChallengesView
         showAllChallengesView = binding.showAllChallenges
@@ -98,6 +106,10 @@ class HomeViewFragment : Fragment() {
         notificationCountView = binding.notificationCountView
         weekChallengeView = WeekView(binding.weekChallengeContainer)
         dailyAchievementView = DailyView(binding.dailyAchievementContainer)
+        shimmerLayout = binding.shimmerLayout
+        dailyShimmerLayout = binding.dailyShimmerLayout
+        weekShimmerLayout = binding.weekShimmerLayout
+        weekChallengeContainer = binding.weekChallengeContainer.weeklyRootContainer
     }
 
     private fun initAdapter() {
@@ -154,8 +166,8 @@ class HomeViewFragment : Fragment() {
 
                         is HomeViewState.Loading -> {
                             Log.d("observeChallenges", "Loading view state")
-                            progressView.visibility = View.VISIBLE
-                            challengeView.visibility = View.GONE
+                            startShimmer(shimmerLayout, challengeView)
+                            delay(3000)
                         }
 
                         is HomeViewState.Failure -> {
@@ -168,6 +180,13 @@ class HomeViewFragment : Fragment() {
         }
     }
 
+    private fun startShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        view.visibility = View.GONE
+    }
+
+
     private fun transformToGroupAndChallengesPair(groupAndChallengesList: List<GroupAndChallenges>): MutableList<Pair<Group, Challenge>> {
         val groupAndChallengesPairs = mutableListOf<Pair<Group, Challenge>>()
         groupAndChallengesList.flatMapTo(groupAndChallengesPairs) { groupAndChallenges ->
@@ -179,19 +198,24 @@ class HomeViewFragment : Fragment() {
     }
 
     private fun handleOnSuccess(groupAndChallenges: MutableList<Pair<Group, Challenge>>) {
-        progressView.visibility = View.GONE
         currentChallengeView.visibility = View.VISIBLE
         showAllChallengesView.visibility = View.VISIBLE
         adapter.setGroupAndChallenges(groupAndChallenges)
-        challengeView.visibility = View.VISIBLE
+        stopShimmer(shimmerLayout, challengeView)
     }
 
+    private fun stopShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        view.visibility = View.VISIBLE
+    }
+
+
     private fun handleOnFailure() {
-        progressView.visibility = View.GONE
         currentChallengeView.visibility = View.GONE
         showAllChallengesView.visibility = View.GONE
-        progressView.visibility = View.VISIBLE
         challengeView.visibility = View.GONE
+        stopShimmer(shimmerLayout, challengeView)
     }
 
     private fun observeWeekChallenge() {
@@ -204,11 +228,13 @@ class HomeViewFragment : Fragment() {
                         }
 
                         is HomeViewState.Loading -> {
-
+                            startShimmer(weekShimmerLayout, weekChallengeContainer)
+                            delay(3000)
                         }
 
                         is HomeViewState.Failure -> {
-
+                            handleOnWeekFailure()
+                            stopShimmer(weekShimmerLayout, weekChallengeContainer)
                         }
                     }
                 }
@@ -218,6 +244,11 @@ class HomeViewFragment : Fragment() {
 
     private fun showWeekChallenge(challenge: Challenge) {
         weekChallengeView.updateWeeklyChallenge(challenge)
+        stopShimmer(weekShimmerLayout, weekChallengeContainer)
+    }
+
+    private fun handleOnWeekFailure() {
+
     }
 
     private fun observeDailyAchievement() {
@@ -277,8 +308,8 @@ class HomeViewFragment : Fragment() {
 
     private fun showNotificationCount(notificationCount: Int) {
 //        if (notificationCount != 0) {
-            notificationCountView.text = notificationCount.toString()
-            notificationCountView.visibility = View.VISIBLE
+        notificationCountView.text = notificationCount.toString()
+        notificationCountView.visibility = View.VISIBLE
 //        } else {
 //            hideNotificationCount()
 //        }

@@ -101,6 +101,7 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
     implementation ("com.google.firebase:firebase-messaging")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 //    implementation ("com.android.support:support-compat:28.0.0")
 
 }

@@ -9,6 +9,8 @@ interface UserAchievementLocalRepository {
 
     suspend fun fetchUsersByAchievementId(achievementId: String): List<UserAchievement>
 
+    suspend fun fetchByUserIdAndAchievementId(achievementId: String, userId: String): UserAchievement?
+
     suspend fun insertOne(userAchievement: UserAchievement)
 
     suspend fun deleteOne(userAchievement: UserAchievement)

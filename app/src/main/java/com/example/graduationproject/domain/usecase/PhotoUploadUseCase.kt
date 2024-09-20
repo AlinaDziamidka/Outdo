@@ -1,24 +1,19 @@
 package com.example.graduationproject.domain.usecase
 
-import android.content.Context
-import android.net.Uri
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.example.graduationproject.domain.entity.Achievement
+import com.example.graduationproject.domain.entity.AchievementStatus
+import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.UserAchievement
 import com.example.graduationproject.domain.repository.local.UserAchievementLocalRepository
 import com.example.graduationproject.domain.repository.remote.PhotoUploadRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserAchievementRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
-import com.example.graduationproject.domain.util.writeToLocalDatabase
-import com.google.android.gms.common.util.IOUtils.copyStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 class PhotoUploadUseCase @Inject constructor(
@@ -46,12 +41,15 @@ class PhotoUploadUseCase @Inject constructor(
                     Log.d("PhotoUploadUseCase", "Upload photo url $url")
                     val updatePhotoEvent = updateUserAchievementPhoto(userId, achievementId, url)
                     if (updatePhotoEvent is Event.Success) {
+                        val userAchievement = UserAchievement(
+                            userId = userId,
+                            achievementId = achievementId,
+                            achievementStatus = AchievementStatus.COMPLETED,
+                            achievementType = AchievementType.CHALLENGE,
+                            photoUrl = photo.toString()
+                        )
                         withContext(Dispatchers.IO) {
-                            userAchievementLocalRepository.updatePhoto(
-                                photo.toString(),
-                                achievementId,
-                                userId
-                            )
+                            userAchievementLocalRepository.insertOne(userAchievement)
                         }
                         emit(url)
                     } else {
