@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.LinearLayout
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,7 +22,9 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.presentation.challenges.adapter.AllChallengesAdapter
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -34,6 +36,9 @@ class AllChallengesView : Fragment() {
     private lateinit var adapter: AllChallengesAdapter
     private lateinit var challengesView: RecyclerView
     private lateinit var onBackAction: ImageButton
+    private lateinit var shimmerLayout: ShimmerFrameLayout
+    private lateinit var errorView: CardView
+    private lateinit var updateError: LinearLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,11 +66,15 @@ class AllChallengesView : Fragment() {
         onPressedBackAction()
         setUpChallenges()
         observeChallenges()
+        setUpErrorUpdateAction()
     }
 
     private fun initViews() {
         challengesView = binding.challengesRecyclerView
         onBackAction = binding.onBackAction
+        shimmerLayout = binding.shimmerLayout
+        errorView = binding.errorView.errorRootContainer
+        updateError = binding.errorView.updateContainer
     }
 
     private fun initAdapter() {
@@ -78,7 +87,8 @@ class AllChallengesView : Fragment() {
     }
 
     private fun moveToChallengeDetailsScreen(challenge: Challenge) {
-        val action = AllChallengesViewDirections.actionAllChallengesViewToChallengeDetailsView(challenge.challengeId)
+        val action =
+            AllChallengesViewDirections.actionAllChallengesViewToChallengeDetailsView(challenge.challengeId)
         findNavController().navigate(action)
     }
 
@@ -99,18 +109,18 @@ class AllChallengesView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
-                    Log.d("observeAllChallenges", "New view state: $it")
                     when (it) {
                         is ChallengeViewState.Success -> {
                             val groupAndChallengesPairs = transformToGroupAndChallengesPair(it.data)
                             handleOnSuccess(groupAndChallengesPairs)
-                            Log.d("observeAllChallenges", "Success view state, data: ${it.data}")
                         }
 
                         is ChallengeViewState.Loading -> {
+                            startShimmer()
                         }
 
                         is ChallengeViewState.Failure -> {
+                            handleOnFailure()
                         }
                     }
                 }
@@ -130,5 +140,30 @@ class AllChallengesView : Fragment() {
 
     private fun handleOnSuccess(groupAndChallenges: MutableList<Pair<Group, Challenge>>) {
         adapter.setGroupAndChallenges(groupAndChallenges)
+        stopShimmer()
+    }
+
+    private fun startShimmer() {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        challengesView.visibility = View.GONE
+    }
+
+    private fun stopShimmer() {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        challengesView.visibility = View.VISIBLE
+    }
+
+    private fun handleOnFailure() {
+        stopShimmer()
+        errorView.visibility = View.VISIBLE
+    }
+
+    private fun setUpErrorUpdateAction() {
+        updateError.setOnClickListener {
+            errorView.visibility = View.GONE
+            setUpChallenges()
+        }
     }
 }

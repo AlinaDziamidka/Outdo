@@ -1,6 +1,5 @@
 package com.example.graduationproject.presentation.challengedetails
 
-import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewState
 
 interface ChallengeDetailsViewState<out T> {
 

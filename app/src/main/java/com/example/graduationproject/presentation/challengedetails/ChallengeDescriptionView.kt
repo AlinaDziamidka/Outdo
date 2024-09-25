@@ -1,6 +1,5 @@
 package com.example.graduationproject.presentation.challengedetails
 
-import android.opengl.Visibility
 import android.view.View
 import android.widget.TextView
 import com.example.graduationproject.databinding.ChallengeDetailsCardBinding

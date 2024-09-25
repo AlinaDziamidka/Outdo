@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,7 +24,9 @@ import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.challengedetails.adapter.AchievementsAdapter
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -37,8 +41,12 @@ class ChallengeDetailsView : Fragment() {
     private lateinit var challengeNameView: TextView
     private lateinit var challengeId: String
     private lateinit var challenge: Challenge
-    private lateinit var challengeDescription: ChallengeDescriptionView
-
+    private lateinit var challengeDescriptionView: ChallengeDescriptionView
+    private lateinit var descriptionShimmerLayout: ShimmerFrameLayout
+    private lateinit var achievementShimmerLayout: ShimmerFrameLayout
+    private lateinit var descriptionErrorView: CardView
+    private lateinit var updateDescriptionError: LinearLayout
+    private lateinit var challengeDescriptionContainer: CardView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -67,12 +75,19 @@ class ChallengeDetailsView : Fragment() {
         initAdapter()
         setUpAchievements()
         observeAchievements()
+        setUpErrorUpdateAction()
     }
 
     private fun initViews() {
         challengeNameView = binding.challengeNameView
-        challengeDescription = ChallengeDescriptionView(binding.challengeDetailsContainer)
+        challengeDescriptionView = ChallengeDescriptionView(binding.challengeDetailsContainerView)
         achievementView = binding.achievementRecyclerView
+        descriptionShimmerLayout = binding.descriptionShimmerLayout
+        achievementShimmerLayout = binding.achievementShimmerLayout
+        descriptionErrorView = binding.errorView.errorRootContainer
+        updateDescriptionError = binding.errorView.updateContainer
+        challengeDescriptionContainer =
+            binding.challengeDetailsContainerView.challengeDetailsRootContainer
     }
 
     private fun setUpChallengeName() {
@@ -84,24 +99,30 @@ class ChallengeDetailsView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateCurrentChallenge.collect {
-                    Log.d("observeCurrentChallenge", "New view state: $it")
                     when (it) {
                         is ChallengeDetailsViewState.Success -> {
                             challenge = it.data.first
-                            setChallengeName(it.data.first)
-                            setChallengeDescription(it.data)
-                            Log.d("observeCurrentChallenge", "Success view state, data: ${it.data}")
+                            handleOnSuccess(it.data)
                         }
 
                         is ChallengeDetailsViewState.Loading -> {
+                            startShimmer(descriptionShimmerLayout, challengeDescriptionContainer)
+                            delay(3000)
                         }
 
                         is ChallengeDetailsViewState.Failure -> {
+                            handleOnFailure()
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun handleOnSuccess(challengeDetails: Pair<Challenge, UserProfile?>) {
+        setChallengeName(challengeDetails.first)
+        setChallengeDescription(challengeDetails)
+        stopShimmer(descriptionShimmerLayout, challengeDescriptionContainer)
     }
 
     private fun setChallengeName(challenge: Challenge) {
@@ -111,10 +132,27 @@ class ChallengeDetailsView : Fragment() {
     }
 
     private fun setChallengeDescription(challengeDetails: Pair<Challenge, UserProfile?>) {
-        challengeDescription.updateChallengeDescription(
+        challengeDescriptionView.updateChallengeDescription(
             challengeDetails.first,
             challengeDetails.second
         )
+    }
+
+    private fun startShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        view.visibility = View.GONE
+    }
+
+    private fun stopShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        view.visibility = View.VISIBLE
+    }
+
+    private fun handleOnFailure() {
+        stopShimmer(descriptionShimmerLayout, challengeDescriptionContainer)
+        descriptionErrorView.visibility = View.VISIBLE
     }
 
     private fun initAdapter() {
@@ -142,19 +180,18 @@ class ChallengeDetailsView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateAchievements.collect {
-                    Log.d("observeAchievements", "New view state: $it")
                     when (it) {
                         is ChallengeDetailsViewState.Success -> {
                             loadAchievements(it.data)
-                            Log.d("observeAchievements", "Success view state, data: ${it.data}")
                         }
 
                         is ChallengeDetailsViewState.Loading -> {
-                            Log.d("observeAchievements", "Loading view state")
+                            startShimmer(achievementShimmerLayout, achievementView)
+                            delay(3000)
                         }
 
                         is ChallengeDetailsViewState.Failure -> {
-                            Log.d("observeAchievements", "Failure view state")
+                            stopShimmer(achievementShimmerLayout, achievementView)
                         }
                     }
                 }
@@ -165,5 +202,13 @@ class ChallengeDetailsView : Fragment() {
     private fun loadAchievements(achievements: MutableList<Achievement>) {
         val sortedAchievements = achievements.sortedBy { it.achievementName }.toMutableList()
         achievementsAdapter.setAchievements(sortedAchievements)
+        stopShimmer(achievementShimmerLayout, achievementView)
+    }
+
+    private fun setUpErrorUpdateAction() {
+        updateDescriptionError.setOnClickListener {
+            descriptionErrorView.visibility = View.GONE
+            setUpChallengeName()
+        }
     }
 }

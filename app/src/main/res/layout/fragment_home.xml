@@ -130,7 +130,7 @@
 
         <include
             android:id="@+id/errorDailyView"
-            layout="@layout/error_home_card"
+            layout="@layout/error_card"
             android:visibility="gone"/>
 
         <TextView
@@ -159,7 +159,7 @@
 
         <include
             android:id="@+id/errorWeekView"
-            layout="@layout/error_home_card"
+            layout="@layout/error_card"
             android:visibility="gone"/>
 
     </LinearLayout>

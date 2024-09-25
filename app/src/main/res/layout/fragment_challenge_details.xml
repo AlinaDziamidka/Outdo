@@ -15,38 +15,70 @@
         android:layout_marginBottom="30dp"
         android:orientation="vertical">
 
-      <TextView
-          android:id="@+id/challengeNameView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          style="@style/screen_header_text"
-          android:layout_marginStart="16dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginBottom="12dp"
-          tools:text="Челленж «12 мгновений весны»"/>
+        <TextView
+            android:id="@+id/challengeNameView"
+            style="@style/screen_header_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            tools:text="Челленж «12 мгновений весны»" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/descriptionShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_duration="1000">
+            <include layout="@layout/challenge_details_card_shimmer" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <include
-            android:id="@+id/challengeDetailsContainer"
-            layout="@layout/challenge_details_card" />
+            android:id="@+id/errorView"
+            layout="@layout/error_card"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/challengeDetailsContainerView"
+            layout="@layout/challenge_details_card"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/achievementsTextView"
+            style="@style/challenges_name_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/challenges_name_title"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/challenge_details_screen_achievements_title"/>
+            android:text="@string/challenge_details_screen_achievements_title" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/achievementShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:shimmer_duration="1000">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/achievement_card_shimmer" />
+
+                <include layout="@layout/achievement_card_shimmer" />
+
+                <include layout="@layout/achievement_card_shimmer" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/achievementRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             tools:listitem="@layout/achievement_card" />
-
-
     </LinearLayout>
 </ScrollView>

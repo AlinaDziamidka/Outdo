@@ -33,7 +33,9 @@ class ChallengeDetailsViewModel @Inject constructor(
         _viewStateAchievements
 
     private val _viewStateCurrentChallenge =
-        MutableStateFlow<ChallengeDetailsViewState<Pair<Challenge, UserProfile?>>>(ChallengeDetailsViewState.Loading)
+        MutableStateFlow<ChallengeDetailsViewState<Pair<Challenge, UserProfile?>>>(
+            ChallengeDetailsViewState.Loading
+        )
     val viewStateCurrentChallenge: StateFlow<ChallengeDetailsViewState<Pair<Challenge, UserProfile?>>> =
         _viewStateCurrentChallenge
 
@@ -45,14 +47,9 @@ class ChallengeDetailsViewModel @Inject constructor(
                 .onStart {
                     _viewStateCurrentChallenge.value = ChallengeDetailsViewState.Loading
                 }.catch {
-                    Log.e(
-                        "ChallengeDetailsViewModel",
-                        "Fetching current challenge: Error - ${it.message}"
-                    )
                     _viewStateCurrentChallenge.value =
                         ChallengeDetailsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect {
-                    Log.d("ChallengeDetailsViewModel", "Fetching challenge: Success")
                     _viewStateCurrentChallenge.value = ChallengeDetailsViewState.Success(it)
                 }
         }
@@ -60,24 +57,17 @@ class ChallengeDetailsViewModel @Inject constructor(
 
     fun setUpAchievements(challengeId: String) {
         viewModelScope.launch {
-            Log.d("ChallengeDetailsViewModel", "Fetching achievements $challengeId")
             fetchChallengeAchievementUseCase(
                 FetchChallengeAchievementUseCase.Params(
                     challengeId
                 )
             )
                 .onStart {
-                    Log.d("ChallengeDetailsViewModel", "Fetching achievements: Loading state")
                     _viewStateAchievements.value = ChallengeDetailsViewState.Loading
                 }.catch {
-                    Log.e(
-                        "ChallengeDetailsViewModel",
-                        "Fetching achievements: Error - ${it.message}"
-                    )
                     _viewStateAchievements.value =
                         ChallengeDetailsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { achievements ->
-                    Log.d("ChallengeDetailsViewModel", "Fetching achievements: Success")
                     _viewStateAchievements.value = ChallengeDetailsViewState.Success(achievements)
                 }
         }
