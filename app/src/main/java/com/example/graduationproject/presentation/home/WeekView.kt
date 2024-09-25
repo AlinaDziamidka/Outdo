@@ -11,9 +11,10 @@ import com.example.graduationproject.R
 import com.example.graduationproject.databinding.WeeklyChallengeCardBinding
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Challenge
+import com.facebook.shimmer.ShimmerFrameLayout
 import java.util.Locale
 
-class WeekView(rootView: WeeklyChallengeCardBinding){
+class WeekView(rootView: WeeklyChallengeCardBinding) {
 
     private lateinit var timeView: TextView
     private lateinit var countdownTimer: CountDownTimer
@@ -21,6 +22,7 @@ class WeekView(rootView: WeeklyChallengeCardBinding){
     private lateinit var descriptionView: TextView
     private lateinit var participateAction: Button
     private lateinit var iconView: ImageView
+    private lateinit var shimmerIcon: ShimmerFrameLayout
 
     init {
         bindViews(rootView)
@@ -32,6 +34,7 @@ class WeekView(rootView: WeeklyChallengeCardBinding){
         descriptionView = rootView.descriptionView
         participateAction = rootView.participateAction
         iconView = rootView.iconView
+        shimmerIcon = rootView.weekIconShimmerLayout
     }
 
     fun updateWeeklyChallenge(challenge: Challenge) {
@@ -95,6 +98,20 @@ class WeekView(rootView: WeeklyChallengeCardBinding){
             decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
                 .placeholder(R.drawable.placeholder_week_daily_icon)
                 .error(R.drawable.error_week_daily_icon)
+                .listener(
+                    onStart = {
+                        shimmerIcon.visibility = View.VISIBLE
+                        iconView.visibility = View.INVISIBLE
+                    },
+                    onSuccess = { _, _ ->
+                        shimmerIcon.visibility = View.GONE
+                        iconView.visibility = View.VISIBLE
+                    },
+                    onError = { _, _ ->
+                        shimmerIcon.visibility = View.GONE
+                        iconView.visibility = View.VISIBLE
+                    }
+                )
         }
     }
 }

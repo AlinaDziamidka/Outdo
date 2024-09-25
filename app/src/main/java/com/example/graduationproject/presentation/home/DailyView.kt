@@ -1,6 +1,7 @@
 package com.example.graduationproject.presentation.home
 
 import android.os.CountDownTimer
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,16 +11,17 @@ import com.example.graduationproject.databinding.DailyAchievementCardBinding
 import com.example.graduationproject.domain.entity.Achievement
 import java.util.Locale
 import coil.load
+import com.facebook.shimmer.ShimmerFrameLayout
 
 
-
-class DailyView ( rootView: DailyAchievementCardBinding) {
+class DailyView(rootView: DailyAchievementCardBinding) {
     private lateinit var timeView: TextView
     private lateinit var countdownTimer: CountDownTimer
     private lateinit var dailyNameView: TextView
     private lateinit var descriptionView: TextView
     private lateinit var participateAction: Button
     private lateinit var iconView: ImageView
+    private lateinit var shimmerIcon: ShimmerFrameLayout
 
     init {
         bindViews(rootView)
@@ -31,6 +33,7 @@ class DailyView ( rootView: DailyAchievementCardBinding) {
         descriptionView = rootView.descriptionView
         participateAction = rootView.participateAction
         iconView = rootView.iconView
+        shimmerIcon = rootView.weekIconShimmerLayout
     }
 
     fun updateDailyAchievement(achievement: Achievement) {
@@ -94,6 +97,20 @@ class DailyView ( rootView: DailyAchievementCardBinding) {
             decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
                 .placeholder(R.drawable.placeholder_week_daily_icon)
                 .error(R.drawable.error_week_daily_icon)
+                .listener(
+                    onStart = {
+                        shimmerIcon.visibility = View.VISIBLE
+                        iconView.visibility = View.INVISIBLE
+                    },
+                    onSuccess = { _, _ ->
+                        shimmerIcon.visibility = View.GONE
+                        iconView.visibility = View.VISIBLE
+                    },
+                    onError = { _, _ ->
+                        shimmerIcon.visibility = View.GONE
+                        iconView.visibility = View.VISIBLE
+                    }
+                )
         }
     }
 }

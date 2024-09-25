@@ -128,6 +128,11 @@
             layout="@layout/daily_achievement_card"
             android:visibility="gone" />
 
+        <include
+            android:id="@+id/errorDailyView"
+            layout="@layout/error_home_card"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/weeklyChallengeView"
             style="@style/challenges_name_title"
@@ -151,6 +156,11 @@
             android:id="@+id/weekChallengeContainer"
             layout="@layout/weekly_challenge_card"
             android:visibility="gone" />
+
+        <include
+            android:id="@+id/errorWeekView"
+            layout="@layout/error_home_card"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>

@@ -21,8 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeView : AppCompatActivity() {
 
-
-
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
 
@@ -32,7 +30,6 @@ class HomeView : AppCompatActivity() {
         setContent()
         createNavController()
         setBottomNavigation()
-        setLoadedStatus()
         onBackPressedAction()
     }
 
@@ -65,13 +62,6 @@ class HomeView : AppCompatActivity() {
         binding.bottomNavigationView.selectedItemId = R.id.homeView
     }
 
-    private fun setLoadedStatus() {
-//        val loadedStatus = intent.getBooleanExtra("loadedStatus", false)
-//        Log.d("HomeView", "Loaded status from intent: $loadedStatus")
-//        val args = HomeViewFragmentArgs.Builder(loadedStatus).build().toBundle()
-        navController.navigate(R.id.homeViewFragment)
-    }
-
     private fun onBackPressedAction() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -82,5 +72,4 @@ class HomeView : AppCompatActivity() {
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
-
 }

@@ -17,7 +17,6 @@ import com.example.graduationproject.domain.usecase.FetchDailyAchievementUseCase
 import com.example.graduationproject.domain.usecase.FetchNotificationsUseCase
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchWeekChallengeUseCase
-import com.example.graduationproject.presentation.notifications.NotificationsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,24 +57,17 @@ class HomeViewModel @Inject constructor(
 
     fun setUpUserChallenges(userId: String) {
         viewModelScope.launch {
-            Log.d("HomeViewModel", "Fetching remote group challenges for user $userId")
             fetchUserGroupChallengesUseCase(
                 FetchUserGroupChallengesUseCase.Params(
                     userId, ChallengeStatus.UNFINISHED
                 )
             )
                 .onStart {
-                    Log.d("HomeViewModel", "Fetching remote group challenges: Loading state")
                     _viewStateChallenges.value = HomeViewState.Loading
                 }.catch {
-                    Log.e(
-                        "HomeViewModel",
-                        "Fetching remote group challenges: Error - ${it.message}"
-                    )
                     _viewStateChallenges.value =
                         HomeViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { groupAndChallenges ->
-                    Log.d("HomeViewModel", "Fetching remote group challenges: Success")
                     _viewStateChallenges.value = HomeViewState.Success(groupAndChallenges)
                 }
         }
@@ -121,14 +113,9 @@ class HomeViewModel @Inject constructor(
                 .onStart {
                     _viewStateNotification.value = HomeViewState.Loading
                 }.catch {
-                    Log.e(
-                        "HomeViewModel",
-                        "Fetching notifications: Error - ${it.message}"
-                    )
                     _viewStateNotification.value =
                         HomeViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { notifications ->
-                    Log.d("HomeViewModel", "Fetching notifications: Success")
                     _viewStateNotification.value = HomeViewState.Success(notifications)
                 }
         }

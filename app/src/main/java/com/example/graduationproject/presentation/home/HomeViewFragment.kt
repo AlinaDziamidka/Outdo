@@ -3,13 +3,12 @@ package com.example.graduationproject.presentation.home
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -20,7 +19,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.graduationproject.App
 import com.example.graduationproject.databinding.FragmentHomeBinding
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementType
@@ -28,9 +26,7 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupAndChallenges
-import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.home.adapter.ChallengesAdapter
-import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -45,7 +41,6 @@ class HomeViewFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: ChallengesAdapter
     private lateinit var challengeView: RecyclerView
-
     private lateinit var currentChallengeView: TextView
     private lateinit var showAllChallengesView: TextView
     private lateinit var userName: TextView
@@ -59,6 +54,11 @@ class HomeViewFragment : Fragment() {
     private lateinit var dailyShimmerLayout: ShimmerFrameLayout
     private lateinit var weekShimmerLayout: ShimmerFrameLayout
     private lateinit var weekChallengeContainer: CardView
+    private lateinit var dailyAchievementContainer: CardView
+    private lateinit var errorDailyView: CardView
+    private lateinit var errorWeekView: CardView
+    private lateinit var updateErrorDaily: LinearLayout
+    private lateinit var updateErrorWeek: LinearLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -95,6 +95,7 @@ class HomeViewFragment : Fragment() {
         observeNotification()
         moveToAllChallengesScreen()
         moveToNotificationScreen()
+        setUpErrorUpdateAction()
     }
 
     private fun initViews() {
@@ -110,6 +111,11 @@ class HomeViewFragment : Fragment() {
         dailyShimmerLayout = binding.dailyShimmerLayout
         weekShimmerLayout = binding.weekShimmerLayout
         weekChallengeContainer = binding.weekChallengeContainer.weeklyRootContainer
+        dailyAchievementContainer = binding.dailyAchievementContainer.rootContainer
+        errorDailyView = binding.errorDailyView.errorRootContainer
+        errorWeekView = binding.errorWeekView.errorRootContainer
+        updateErrorDaily = binding.errorDailyView.updateContainer
+        updateErrorWeek = binding.errorWeekView.updateContainer
     }
 
     private fun initAdapter() {
@@ -128,7 +134,6 @@ class HomeViewFragment : Fragment() {
     }
 
     private fun setUserName() {
-        Log.d("HomeViewFragment", "Setting username")
         sharedPreferences =
             requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
         val usernamePref = sharedPreferences.getString("current_username", null)
@@ -156,22 +161,17 @@ class HomeViewFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateChallenges.collect {
-                    Log.d("observeChallenges", "New view state: $it")
                     when (it) {
                         is HomeViewState.Success -> {
                             val groupAndChallengesPairs = transformToGroupAndChallengesPair(it.data)
                             handleOnSuccess(groupAndChallengesPairs)
-                            Log.d("observeChallenges", "Success view state, data: ${it.data}")
                         }
 
                         is HomeViewState.Loading -> {
-                            Log.d("observeChallenges", "Loading view state")
                             startShimmer(shimmerLayout, challengeView)
-                            delay(3000)
                         }
 
                         is HomeViewState.Failure -> {
-                            Log.d("observeChallenges", "Failure view state")
                             handleOnFailure()
                         }
                     }
@@ -185,7 +185,6 @@ class HomeViewFragment : Fragment() {
         shimmerLayout.visibility = View.VISIBLE
         view.visibility = View.GONE
     }
-
 
     private fun transformToGroupAndChallengesPair(groupAndChallengesList: List<GroupAndChallenges>): MutableList<Pair<Group, Challenge>> {
         val groupAndChallengesPairs = mutableListOf<Pair<Group, Challenge>>()
@@ -210,7 +209,6 @@ class HomeViewFragment : Fragment() {
         view.visibility = View.VISIBLE
     }
 
-
     private fun handleOnFailure() {
         currentChallengeView.visibility = View.GONE
         showAllChallengesView.visibility = View.GONE
@@ -229,12 +227,10 @@ class HomeViewFragment : Fragment() {
 
                         is HomeViewState.Loading -> {
                             startShimmer(weekShimmerLayout, weekChallengeContainer)
-                            delay(3000)
                         }
 
                         is HomeViewState.Failure -> {
                             handleOnWeekFailure()
-                            stopShimmer(weekShimmerLayout, weekChallengeContainer)
                         }
                     }
                 }
@@ -248,7 +244,8 @@ class HomeViewFragment : Fragment() {
     }
 
     private fun handleOnWeekFailure() {
-
+        stopShimmer(weekShimmerLayout, weekChallengeContainer)
+        errorWeekView.visibility = View.VISIBLE
     }
 
     private fun observeDailyAchievement() {
@@ -261,11 +258,11 @@ class HomeViewFragment : Fragment() {
                         }
 
                         is HomeViewState.Loading -> {
-
+                            startShimmer(dailyShimmerLayout, dailyAchievementContainer)
                         }
 
                         is HomeViewState.Failure -> {
-
+                            handleOnDailyFailure()
                         }
                     }
                 }
@@ -275,29 +272,28 @@ class HomeViewFragment : Fragment() {
 
     private fun showDailyAchievement(achievement: Achievement) {
         dailyAchievementView.updateDailyAchievement(achievement)
+        stopShimmer(dailyShimmerLayout, dailyAchievementContainer)
+    }
+
+    private fun handleOnDailyFailure() {
+        stopShimmer(dailyShimmerLayout, dailyAchievementContainer)
+        errorDailyView.visibility = View.VISIBLE
     }
 
     private fun observeNotification() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateNotification.collect {
-                    Log.d("observeNotificationCount", "New view state: $it")
                     when (it) {
                         is HomeViewState.Success -> {
                             showNotificationCount(it.data.size)
-                            Log.d(
-                                "observeNotificationCount",
-                                "Success view state, data: ${it.data}"
-                            )
                         }
 
                         is HomeViewState.Loading -> {
-                            Log.d("observeChallenges", "Loading view state")
                             hideNotificationCount()
                         }
 
                         is HomeViewState.Failure -> {
-                            Log.d("observeChallenges", "Failure view state")
                             hideNotificationCount()
                         }
                     }
@@ -307,12 +303,12 @@ class HomeViewFragment : Fragment() {
     }
 
     private fun showNotificationCount(notificationCount: Int) {
-//        if (notificationCount != 0) {
-        notificationCountView.text = notificationCount.toString()
-        notificationCountView.visibility = View.VISIBLE
-//        } else {
-//            hideNotificationCount()
-//        }
+        if (notificationCount != 0) {
+            notificationCountView.text = notificationCount.toString()
+            notificationCountView.visibility = View.VISIBLE
+        } else {
+            hideNotificationCount()
+        }
     }
 
     private fun hideNotificationCount() {
@@ -330,6 +326,25 @@ class HomeViewFragment : Fragment() {
         notificationView.setOnClickListener {
             val action = HomeViewFragmentDirections.actionHomeViewFragmentToNotificationView()
             findNavController().navigate(action)
+        }
+    }
+
+    private fun setUpErrorUpdateAction() {
+        onClickDailyUpdateAction()
+        onClickWeekUpdateAction()
+    }
+
+    private fun onClickDailyUpdateAction() {
+        updateErrorDaily.setOnClickListener {
+            errorDailyView.visibility = View.GONE
+            setUpDailyAchievement()
+        }
+    }
+
+    private fun onClickWeekUpdateAction() {
+        updateErrorWeek.setOnClickListener {
+            errorWeekView.visibility = View.GONE
+            setUpWeekChallenge()
         }
     }
 }
