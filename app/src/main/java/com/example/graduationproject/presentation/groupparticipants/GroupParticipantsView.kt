@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,11 +23,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentGroupParticipantsBinding
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
-import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewDirections
-import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewState
-import com.example.graduationproject.presentation.groupdetails.adapter.ChallengesAdapter
 import com.example.graduationproject.presentation.groupparticipants.adapter.GroupParticipantsAdapter
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -44,7 +45,10 @@ class GroupParticipantsView : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var groupId: String
     private lateinit var group: Group
-
+    private lateinit var participantsShimmerLayout: ShimmerFrameLayout
+    private lateinit var groupNameShimmerLayout: ShimmerFrameLayout
+    private lateinit var errorView: CardView
+    private lateinit var updateError: LinearLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -74,6 +78,7 @@ class GroupParticipantsView : Fragment() {
         observeParticipants()
         setUpSwitchChallengesAction()
         setUpLeaveGroupAction()
+        setUpErrorUpdateAction()
     }
 
     private fun initViews() {
@@ -82,6 +87,10 @@ class GroupParticipantsView : Fragment() {
         participantsView = binding.participantsRecyclerView
         switchChallengesAction = binding.selectChallengesAction
         leaveGroupAction = binding.leaveGroupAction
+        participantsShimmerLayout = binding.participantsShimmerLayout
+        groupNameShimmerLayout = binding.groupNameShimmerLayout
+        errorView = binding.errorView.errorRootContainer
+        updateError = binding.errorView.updateContainer
     }
 
     private fun setUpGroupName() {
@@ -93,22 +102,19 @@ class GroupParticipantsView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateCurrentGroup.collect {
-                    Log.d("observeCurrentGroup in GroupParticipants", "New view state: $it")
                     when (it) {
                         is GroupParticipantsViewState.Success -> {
                             group = it.data
                             setGroupName(it.data)
                             initAdapter()
-                            Log.d(
-                                "observeCurrentGroup in GroupParticipants",
-                                "Success view state, data: ${it.data}"
-                            )
                         }
 
                         is GroupParticipantsViewState.Loading -> {
+                            startShimmer(groupNameShimmerLayout, groupNameView)
                         }
 
                         is GroupParticipantsViewState.Failure -> {
+                            stopShimmer(groupNameShimmerLayout, groupNameView)
                         }
                     }
                 }
@@ -118,6 +124,19 @@ class GroupParticipantsView : Fragment() {
 
     private fun setGroupName(group: Group) {
         groupNameView.text = group.groupName
+        stopShimmer(groupNameShimmerLayout, groupNameView)
+    }
+
+    private fun startShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        view.visibility = View.GONE
+    }
+
+    private fun stopShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        view.visibility = View.VISIBLE
     }
 
     private fun initAdapter() {
@@ -135,19 +154,17 @@ class GroupParticipantsView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateParticipants.collect {
-                    Log.d("observeParticipants", "New view state: $it")
                     when (it) {
                         is GroupParticipantsViewState.Success -> {
                             loadParticipants(it.data)
-                            Log.d("observeParticipants", "Success view state, data: ${it.data}")
                         }
 
                         is GroupParticipantsViewState.Loading -> {
-                            Log.d("observeParticipants", "Loading view state")
+                            startShimmer(participantsShimmerLayout, participantsView)
                         }
 
                         is GroupParticipantsViewState.Failure -> {
-                            Log.d("observeParticipants", "Failure view state")
+                            handleOnFailure()
                         }
                     }
                 }
@@ -156,8 +173,13 @@ class GroupParticipantsView : Fragment() {
     }
 
     private fun loadParticipants(participants: MutableList<UserProfile>) {
-//        val sortedChallenges = challenges.sortedBy { it.endTime }.toMutableList()
         groupParticipantsAdapter.setParticipants(participants)
+        stopShimmer(participantsShimmerLayout, participantsView)
+    }
+
+    private fun handleOnFailure() {
+        stopShimmer(participantsShimmerLayout, participantsView)
+        errorView.visibility = View.VISIBLE
     }
 
     private fun setUpSwitchChallengesAction() {
@@ -182,5 +204,12 @@ class GroupParticipantsView : Fragment() {
         sharedPreferences =
             requireContext().getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("current_user_id", "  ") ?: "  "
+    }
+
+    private fun setUpErrorUpdateAction() {
+        updateError.setOnClickListener {
+            errorView.visibility = View.GONE
+            setUpParticipants()
+        }
     }
 }

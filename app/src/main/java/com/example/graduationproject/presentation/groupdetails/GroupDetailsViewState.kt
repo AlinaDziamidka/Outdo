@@ -1,6 +1,5 @@
 package com.example.graduationproject.presentation.groupdetails
 
-import com.example.graduationproject.presentation.group.GroupViewState
 
 sealed interface GroupDetailsViewState <out T> {
 

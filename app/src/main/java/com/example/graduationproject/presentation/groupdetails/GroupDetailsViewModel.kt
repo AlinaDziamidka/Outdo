@@ -50,14 +50,9 @@ class GroupDetailsViewModel @Inject constructor(
                 .onStart {
                     _viewStateCurrentGroup.value = GroupDetailsViewState.Loading
                 }.catch {
-                    Log.e(
-                        "GroupDetailsViewModel",
-                        "Fetching current group: Error - ${it.message}"
-                    )
                     _viewStateCurrentGroup.value =
                         GroupDetailsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { group ->
-                    Log.d("GroupDetailsViewModel", "Fetching group: Success")
                     _viewStateCurrentGroup.value = GroupDetailsViewState.Success(group)
                 }
         }
@@ -65,24 +60,17 @@ class GroupDetailsViewModel @Inject constructor(
 
     fun setUpChallenges(groupId: String) {
         viewModelScope.launch {
-            Log.d("GroupDetailsViewModel", "Fetching challenges $groupId")
             fetchGroupChallengesUseCase(
                 FetchGroupChallengesUseCase.Params(
                     groupId, ChallengeStatus.UNFINISHED
                 )
             )
                 .onStart {
-                    Log.d("GroupDetailsViewModel", "Fetching challenges: Loading state")
                     _viewStateChallenges.value = GroupDetailsViewState.Loading
                 }.catch {
-                    Log.e(
-                        "GroupDetailsViewModel",
-                        "Fetching challenges: Error - ${it.message}"
-                    )
                     _viewStateChallenges.value =
                         GroupDetailsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { challenges ->
-                    Log.d("GroupDetailsViewModel", "Fetching challenges: Success")
                     _viewStateChallenges.value = GroupDetailsViewState.Success(challenges)
                 }
         }
@@ -90,24 +78,17 @@ class GroupDetailsViewModel @Inject constructor(
 
     fun setUpChallengesHistory(groupId: String) {
         viewModelScope.launch {
-            Log.d("GroupDetailsViewModel", "Fetching challenges history$groupId")
             fetchGroupChallengesUseCase(
                 FetchGroupChallengesUseCase.Params(
                     groupId, ChallengeStatus.FINISHED
                 )
             )
                 .onStart {
-                    Log.d("GroupDetailsViewModel", "Fetching challenges history: Loading state")
                     _viewStateChallengesHistory.value = GroupDetailsViewState.Loading
                 }.catch {
-                    Log.e(
-                        "GroupDetailsViewModel",
-                        "Fetching challenges: Error - ${it.message}"
-                    )
                     _viewStateChallengesHistory.value =
                         GroupDetailsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { challenges ->
-                    Log.d("GroupDetailsViewModel", "Fetching challenges history: Success")
                     _viewStateChallengesHistory.value = GroupDetailsViewState.Success(challenges)
                 }
         }

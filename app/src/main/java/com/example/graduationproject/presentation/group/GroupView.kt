@@ -19,8 +19,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentGroupsBinding
 import com.example.graduationproject.domain.entity.GroupParticipants
 import com.example.graduationproject.presentation.group.adapter.GroupAdapter
-import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewDirections
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -33,6 +34,7 @@ class GroupView : Fragment() {
     private lateinit var groupsView: RecyclerView
     private lateinit var searchView: SearchView
     private lateinit var createGroupAction: Button
+    private lateinit var shimmerLayout: ShimmerFrameLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,21 +68,15 @@ class GroupView : Fragment() {
         groupsView = binding.groupsRecyclerView
         searchView = binding.searchView
         createGroupAction = binding.createGroupAction
+        shimmerLayout = binding.shimmerLayout
     }
 
     private fun initAdapter() {
-        Log.d("GroupFragment", "initAdapter: Setting up layout manager")
         groupsView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        Log.d("GroupFragment", "initAdapter: Creating adapter")
         adapter = GroupAdapter(mutableListOf()) { groupParticipants ->
-            Log.d(
-                "GroupFragment",
-                "initAdapter: Adapter item clicked, moving to group details screen"
-            )
             moveToGroupDetailsScreen(groupParticipants)
         }
-        Log.d("GroupFragment", "initAdapter: Setting adapter to RecyclerView")
         groupsView.adapter = adapter
     }
 
@@ -101,17 +97,17 @@ class GroupView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
-                    Log.d("observeGroups", "New view state: $it")
                     when (it) {
                         is GroupViewState.Success -> {
                             handleOnSuccess(it.data)
-                            Log.d("observeGroups", "Success view state, data: ${it.data}")
                         }
 
                         is GroupViewState.Loading -> {
+                            startShimmer()
                         }
 
                         is GroupViewState.Failure -> {
+                            stopShimmer()
                         }
                     }
                 }
@@ -122,24 +118,35 @@ class GroupView : Fragment() {
     private fun handleOnSuccess(groupParticipants: MutableList<GroupParticipants>) {
         adapter.setGroupParticipants(groupParticipants)
         setUpSearchView()
+        stopShimmer()
     }
 
     private fun setUpSearchView() {
-        Log.d("GroupFragment", "setUpSearchView: Setting up search view listener")
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.d("GroupFragment", "onQueryTextSubmit: Query submitted - $query")
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d("GroupFragment", "onQueryTextChange: Query text changed - $newText")
                 adapter.updateGroupParticipants()
                 adapter.filterGroupParticipants(newText)
                 return true
             }
         })
     }
+
+    private fun startShimmer() {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        groupsView.visibility = View.GONE
+    }
+
+    private fun stopShimmer() {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        groupsView.visibility = View.VISIBLE
+    }
+
 
     private fun setUpCreateGroupAction() {
         createGroupAction.setOnClickListener {

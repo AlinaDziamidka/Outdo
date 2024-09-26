@@ -4,15 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.graduationproject.domain.entity.Challenge
-import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.usecase.DeleteUserGroupUseCase
-import com.example.graduationproject.domain.usecase.FetchGroupChallengesUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupNameUseCase
 import com.example.graduationproject.domain.usecase.FetchGroupParticipantsUseCase
-import com.example.graduationproject.presentation.groupdetails.GroupDetailsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,14 +46,9 @@ class GroupParticipantsViewModel @Inject constructor(
                 .onStart {
                     _viewStateCurrentGroup.value = GroupParticipantsViewState.Loading
                 }.catch {
-                    Log.e(
-                        "GroupParticipantsViewModel",
-                        "Fetching current group: Error - ${it.message}"
-                    )
                     _viewStateCurrentGroup.value =
                         GroupParticipantsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { group ->
-                    Log.d("GroupParticipantsViewModel", "Fetching group: Success")
                     _viewStateCurrentGroup.value = GroupParticipantsViewState.Success(group)
                 }
         }
@@ -65,24 +56,17 @@ class GroupParticipantsViewModel @Inject constructor(
 
     fun setUpGroupParticipants(groupId: String) {
         viewModelScope.launch {
-            Log.d("GroupDetailsViewModel", "Fetching challenges $groupId")
             fetchGroupParticipantsUseCase(
                 FetchGroupParticipantsUseCase.Params(
                     groupId
                 )
             )
                 .onStart {
-                    Log.d("GroupParticipantsViewModel", "Fetching participants: Loading state")
                     _viewStateParticipants.value = GroupParticipantsViewState.Loading
                 }.catch {
-                    Log.e(
-                        "GroupParticipantsViewModel",
-                        "Fetching participants: Error - ${it.message}"
-                    )
                     _viewStateParticipants.value =
                         GroupParticipantsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { participants ->
-                    Log.d("GroupParticipantsViewModel", "Fetching participants: Success")
                     _viewStateParticipants.value = GroupParticipantsViewState.Success(participants)
                 }
         }

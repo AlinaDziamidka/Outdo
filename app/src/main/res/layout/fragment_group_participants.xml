@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -19,14 +20,29 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp">
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/groupNameShimmerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_toStartOf="@id/addFriendsAction"
+                app:shimmer_duration="1000">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/bg_shimmer" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <TextView
                 android:id="@+id/groupNameView"
                 style="@style/header_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
+                android:visibility="gone"
                 tools:text="11А класс" />
 
             <Button
@@ -72,23 +88,49 @@
                 android:text="@string/group_info_switch_participants" />
         </LinearLayout>
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/participantsShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:shimmer_duration="1000">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/participants_card_shimmer" />
+
+                <include layout="@layout/participants_card_shimmer" />
+
+                <include layout="@layout/participants_card_shimmer" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <include
+            android:id="@+id/errorView"
+            layout="@layout/error_card"
+            android:visibility="gone" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/participantsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:visibility="gone"
             tools:listitem="@layout/participants_card" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/leaveGroupAction"
+            style="@style/unselected_simple_button_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_unselected_simple_action"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/group_info_leave_action"
-            style="@style/unselected_simple_button_action"/>
+            android:background="@drawable/bg_unselected_simple_action"
+            android:text="@string/group_info_leave_action" />
     </LinearLayout>
 </ScrollView>

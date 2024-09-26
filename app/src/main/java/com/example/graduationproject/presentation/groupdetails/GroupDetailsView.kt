@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,14 +23,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.graduationproject.databinding.FragmentGroupDetailsBinding
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
-import com.example.graduationproject.domain.entity.GroupParticipants
-import com.example.graduationproject.presentation.group.GroupViewDirections
 import com.example.graduationproject.presentation.groupdetails.adapter.ChallengesAdapter
 import com.example.graduationproject.presentation.groupdetails.adapter.ChallengesHistoryAdapter
-import com.example.graduationproject.presentation.home.HomeViewState
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class GroupDetailsView : Fragment() {
@@ -48,7 +48,13 @@ class GroupDetailsView : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var groupId: String
     private lateinit var group: Group
-
+    private lateinit var challengeShimmerLayout: ShimmerFrameLayout
+    private lateinit var challengeHistoryShimmerLayout: ShimmerFrameLayout
+    private lateinit var groupNameShimmerLayout: ShimmerFrameLayout
+    private lateinit var challengesErrorView: CardView
+    private lateinit var updateChallengesError: LinearLayout
+    private lateinit var challengesHistoryErrorView: CardView
+    private lateinit var updateChallengesHistoryError: LinearLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -79,6 +85,7 @@ class GroupDetailsView : Fragment() {
         setUpSwitchParticipantsAction()
         setUpLeaveGroupAction()
         setUpCreateChallengeAction()
+        setUpErrorUpdateAction()
     }
 
     private fun initViews() {
@@ -88,11 +95,17 @@ class GroupDetailsView : Fragment() {
         switchParticipantsAction = binding.selectParticipantsAction
         challengesHistoryView = binding.challengeHistoryRecyclerView
         leaveGroupAction = binding.leaveGroupAction
+        challengeShimmerLayout = binding.challengeShimmerLayout
+        challengeHistoryShimmerLayout = binding.challengeHistoryShimmerLayout
+        groupNameShimmerLayout = binding.groupNameShimmerLayout
+        challengesErrorView = binding.challengesErrorView.errorRootContainer
+        updateChallengesError = binding.challengesErrorView.updateContainer
+        challengesHistoryErrorView = binding.challengesHistoryErrorView.errorRootContainer
+        updateChallengesHistoryError = binding.challengesHistoryErrorView.updateContainer
     }
 
     private fun setUpGroupName() {
         groupId = args.groupId
-        Log.d("GroupDetailsView", groupId)
         viewModel.setCurrentGroup(groupId)
     }
 
@@ -100,19 +113,19 @@ class GroupDetailsView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateCurrentGroup.collect {
-                    Log.d("observeCurrentGroup", "New view state: $it")
                     when (it) {
                         is GroupDetailsViewState.Success -> {
                             group = it.data
                             setGroupName(it.data)
                             initAdapter(it.data)
-                            Log.d("observeCurrentGroup", "Success view state, data: ${it.data}")
                         }
 
                         is GroupDetailsViewState.Loading -> {
+                            startShimmer(groupNameShimmerLayout, groupNameView)
                         }
 
                         is GroupDetailsViewState.Failure -> {
+                            stopShimmer(groupNameShimmerLayout, groupNameView)
                         }
                     }
                 }
@@ -121,12 +134,23 @@ class GroupDetailsView : Fragment() {
     }
 
     private fun setGroupName(group: Group) {
-        Log.d("GroupDetailsView", group.groupName)
         groupNameView.text = group.groupName
+        stopShimmer(groupNameShimmerLayout, groupNameView)
+    }
+
+    private fun startShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        view.visibility = View.GONE
+    }
+
+    private fun stopShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        view.visibility = View.VISIBLE
     }
 
     private fun initAdapter(group: Group) {
-        Log.d("GroupDetailsView", group.groupName)
         initChallengesAdapter(group)
         initChallengeHistoryAdapter(group)
     }
@@ -163,19 +187,17 @@ class GroupDetailsView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateChallenges.collect {
-                    Log.d("observeChallenges", "New view state: $it")
                     when (it) {
                         is GroupDetailsViewState.Success -> {
                             loadChallenges(it.data)
-                            Log.d("observeChallenges", "Success view state, data: ${it.data}")
                         }
 
                         is GroupDetailsViewState.Loading -> {
-                            Log.d("observeChallenges", "Loading view state")
+                            startShimmer(challengeShimmerLayout, challengesView)
                         }
 
                         is GroupDetailsViewState.Failure -> {
-                            Log.d("observeChallenges", "Failure view state")
+                            handleOnChallengesFailure()
                         }
                     }
                 }
@@ -186,6 +208,12 @@ class GroupDetailsView : Fragment() {
     private fun loadChallenges(challenges: MutableList<Challenge>) {
         val sortedChallenges = challenges.sortedBy { it.endTime }.toMutableList()
         challengesAdapter.setChallenges(sortedChallenges, group)
+        stopShimmer(challengeShimmerLayout, challengesView)
+    }
+
+    private fun handleOnChallengesFailure() {
+        stopShimmer(challengeShimmerLayout, challengesView)
+        challengesErrorView.visibility = View.VISIBLE
     }
 
     private fun setUpChallengesHistory() {
@@ -196,21 +224,17 @@ class GroupDetailsView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateChallengesHistory.collect {
-                    Log.d("observeChallengesHistory", "New view state: $it")
                     when (it) {
                         is GroupDetailsViewState.Success -> {
                             loadChallengesHistory(it.data)
-                            Log.d(
-                                "observeChallengesHistory", "Success view state, data: ${it.data}"
-                            )
                         }
 
                         is GroupDetailsViewState.Loading -> {
-                            Log.d("observeChallengesHistory", "Loading view state")
+                            startShimmer(challengeHistoryShimmerLayout, challengesHistoryView)
                         }
 
                         is GroupDetailsViewState.Failure -> {
-                            Log.d("observeChallengesHistory", "Failure view state")
+                            handleOnChallengesHistoryFailure()
                         }
                     }
                 }
@@ -221,6 +245,12 @@ class GroupDetailsView : Fragment() {
     private fun loadChallengesHistory(challenges: MutableList<Challenge>) {
         val sortedChallenges = challenges.sortedBy { it.endTime }.toMutableList()
         challengesHistoryAdapter.setChallenges(sortedChallenges, group)
+        stopShimmer(challengeHistoryShimmerLayout, challengesHistoryView)
+    }
+
+    private fun handleOnChallengesHistoryFailure() {
+        stopShimmer(challengeHistoryShimmerLayout, challengesHistoryView)
+        challengesHistoryErrorView.visibility = View.VISIBLE
     }
 
     private fun setUpSwitchParticipantsAction() {
@@ -253,7 +283,25 @@ class GroupDetailsView : Fragment() {
 
     private fun moveToCreateChallengeScreen() {
         val action = GroupDetailsViewDirections.actionGroupDetailsViewToCreateChallengeView(groupId)
-        Log.d("GroupDetailsView", groupId)
         findNavController().navigate(action)
+    }
+
+    private fun setUpErrorUpdateAction() {
+        onClickChallengesUpdateAction()
+        onClickChallengesHistoryUpdateAction()
+    }
+
+    private fun onClickChallengesHistoryUpdateAction() {
+        updateChallengesHistoryError.setOnClickListener {
+            challengesHistoryErrorView.visibility = View.GONE
+            setUpChallengesHistory()
+        }
+    }
+
+    private fun onClickChallengesUpdateAction() {
+        updateChallengesError.setOnClickListener {
+            challengesErrorView.visibility = View.GONE
+            setUpChallenges()
+        }
     }
 }

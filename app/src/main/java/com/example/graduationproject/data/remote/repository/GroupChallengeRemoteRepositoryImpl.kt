@@ -118,7 +118,6 @@ class GroupChallengeRemoteRepositoryImpl @Inject constructor(
                             "GroupChallengeRepositoryImpl",
                             "Failed to fetch challenge with ID and STATUS: ${groupChallengeResponse.challengeId}"
                         )
-                        return Event.Failure("Not found challenges by STATUS")
                     }
                 }
                 Log.d(
