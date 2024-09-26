@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -25,11 +25,12 @@ import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.addfriends.adapter.AddFriendsAdapter
 import com.example.graduationproject.presentation.createchallenge.CreateChallengeView
 import com.example.graduationproject.presentation.creategroup.CreateGroupView
-import com.example.graduationproject.presentation.groupparticipants.GroupParticipantsViewArgs
 import com.example.graduationproject.presentation.util.getSerializableCompat
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.example.graduationproject.presentation.util.putArguments
+import com.facebook.shimmer.ShimmerFrameLayout
+import kotlinx.coroutines.delay
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -44,6 +45,9 @@ class AddFriendsView : Fragment() {
     private lateinit var friendsCheckView: RecyclerView
     private lateinit var sharedPreferences: SharedPreferences
     private val args: AddFriendsViewArgs by navArgs()
+    private lateinit var shimmerLayout: ShimmerFrameLayout
+    private lateinit var errorView: CardView
+    private lateinit var updateError: LinearLayout
 
     companion object {
         const val SELECTED_FRIENDS_REQUEST_KEY = "SELECTED_FRIENDS_REQUEST_KEY"
@@ -75,16 +79,19 @@ class AddFriendsView : Fragment() {
         initAdapter()
         getSelectedFriends()
         observeSelectedFriends()
-//        setUpFriends()
         observeFriends()
         setUpConfirmAction()
         onPressedBackAction()
+        setUpErrorUpdateAction()
     }
 
     private fun initViews() {
         actionBack = binding.actionPressedBackContainer
         confirmAction = binding.friendsContainer.confirmAction
         friendsCheckView = binding.friendsContainer.friendsRecyclerView
+        shimmerLayout = binding.friendsContainer.challengeShimmerLayout
+        errorView = binding.friendsContainer.errorView.errorRootContainer
+        updateError = binding.friendsContainer.errorView.updateContainer
     }
 
     private fun initAdapter() {
@@ -95,18 +102,15 @@ class AddFriendsView : Fragment() {
     }
 
     private fun getSelectedFriends() {
-        Log.d("AddFriendsView", "Setting up FragmentResultListeners")
         parentFragmentManager.setFragmentResultListener(
             CreateGroupView.ADDED_FRIENDS_TO_GROUP_REQUEST_KEY,
             this
         ) { _, bundle ->
-            Log.d("AddFriendsView", "Triggered by CreateGroupView result")
             val friendsArrayList = bundle.getSerializableCompat(
                 CreateGroupView.ADDED_FRIENDS_TO_GROUP_LIST_KEY,
                 ArrayList::class.java
             ) as? ArrayList<UserProfile>
             friendsArrayList?.let {
-                Log.d("AddFriendsView", "Adding friends from CreateGroupView: ${it.size} friends")
                 viewModel.addFriends(it)
             }
             setUpFriends()
@@ -116,16 +120,11 @@ class AddFriendsView : Fragment() {
             CreateChallengeView.ADDED_FRIENDS_TO_CHALLENGE_REQUEST_KEY,
             this
         ) { _, bundle ->
-            Log.d("AddFriendsView", "Triggered by CreateChallengeView result")
             val friendsArrayList = bundle.getSerializableCompat(
                 CreateChallengeView.ADDED_FRIENDS_TO_CHALLENGE_LIST_KEY,
                 ArrayList::class.java
             ) as? ArrayList<UserProfile>
             friendsArrayList?.let {
-                Log.d(
-                    "AddFriendsView",
-                    "Adding friends from CreateChallengeView: ${it.size} friends"
-                )
                 viewModel.addFriends(it)
             }
             setUpGroupFriends()
@@ -143,9 +142,7 @@ class AddFriendsView : Fragment() {
     }
 
     private fun setUpFriends() {
-        Log.d("AddFriendsView", "SetUpFriends method is starting")
         val userId = getUserId()
-        Log.d("AddFriendsView", "Setting up friends for userId: $userId")
         viewModel.setUpFriends(userId)
     }
 
@@ -156,9 +153,7 @@ class AddFriendsView : Fragment() {
     }
 
     private fun setUpGroupFriends() {
-        Log.d("AddFriendsView", "SetUpGroupFriends method is starting")
         args.groupId?.let { groupId ->
-            Log.d("AddFriendsView", "Setting up group friends for groupId: $groupId")
             viewModel.setUpGroupFriends(groupId)
         } ?: run {
             Log.e("CreateGroupView", "Group ID is null. Cannot set up group friends.")
@@ -170,19 +165,17 @@ class AddFriendsView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
-                    Log.d("observeFriends", "New view state: $it")
                     when (it) {
                         is AddFriendsViewState.Success -> {
                             loadFriends(it.data)
-                            Log.d("observeFriends", "Success view state, data: ${it.data}")
                         }
 
                         is AddFriendsViewState.Loading -> {
-                            Log.d("observeFriends", "Loading view state")
+                            startShimmer()
                         }
 
                         is AddFriendsViewState.Failure -> {
-                            Log.d("observeFriends", "Failure view state")
+                            handleOnFailure()
                         }
                     }
                 }
@@ -195,6 +188,24 @@ class AddFriendsView : Fragment() {
             !viewModel.selectedFriends.value.contains(friend)
         }.toMutableList()
         adapter.setFriends(filteredFriends)
+        stopShimmer()
+    }
+
+    private fun startShimmer() {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        friendsCheckView.visibility = View.GONE
+    }
+
+    private fun stopShimmer() {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        friendsCheckView.visibility = View.VISIBLE
+    }
+
+    private fun handleOnFailure() {
+        stopShimmer()
+        errorView.visibility = View.VISIBLE
     }
 
     private fun setUpConfirmAction() {
@@ -214,6 +225,13 @@ class AddFriendsView : Fragment() {
     private fun onPressedBackAction() {
         actionBack.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun setUpErrorUpdateAction() {
+        updateError.setOnClickListener {
+            errorView.visibility = View.GONE
+            setUpFriends()
         }
     }
 }

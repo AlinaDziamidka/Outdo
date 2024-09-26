@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -20,7 +21,9 @@ import com.example.graduationproject.databinding.FragmentNotificationScreenBindi
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.notifications.adapter.NotificationAdapter
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -34,6 +37,9 @@ class NotificationView : Fragment() {
     private lateinit var notifications: RecyclerView
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var userId: String
+    private lateinit var shimmerLayout: ShimmerFrameLayout
+    private lateinit var errorView: CardView
+    private lateinit var updateError: LinearLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,11 +67,15 @@ class NotificationView : Fragment() {
         initAdapter()
         setNotifications()
         observeNotifications()
+        setUpErrorUpdateAction()
     }
 
     private fun initViews() {
         actionBack = binding.actionPressedBackContainer
         notifications = binding.notificationsRecyclerView
+        shimmerLayout = binding.shimmerLayout
+        errorView = binding.errorView.errorRootContainer
+        updateError = binding.errorView.updateContainer
     }
 
     private fun getCurrentUserId() {
@@ -100,6 +110,10 @@ class NotificationView : Fragment() {
         viewModel.deleteUserGroup(userId, groupId)
     }
 
+    private fun deleteNotification(notification: Pair<UserProfile, Group>) {
+        val groupId = notification.second.groupId
+        viewModel.deleteNotification(userId, groupId)
+    }
 
     private fun setNotifications() {
         viewModel.setNotifications(userId)
@@ -109,19 +123,17 @@ class NotificationView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
-                    Log.d("observeNotifications", "New view state: $it")
                     when (it) {
                         is NotificationsViewState.Success -> {
                             handleOnSuccess(it.data)
-                            Log.d("observeNotifications", "Success view state, data: ${it.data}")
                         }
 
                         is NotificationsViewState.Loading -> {
-                            Log.d("observeNotifications", "Loading view state")
+                            startShimmer()
                         }
 
                         is NotificationsViewState.Failure -> {
-                            Log.d("observeNotifications", "Failure view state")
+                            handleOnFailure()
                         }
                     }
                 }
@@ -131,10 +143,30 @@ class NotificationView : Fragment() {
 
     private fun handleOnSuccess(notificationPairs: MutableList<Pair<UserProfile, Group>>) {
         adapter.setNotifications(notificationPairs)
+        stopShimmer()
     }
 
-    private fun deleteNotification (notification: Pair<UserProfile, Group>){
-        val  groupId = notification.second.groupId
-        viewModel.deleteNotification(userId, groupId)
+    private fun startShimmer() {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        notifications.visibility = View.GONE
+    }
+
+    private fun stopShimmer() {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        notifications.visibility = View.VISIBLE
+    }
+
+    private fun handleOnFailure() {
+        stopShimmer()
+        errorView.visibility = View.VISIBLE
+    }
+
+    private fun setUpErrorUpdateAction() {
+        updateError.setOnClickListener {
+            errorView.visibility = View.GONE
+            setNotifications()
+        }
     }
 }

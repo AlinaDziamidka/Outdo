@@ -1,24 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/addFriendsContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     android:background="@drawable/bg_friends_container"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/challengeShimmerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shimmer_duration="1000">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/friends_checklist_shimmer" />
+
+            <include layout="@layout/friends_checklist_shimmer" />
+
+            <include layout="@layout/friends_checklist_shimmer" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <include
+        android:id="@+id/errorView"
+        layout="@layout/error_card"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/friends_checklist" />
+        tools:listitem="@layout/friends_checklist"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/confirmAction"
+        style="@style/button_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_sign_in_action"
-        android:text="@string/add_friends_screen_confirm_action"
-        style="@style/button_action"/>
+        android:text="@string/add_friends_screen_confirm_action" />
 </LinearLayout>

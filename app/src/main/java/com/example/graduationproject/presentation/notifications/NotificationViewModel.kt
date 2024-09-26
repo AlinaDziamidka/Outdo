@@ -5,12 +5,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.graduationproject.domain.entity.Group
-import com.example.graduationproject.domain.entity.UserNotifications
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.usecase.DeleteNotificationUseCase
 import com.example.graduationproject.domain.usecase.DeleteUserGroupUseCase
 import com.example.graduationproject.domain.usecase.FetchNotificationsUseCase
-import com.example.graduationproject.domain.usecase.SetGroupParticipantsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,14 +40,9 @@ class NotificationViewModel @Inject constructor(
                 .onStart {
                     _viewState.value = NotificationsViewState.Loading
                 }.catch {
-                    Log.e(
-                        "NotificationViewModel",
-                        "Fetching notifications: Error - ${it.message}"
-                    )
                     _viewState.value =
                         NotificationsViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { notifications ->
-                    Log.d("NotificationViewModel", "Fetching notifications: Success")
                     _viewState.value = NotificationsViewState.Success(notifications)
                 }
         }

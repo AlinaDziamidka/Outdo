@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.GroupAndChallenges
 import com.example.graduationproject.domain.usecase.FetchUserGroupChallengesUseCase
-import com.example.graduationproject.domain.usecase.FetchUserGroupsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

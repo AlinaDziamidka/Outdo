@@ -17,12 +17,10 @@ class BackendlessFCMService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        Log.d("FCM", "Message received: $remoteMessage")
 
         if (remoteMessage.data.isNotEmpty()) {
-            Log.d("FCM", "Data: ${remoteMessage.data}")
             val messageJson =
-                remoteMessage.data["message"] ?: "{}"  // Получение JSON строки из данных
+                remoteMessage.data["message"] ?: "{}"
             parseAndShowNotification(messageJson)
         }
     }
@@ -59,18 +57,6 @@ class BackendlessFCMService : FirebaseMessagingService() {
         }
     }
 
-//        remoteMessage.notification?.let {
-//            showNotification(it.title, it.body)
-//        }
-//
-//        if (remoteMessage.data.isNotEmpty()) {
-//            Log.d("FCM", "Data: ${remoteMessage.data}")
-//            val title = remoteMessage.data["android-content-title"] ?: "Default Title"
-//            val body = remoteMessage.data["android-content-text"] ?: "Default Body"
-//            showNotification(title, body)
-//        }
-//    }
-
     private fun showNotification(title: String?, body: String?) {
         val intent = Intent(this, NotificationView::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -91,7 +77,6 @@ class BackendlessFCMService : FirebaseMessagingService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notificationBuilder.build())
-        Log.d("FCM", "Notification shown")
     }
 
     override fun onNewToken(token: String) {
