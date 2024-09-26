@@ -50,7 +50,6 @@ class CreateGroupViewModel @Inject constructor(
         _addedFriends.value.addAll(newFriends)
     }
 
-
     fun setGroup(groupName: String, creatorId: String, groupAvatarPath: String?) {
         viewModelScope.launch {
             createGroupUseCase(
@@ -59,14 +58,9 @@ class CreateGroupViewModel @Inject constructor(
                 .onStart {
                     _viewState.value = CreateGroupViewState.Loading
                 }.catch {
-                    Log.e(
-                        "CreateGroupViewModel",
-                        "Insert group: Error - ${it.message}"
-                    )
                     _viewState.value =
                         CreateGroupViewState.Failure(it.message ?: "Something went wrong.")
                 }.collect { group ->
-                    Log.d("CreateGroupViewModel", "Inserting group: Success")
                     _viewState.value = CreateGroupViewState.Success(group)
                 }
         }

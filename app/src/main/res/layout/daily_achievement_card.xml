@@ -54,7 +54,7 @@
             tools:text="В этом задании вам предстоит выйти на улицу и найти новое знакомство" />
 
         <Button
-            android:id="@+id/participateAction"
+            android:id="@+id/participateDailyAction"
             style="@style/button_action"
             android:layout_width="0dp"
             android:layout_height="32dp"

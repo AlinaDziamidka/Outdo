@@ -68,6 +68,7 @@ class NotificationView : Fragment() {
         setNotifications()
         observeNotifications()
         setUpErrorUpdateAction()
+        onPressedBackAction()
     }
 
     private fun initViews() {
@@ -167,6 +168,12 @@ class NotificationView : Fragment() {
         updateError.setOnClickListener {
             errorView.visibility = View.GONE
             setNotifications()
+        }
+    }
+
+    private fun onPressedBackAction() {
+        actionBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 }

@@ -54,7 +54,7 @@
             tools:text="Получите несколько заданий на очищение нашей планеты от мусора" />
 
         <Button
-            android:id="@+id/participateAction"
+            android:id="@+id/participateWeekAction"
             style="@style/button_action"
             android:layout_width="0dp"
             android:layout_height="32dp"

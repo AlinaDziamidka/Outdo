@@ -1,110 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="24dp"
-    android:layout_marginEnd="16dp"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/groupContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/myGroupsView"
-            style="@style/header_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignBottom="@id/createGroupAction"
-            android:layout_alignParentStart="true"
-            android:gravity="center_vertical"
-            android:text="@string/group_screen_header" />
-
-        <Button
-            android:id="@+id/createGroupAction"
-            style="@style/create_group_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_create_feature_action"
-            android:text="@string/group_screen_create_group_action" />
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/groupNameView"
-        style="@style/card_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/group_screen_group_name" />
-
-    <EditText
-        android:id="@+id/groupNameContent"
-        style="@style/hint_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bg_edit_text"
-        android:hint="@string/group_screen_edit_text_enter_text"
-        android:paddingStart="16dp" />
-
-    <TextView
-        android:id="@+id/groupAvatarView"
-        style="@style/card_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/group_screen_group_avatar" />
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/uploadAvatarView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/groupContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/myGroupsView"
+                style="@style/header_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@id/createGroupAction"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:text="@string/group_screen_header" />
+
+            <Button
+                android:id="@+id/createGroupAction"
+                style="@style/create_group_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/bg_create_feature_action"
+                android:text="@string/group_screen_create_group_action" />
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/fileNameView"
-            style="@style/regular_grey_text_color_text"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:background="@drawable/bg_add_file_name"
-            android:paddingStart="16dp"
-            android:text="@string/group_screen_file_name" />
-
-        <Button
-            android:id="@+id/uploadAction"
-            style="@style/button_action"
-            android:layout_width="0dp"
+            android:id="@+id/groupNameView"
+            style="@style/card_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_add_file_action"
-            android:paddingStart="16dp"
-            android:text="@string/group_screen_upload_action" />
+            android:text="@string/group_screen_group_name" />
+
+        <EditText
+            android:id="@+id/groupNameContent"
+            style="@style/hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_edit_text"
+            android:hint="@string/group_screen_edit_text_enter_text"
+            android:paddingStart="16dp" />
+
+        <TextView
+            android:id="@+id/groupAvatarView"
+            style="@style/card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/group_screen_group_avatar" />
+
+        <LinearLayout
+            android:id="@+id/uploadAvatarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fileNameView"
+                style="@style/regular_grey_text_color_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_add_file_name"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:text="@string/group_screen_file_name" />
+
+            <Button
+                android:id="@+id/uploadAction"
+                style="@style/button_action"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_add_file_action"
+                android:paddingStart="16dp"
+                android:text="@string/group_screen_upload_action" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/participantsView"
+            style="@style/card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/group_screen_participants_title" />
+
+        <include
+            android:id="@+id/addFriendsAction"
+            layout="@layout/add_friends_button" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/friendsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            tools:listitem="@layout/friends_card" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/participantsView"
-        style="@style/card_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/group_screen_participants_title" />
-
- <include
-     android:id="@+id/addFriendsAction"
-     layout="@layout/add_friends_button"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friendsRecyclerView"
+    <FrameLayout
+        android:id="@+id/progressOverlay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        tools:listitem="@layout/friends_card" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</FrameLayout>

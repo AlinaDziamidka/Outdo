@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -18,20 +19,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.graduationproject.R
 import com.example.graduationproject.databinding.FragmentCreateGroupBinding
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.presentation.addfriends.AddFriendsView.Companion.SELECTED_FRIENDS_LIST_KEY
 import com.example.graduationproject.presentation.addfriends.AddFriendsView.Companion.SELECTED_FRIENDS_REQUEST_KEY
-import com.example.graduationproject.presentation.createchallenge.CreateChallengeViewArgs
 import com.example.graduationproject.presentation.creategroup.adapter.CreateGroupAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.graduationproject.presentation.util.getSerializableCompat
 import com.example.graduationproject.presentation.util.putArguments
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
@@ -50,6 +49,7 @@ class CreateGroupView : Fragment() {
     private lateinit var friendsView: RecyclerView
     private lateinit var adapter: CreateGroupAdapter
     private lateinit var participants: MutableList<UserProfile>
+    private lateinit var progressOverlay: FrameLayout
 
     companion object {
         const val ADDED_FRIENDS_TO_GROUP_REQUEST_KEY = "ADDED_FRIENDS_TO_GROUP_REQUEST_KEY"
@@ -93,6 +93,7 @@ class CreateGroupView : Fragment() {
         groupNameView = binding.groupNameContent
         addFriendsAction = binding.addFriendsAction.rootButtonContainer
         friendsView = binding.friendsRecyclerView
+        progressOverlay = binding.progressOverlay
     }
 
     private fun initAdapter() {
@@ -188,27 +189,43 @@ class CreateGroupView : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect() {
-                    Log.d("observeAddedGroup", "New view state: $it")
                     when (it) {
                         is CreateGroupViewState.Success -> {
                             val group = it.data
-                            setUserGroup(group)
-                            notifyGroupParticipants(participants, group)
-                            moveToGroupDetailsScreen(group)
-                            Log.d("observeAddedGroups", "Success view state, data: ${it.data}")
+                            handleOnSuccess(group)
                         }
 
                         is CreateGroupViewState.Loading -> {
-                            Log.d("observeAddedGroup", "Loading view state")
+                            showLoading()
                         }
 
                         is CreateGroupViewState.Failure -> {
-                            Log.d("observeAddedGroup", "Failure view state")
+                            hideLoading()
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun showLoading() {
+        progressOverlay.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        progressOverlay.visibility = View.GONE
+    }
+
+    private fun handleOnSuccess(group: Group) {
+        setUserGroup(group)
+        notifyGroupParticipants(participants, group)
+        hideLoading()
+        moveToGroupDetailsScreen(group)
+    }
+
+    private fun setUserGroup(group: Group) {
+        participants = viewModel.addedFriends.value
+        viewModel.addGroupParticipants(group.groupId, participants)
     }
 
     private fun notifyGroupParticipants(participants: MutableList<UserProfile>, group: Group) {
@@ -217,11 +234,6 @@ class CreateGroupView : Fragment() {
         val message =
             "{ \"creatorName\": \"$creatorName\", \"groupName\": \"${group.groupName}\", \"groupId\": \"${group.groupId}\" }"
         viewModel.notifyParticipants(participants, message, group, creatorId)
-    }
-
-    private fun setUserGroup(group: Group) {
-        participants = viewModel.addedFriends.value
-        viewModel.addGroupParticipants(group.groupId, participants)
     }
 
     private fun moveToGroupDetailsScreen(group: Group) {

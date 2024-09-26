@@ -31,7 +31,7 @@ class DailyView(rootView: DailyAchievementCardBinding) {
         timeView = rootView.timeView
         dailyNameView = rootView.dailyAchievementNameView
         descriptionView = rootView.descriptionView
-        participateAction = rootView.participateAction
+        participateAction = rootView.participateDailyAction
         iconView = rootView.iconView
         shimmerIcon = rootView.weekIconShimmerLayout
     }

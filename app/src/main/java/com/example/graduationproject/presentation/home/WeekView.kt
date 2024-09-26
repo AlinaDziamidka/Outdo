@@ -32,7 +32,7 @@ class WeekView(rootView: WeeklyChallengeCardBinding) {
         timeView = rootView.timeView
         weeklyNameView = rootView.weeklyChallengeNameView
         descriptionView = rootView.descriptionView
-        participateAction = rootView.participateAction
+        participateAction = rootView.participateWeekAction
         iconView = rootView.iconView
         shimmerIcon = rootView.weekIconShimmerLayout
     }
