@@ -46,16 +46,10 @@ class CreateAchievementAdapter(
                 )
             achievementNameView.setText(achievementName)
             achievementDescriptionView.setText(achievementDescription)
-
-            // Remove existing TextWatchers to avoid duplication
             achievementNameView.removeTextChangedListener(textWatcherName)
             achievementDescriptionView.removeTextChangedListener(textWatcherDescription)
-
-            // Set new TextWatchers
             achievementNameView.addTextChangedListener(textWatcherName)
             achievementDescriptionView.addTextChangedListener(textWatcherDescription)
-
-            // Keep the current position
             textWatcherName.position = position
             textWatcherDescription.position = position
         }
@@ -66,9 +60,12 @@ class CreateAchievementAdapter(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Invoke callback only if the position is valid
                 if (position >= 0) {
-                    onTextChanged(position, s.toString(), achievementDescriptionView.text.toString())
+                    onTextChanged(
+                        position,
+                        s.toString(),
+                        achievementDescriptionView.text.toString()
+                    )
                 }
             }
 
@@ -81,59 +78,13 @@ class CreateAchievementAdapter(
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Invoke callback only if the position is valid
                 if (position >= 0) {
                     onTextChanged(position, achievementNameView.text.toString(), s.toString())
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         }
-
-            // Remove existing text watchers to prevent duplicate triggers
-//            achievementNameView.addTextChangedListener(null)
-//            achievementDescriptionView.addTextChangedListener(null)
-
-            // Add text watchers
-
-//            addTextWatcher(achievementNameView, position)
-//            addTextWatcher(achievementDescriptionView, position)
-        }
-//            achievementDescriptionView.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//
-//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                    onTextChanged(position, achievementNameView.text.toString(), s.toString())
-//                }
-//
-//                override fun afterTextChanged(s: Editable?) {}
-//            })
-//        }
-
-//
-//        private fun CreateAchievementViewHolder.addTextWatcher(textView: EditText, position: Int) {
-//            textView.addTextChangedListener(null)
-//            textView.addTextChangedListener(object : TextWatcher {
-//                override fun beforeTextChanged(
-//                    s: CharSequence?,
-//                    start: Int,
-//                    count: Int,
-//                    after: Int
-//                ) {
-//                }
-//
-//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                    onTextChanged(
-//                        position,
-//                        s.toString(),
-//                        textView.text.toString()
-//                    )
-//                }
-//
-//                override fun afterTextChanged(s: Editable?) {}
-//            })
-//        }
-
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

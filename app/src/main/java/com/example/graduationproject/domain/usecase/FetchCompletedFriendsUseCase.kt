@@ -1,5 +1,6 @@
 package com.example.graduationproject.domain.usecase
 
+import android.util.Log
 import com.example.graduationproject.di.qualifiers.Local
 import com.example.graduationproject.di.qualifiers.Remote
 import com.example.graduationproject.domain.entity.AchievementStatus
@@ -14,6 +15,7 @@ import com.example.graduationproject.domain.repository.remote.UserAchievementRem
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
+import com.example.graduationproject.domain.util.writeToLocalDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -56,6 +58,8 @@ class FetchCompletedFriendsUseCase @Inject constructor(
                     users.add(localUser)
                 }
             }
+
+            Log.d("FetchCompletedFriendsUseCase", "users: $users")
             if (users.isEmpty()) {
                 completedUserAchievements.forEach { userAchievement ->
                     val userEvent = userRemoteRepository.fetchUserById(userAchievement.userId)
@@ -73,11 +77,20 @@ class FetchCompletedFriendsUseCase @Inject constructor(
             withContext(Dispatchers.IO) {
                 userAchievementLocalRepository.fetchUsersByAchievementId(achievementId)
             }
+        Log.d("FetchCompletedFriendsUseCase", "userAchievements: $userAchievements")
         if (userAchievements.isEmpty()) {
             val userAchievementsEvent =
                 userAchievementRemoteRepository.fetchUsersByAchievementId(achievementId)
             if (userAchievementsEvent is Event.Success) {
                 userAchievements = userAchievementsEvent.data
+//                userAchievements.forEach { userAchievement ->
+//                    withContext(Dispatchers.IO) {
+//                        writeToLocalDatabase(
+//                            userAchievementLocalRepository::insertOne,
+//                            userAchievement
+//                        )
+//                    }
+//                }
             }
         }
         return userAchievements

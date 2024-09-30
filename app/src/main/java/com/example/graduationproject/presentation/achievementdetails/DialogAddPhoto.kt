@@ -1,16 +1,12 @@
 package com.example.graduationproject.presentation.achievementdetails
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.DialogFragmentAddPhotoBinding
@@ -87,7 +83,6 @@ class DialogAddPhoto : DialogFragment() {
 
 override fun onStart() {
     super.onStart()
-    val dialogWindow = dialog?.window
 
     dialog?.window?.setLayout(
         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -100,10 +95,5 @@ override fun onStart() {
         super.onDetach()
         listener = null
     }
-
-    //    private fun Int.dpToPx(): Int {
-//        val density = requireContext().resources.displayMetrics.density
-//        return (this * density).toInt()
-//    }
 
 }

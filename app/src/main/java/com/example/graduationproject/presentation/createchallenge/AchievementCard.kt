@@ -3,7 +3,6 @@ package com.example.graduationproject.presentation.createchallenge
 import android.content.Context
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.content.ContextCompat.getString
 import androidx.core.widget.doAfterTextChanged
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.CreateAchievementCardBinding
@@ -17,12 +16,8 @@ class AchievementCard(
     private val achievementName: EditText = binding.achievementNameView
     private val description: EditText = binding.descriptionView
 
-    var title: String = ""
-    var descriptionText: String = ""
-
-    init {
-        bindViews()
-    }
+    private var title: String = ""
+    private var descriptionText: String = ""
 
     init {
         bindViews()

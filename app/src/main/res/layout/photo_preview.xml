@@ -10,8 +10,15 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
     <ImageView
         android:id="@+id/photoView"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="150dp"
@@ -23,6 +30,19 @@
         android:padding="0dp"
         tools:src="@drawable/photo_example" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+    <include
+        android:id="@+id/errorView"
+        layout="@layout/error_loading_photo"
+        android:visibility="gone"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/closeActionView"
         style="@style/unselected_simple_button_action"
@@ -33,5 +53,6 @@
         android:paddingStart="32dp"
         android:paddingEnd="32dp"
         android:text="@string/photo_preview_close_action"
-        android:visibility="gone"/>
+        android:visibility="gone"
+/>
 </LinearLayout>

@@ -105,4 +105,7 @@
     <string name="error_card_header">Error</string>
     <string name="error_card_went_wrong">Something went wrong, please try again later</string>
     <string name="error_card_update">Update</string>
+    <string name="create_challenge_enter_date">Enter date</string>
+    <string name="error_loading_photo_header">Error loading</string>
+    <string name="error_loading_photo_description">Failed to load image, please try again later</string>
 </resources>

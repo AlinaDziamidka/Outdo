@@ -13,9 +13,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -41,6 +43,7 @@ import java.io.File
 import java.io.FileOutputStream
 import com.example.graduationproject.BuildConfig
 import com.example.graduationproject.presentation.photoview.PhotoView
+import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -65,7 +68,15 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
     private lateinit var completeActionView: Button
     private lateinit var currentAchievement: Achievement
     private lateinit var photoUri: Uri
-
+    private lateinit var achievementNameShimmerLayout: ShimmerFrameLayout
+    private lateinit var achievementDescriptionShimmerLayout: ShimmerFrameLayout
+    private lateinit var completedShimmerLayout: ShimmerFrameLayout
+    private lateinit var uncompletedShimmerLayout: ShimmerFrameLayout
+    private lateinit var completedErrorView: CardView
+    private lateinit var updateCompletedError: LinearLayout
+    private lateinit var uncompletedErrorView: CardView
+    private lateinit var updateUncompletedError: LinearLayout
+    private lateinit var addPhotoHintView: TextView
 
     companion object {
         const val CAMERA_PERMISSION_REQUEST_CODE = 1001
@@ -102,6 +113,7 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         observeCompletedFriends()
         observeUncompletedFriends()
         setUpCompleteAction()
+        setUpErrorUpdateAction()
     }
 
     private fun initViews() {
@@ -110,6 +122,15 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         completedView = binding.completedRecyclerView
         uncompletedView = binding.uncompletedRecyclerView
         completeActionView = binding.completeAchievementAction
+        achievementNameShimmerLayout = binding.achievementNameShimmerLayout
+        achievementDescriptionShimmerLayout = binding.achievementDescriptionShimmerLayout
+        completedShimmerLayout = binding.completedShimmerLayout
+        uncompletedShimmerLayout = binding.uncompletedShimmerLayout
+        completedErrorView = binding.completedErrorView.errorRootContainer
+        uncompletedErrorView = binding.uncompletedErrorView.errorRootContainer
+        updateCompletedError = binding.completedErrorView.updateContainer
+        updateUncompletedError = binding.uncompletedErrorView.updateContainer
+        addPhotoHintView = binding.addPhotoHintView
     }
 
     private fun setUpChallengeName() {
@@ -127,21 +148,27 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateCurrentAchievement.collect {
-                    Log.d("observeCurrentAchievement", "New view state: $it")
                     when (it) {
                         is AchievementDetailsViewState.Success -> {
                             currentAchievement = it.data
                             setAchievementName(currentAchievement)
                             setAchievementDescription(currentAchievement)
-                            Log.d(
-                                "observeCurrentAchievement", "Success view state, data: ${it.data}"
-                            )
                         }
 
                         is AchievementDetailsViewState.Loading -> {
+                            startShimmer(achievementNameShimmerLayout, achievementNameView)
+                            startShimmer(
+                                achievementDescriptionShimmerLayout,
+                                achievementDescriptionView
+                            )
                         }
 
                         is AchievementDetailsViewState.Failure -> {
+                            stopShimmer(achievementNameShimmerLayout, achievementNameView)
+                            stopShimmer(
+                                achievementDescriptionShimmerLayout,
+                                achievementDescriptionView
+                            )
                         }
                     }
                 }
@@ -149,14 +176,28 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         }
     }
 
+    private fun startShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
+        view.visibility = View.GONE
+    }
+
+    private fun stopShimmer(shimmerLayout: ShimmerFrameLayout, view: View) {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        view.visibility = View.VISIBLE
+    }
+
     private fun setAchievementName(achievement: Achievement) {
         val achievementTitle =
             getString(R.string.achievement_details_title, achievement.achievementName)
         achievementNameView.text = achievementTitle
+        stopShimmer(achievementNameShimmerLayout, achievementNameView)
     }
 
     private fun setAchievementDescription(achievement: Achievement) {
         achievementDescriptionView.text = achievement.description
+        stopShimmer(achievementDescriptionShimmerLayout, achievementDescriptionView)
     }
 
     private fun initAdapter() {
@@ -175,35 +216,19 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
 
     private fun setUpFriendsDetailsAction(friendId: String) {
         lifecycleScope.launch {
-            // Start fetching the photo data
             viewModel.getPhoto(friendId, achievementId)
 
-            // Collect the viewStateDownload flow
             viewModel.viewStateDownload.collect { viewState ->
                 when (viewState) {
-
                     is AchievementDetailsViewState.Success -> {
-                        // Handle success state
-                        Log.d(
-                            "observeFriendPhotoAchievement",
-                            "Success view state, data: ${viewState.data}"
-                        )
-                        showPhotoView(viewState.data)  // Pass the photo URL or data to another method
-
+                        showFriendPhoto(viewState.data, false)
                         cancel()
                     }
 
                     is AchievementDetailsViewState.Loading -> {
-                        // Handle loading state if necessary (e.g., show a loading spinner)
-                        Log.d("observeFriendPhotoAchievement", "Loading")
                     }
 
                     is AchievementDetailsViewState.Failure -> {
-                        // Handle failure state
-                        Log.e(
-                            "observeFriendPhotoAchievement",
-                            "Failure view state: ${viewState.message}"
-                        )
                         showErrorUploadingPhoto()
                         cancel()
                     }
@@ -211,51 +236,19 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
             }
         }
     }
-//    }
 
-//                    // Handle the success case
-//                    if (result is AchievementDetailsViewState.Success) {
-//                        showPhotoView(result.data)
-//                    } else if (result is AchievementDetailsViewState.Failure) {
-//                        showErrorUploadingPhoto()
-//                    }
-//
-//                } catch (e: Exception) {
-//                    // Handle any exceptions or errors
-//                    showErrorUploadingPhoto()
-//                }
-//            }
-//        }
+    private fun showFriendPhoto(photoUrl: String, isLoad: Boolean) {
+        val transaction = childFragmentManager.beginTransaction()
+        val photoViewDialog = PhotoView.newInstance(photoUrl, isLoad)
+        transaction.add(photoViewDialog, "PhotoDialog")
+        transaction.commitNow()
+    }
 
-
-//
-//        viewModel.getPhoto(friendId, achievementId)
-//        observeFriendPhotoAchievement()
-//    }
-
-//    private fun observeFriendPhotoAchievement() {
-//        lifecycleScope.launch {
-//                viewModel.viewStateDownload.collect {
-//                    Log.d("observeFriendPhotoAchievement", "New view state: $it")
-//                    when (it) {
-//                        is AchievementDetailsViewState.Success -> {
-//                            Log.d(
-//                                "observeFriendPhotoAchievement",
-//                                "Success view state, data: ${it.data}"
-//                            )
-//                            showPhotoView(it.data)
-//                        }
-//
-//                        is AchievementDetailsViewState.Loading -> {
-//                        }
-//
-//                        is AchievementDetailsViewState.Failure -> {
-//                            showErrorUploadingPhoto()
-//                        }
-//                }
-//            }
-//        }
-//    }
+    private fun showErrorUploadingPhoto() {
+        val dialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
+        dialog?.errorUploadingPhoto()
+        dialog?.hideProgress()
+    }
 
     private fun initUncompletedAdapter() {
         uncompletedView.layoutManager =
@@ -276,17 +269,17 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateCompletedFriends.collect {
-                    Log.d("observeCompletedFriends", "New view state: $it")
                     when (it) {
                         is AchievementDetailsViewState.Success -> {
                             loadCompletedFriends(it.data)
-                            Log.d("observeCompletedFriends", "Success view state, data: ${it.data}")
                         }
 
                         is AchievementDetailsViewState.Loading -> {
+                            startShimmer(completedShimmerLayout, completedView)
                         }
 
                         is AchievementDetailsViewState.Failure -> {
+                            handleOnCompletedFriendsFailure()
                         }
                     }
                 }
@@ -296,25 +289,39 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
 
     private fun loadCompletedFriends(completedFriends: MutableList<UserProfile>) {
         completedAdapter.setCompletedFriends(completedFriends)
+        checkIfAchievementCompleted(completedFriends)
+        stopShimmer(completedShimmerLayout, completedView)
+    }
+
+    private fun checkIfAchievementCompleted(completedFriends: MutableList<UserProfile>) {
+        completedFriends.forEach { completedFriend ->
+            if (completedFriend.userId == userId) {
+                completeActionView.visibility = View.GONE
+                addPhotoHintView.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun handleOnCompletedFriendsFailure() {
+        stopShimmer(completedShimmerLayout, completedView)
+        completedErrorView.visibility = View.VISIBLE
     }
 
     private fun observeUncompletedFriends() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateUncompletedFriends.collect {
-                    Log.d("observeUncompletedFriends", "New view state: $it")
                     when (it) {
                         is AchievementDetailsViewState.Success -> {
                             loadUncompletedFriends(it.data)
-                            Log.d(
-                                "observeUncompletedFriends", "Success view state, data: ${it.data}"
-                            )
                         }
 
                         is AchievementDetailsViewState.Loading -> {
+                            startShimmer(uncompletedShimmerLayout, uncompletedView)
                         }
 
                         is AchievementDetailsViewState.Failure -> {
+                            handleOnUncompletedFriendsFailure()
                         }
                     }
                 }
@@ -323,8 +330,13 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
     }
 
     private fun loadUncompletedFriends(uncompletedFriends: MutableList<UserProfile>) {
-        Log.d("AchievementDetailsView", "Uncompleted friends $uncompletedFriends")
         uncompletedAdapter.setUncompletedFriends(uncompletedFriends)
+        stopShimmer(uncompletedShimmerLayout, uncompletedView)
+    }
+
+    private fun handleOnUncompletedFriendsFailure() {
+        stopShimmer(uncompletedShimmerLayout, uncompletedView)
+        uncompletedErrorView.visibility = View.VISIBLE
     }
 
     private fun setUpCompleteAction() {
@@ -343,11 +355,9 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
             requireContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
                 startCameraActivity()
             }
-
             !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
                 showCameraPermissionRationale()
             }
-
             else -> {
                 requestSystemPermission()
             }
@@ -355,7 +365,6 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
     }
 
     private fun startCameraActivity() {
-        Log.d("AchievementDetailsView", "Open Camera Clicked")
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val photoFile = File(requireContext().cacheDir, "photo_${System.currentTimeMillis()}.jpg")
         val authority = "${BuildConfig.APPLICATION_ID}.provider"
@@ -367,7 +376,6 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
             Log.e("AchievementDetailsView", "No app available to open camera")
         }
     }
-
 
     private fun showCameraPermissionRationale() {
         AlertDialog.Builder(requireContext()).setTitle(R.string.dialog_camera_permission_title)
@@ -446,7 +454,7 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startCameraActivity()
                 } else {
-                    Log.d("AchievementDetailsView", "Camera permission denied.")
+                    Log.e("AchievementDetailsView", "Camera permission denied.")
                 }
             }
 
@@ -454,7 +462,7 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openGalleryPicker()
                 } else {
-                    Log.d("AchievementDetailsView", "Read media permission denied.")
+                    Log.e("AchievementDetailsView", "Read media permission denied.")
                 }
             }
 
@@ -471,19 +479,11 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                 try {
                     when (requestCode) {
                         REQUEST_IMAGE_CAPTURE -> {
-                            Log.d("AchievementDetailsView", "imageUri: $photoUri")
                             photoUri.let {
-                                Log.d("AchievementDetailsView", "imageUri: $photoUri")
-                                Log.d(
-                                    "AchievementDetailsView", "imageUri not null: $photoUri"
-                                )
                                 val photoFile = uriToFile(it)
-                                Log.d(
-                                    "AchievementDetailsView",
-                                    "Photo file created: ${photoFile.absolutePath}"
-                                )
-                                showPhotoView(photoUri.toString())
+                                showPhotoView(photoUri.toString(), true)
                                 viewModel.setUpPhoto(userId, achievementId, photoFile)
+                                observePhotoUploading()
                             }
                         }
 
@@ -491,8 +491,9 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                             val imageUri = data?.data
                             imageUri?.let {
                                 val imageFile = uriToFile(it)
-                                showPhotoView(imageFile.toString())
+                                showPhotoView(imageFile.toString(), true)
                                 viewModel.setUpPhoto(userId, achievementId, imageFile)
+                                observePhotoUploading()
                             }
                         }
                     }
@@ -501,7 +502,6 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
                 }
             }
         }
-        observePhotoUploading()
     }
 
 
@@ -514,6 +514,16 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
             }
         }
         file
+    }
+
+    private fun showPhotoView(photoUrl: String, isLoad: Boolean) {
+        preloadImage(photoUrl) {
+            val transaction = childFragmentManager.beginTransaction()
+            val photoViewDialog = PhotoView.newInstance(photoUrl, isLoad)
+
+            transaction.add(photoViewDialog, "PhotoDialog")
+            transaction.commitNow()
+        }
     }
 
     private fun preloadImage(photoUrl: String, onSuccess: () -> Unit) {
@@ -531,26 +541,19 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewStateUpload.collect {
-                    Log.d("observeUploadingPhoto", "New view state: $it")
                     when (it) {
                         is AchievementDetailsViewState.Success -> {
-                            Log.d(
-                                "observeUploadingPhoto",
-                                "Success upload view state, data: ${it.data}"
-                            )
+                            hideProgress()
                             cancel()
                         }
 
                         is AchievementDetailsViewState.Loading -> {
-//                            showPhotoView(photoUri.toString())
-                            Log.d("observeUploadingPhoto", "Loading upload view state")
-                            cancel()
                         }
 
                         is AchievementDetailsViewState.Failure -> {
-                            Log.e("observeUploadingPhoto", "Failure upload view state")
-                            delay(1900)
+                            delay(2200)
                             showErrorUploadingPhoto()
+                            cancel()
                         }
                     }
                 }
@@ -558,59 +561,32 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         }
     }
 
-//    private fun showPhotoView(photoUrl: String) {
-//        val photoViewDialog = PhotoView()
-//        photoViewDialog.setPhotoUrl(photoUrl)
-//        photoViewDialog.show(childFragmentManager, "PhotoDialog")
-////        photoViewDialog.getPhotoUrl(photoUrl)
-//    }
-
-    private fun showPhotoView(photoUrl: String) {
-//        val existingDialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
-//        existingDialog?.let {
-//            if (it.isAdded) {
-//                it.dismissAllowingStateLoss()
-//            }
-//        }
-//
-//
-//        val previousDialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
-//
-//
-//
-//        if (previousDialog != null) {
-//            if (previousDialog.isAdded) {
-//                Log.d("PhotoView", "Dialog already added")
-//            }
-//            childFragmentManager.beginTransaction().remove(previousDialog).commitAllowingStateLoss()
-//        }
+    private fun hideProgress() {
+        val dialog =
+            childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
+        dialog?.hideProgress()
+        addPhotoHintView.visibility = View.GONE
+        completeActionView.visibility = View.GONE
+    }
 
 
-        preloadImage(photoUrl) {
-            val transaction = childFragmentManager.beginTransaction()
-            val photoViewDialog = PhotoView.newInstance(photoUrl)
 
-            transaction.add(photoViewDialog, "PhotoDialog")
-            transaction.commitNow()
+    private fun setUpErrorUpdateAction() {
+        onClickCompletedUpdateAction()
+        onClickUncompletedUpdateAction()
+    }
+
+    private fun onClickCompletedUpdateAction() {
+        updateCompletedError.setOnClickListener {
+            completedErrorView.visibility = View.GONE
+            setUpCompletedFriends()
         }
-
-
-//        Log.d("FragmentManager", "BackStackEntryCount: ${childFragmentManager.backStackEntryCount}")
-//        for (i in 0 until childFragmentManager.backStackEntryCount) {
-//            val entry = childFragmentManager.getBackStackEntryAt(i)
-//            Log.d("FragmentManager", "BackStackEntry: ${entry.name}")
-//        }
     }
 
-    private fun showErrorUploadingPhoto() {
-        Log.d("AchievementDetailsView", "Attempting to show error photo")
-        val dialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
-        dialog?.errorUploadingPhoto()
+    private fun onClickUncompletedUpdateAction() {
+        updateUncompletedError.setOnClickListener {
+            uncompletedErrorView.visibility = View.GONE
+            setUpUncompletedFriends()
+        }
     }
-//        val photoViewDialog = PhotoView()
-//        photoViewDialog.show(childFragmentManager, "PhotoDialog")
-//    private fun updatePhotoView(uploadedUrl: String) {
-//        val dialog = childFragmentManager.findFragmentByTag("PhotoDialog") as? PhotoView
-//        dialog?.updatePhotoUrl(uploadedUrl)
-//    }
 }

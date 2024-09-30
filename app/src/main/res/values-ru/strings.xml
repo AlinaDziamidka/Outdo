@@ -107,4 +107,7 @@
     <string name="error_card_header">Ошибка</string>
     <string name="error_card_went_wrong">Что-то пошло не так, повторите попытку позже</string>
     <string name="error_card_update">Обновить</string>
+    <string name="create_challenge_enter_date">Укажите дату</string>
+    <string name="error_loading_photo_header">Ошибка загрузки</string>
+    <string name="error_loading_photo_description">Не удалось загрузить картинку, повторите попытку позже</string>
 </resources>

@@ -9,10 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.DialogFragment
 import coil.load
 import coil.request.CachePolicy
-import coil.size.Scale
 import coil.transform.RoundedCornersTransformation
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.PhotoPreviewBinding
@@ -21,11 +22,13 @@ class PhotoView : DialogFragment() {
 
     companion object {
         private const val PHOTO_URL = "PHOTO_URL"
+        private const val IS_LOAD = "IS_LOAD"
 
-        fun newInstance(photoUrl: String): PhotoView {
+        fun newInstance(photoUrl: String, loadingPhoto: Boolean): PhotoView {
             val fragment = PhotoView()
             val args = Bundle()
             args.putString(PHOTO_URL, photoUrl)
+            args.putBoolean(IS_LOAD, loadingPhoto)
             fragment.arguments = args
             return fragment
         }
@@ -33,9 +36,10 @@ class PhotoView : DialogFragment() {
 
     private var _binding: PhotoPreviewBinding? = null
     private val binding get() = _binding!!
-    private var loadingPhoto = true
     private lateinit var photoView: ImageView
     private lateinit var closeAction: Button
+    private lateinit var progressOverlay: ProgressBar
+    private lateinit var errorView: CardView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,14 +47,23 @@ class PhotoView : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-        Log.d("PhotoView", "onCreateView called")
         _binding = PhotoPreviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            retainInstance = false
+        retainInstance = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,41 +82,57 @@ class PhotoView : DialogFragment() {
     private fun initViews() {
         photoView = binding.photoView
         closeAction = binding.closeActionView
+        progressOverlay = binding.progressBar
+        errorView = binding.errorView.errorRootContainer
     }
 
     private fun getPhotoUrl(onResult: (Boolean) -> Unit) {
         val photoUrl = arguments?.getString(PHOTO_URL)
-        Log.d("PhotoView", "loadingPhoto: $loadingPhoto")
-        Log.d("PhotoView", "Photo URL: $photoUrl")
-        Log.d("PhotoView", "Photo drawable: ${photoView.drawable}")
-            photoView.load(photoUrl) {
-                placeholder(R.drawable.bg_photo_preview)
-                error(R.drawable.photo_example)
-                memoryCachePolicy(CachePolicy.ENABLED)
-                transformations(RoundedCornersTransformation(dpToPx(100f)))
-                listener(
-                    onSuccess = { _, _ ->
-                        Log.d("PhotoView", "Image loaded successfully")
-                        onResult(true)
-                    },
-                    onError = { _, _ ->
-                        Log.e("PhotoView", "Failed to load image")
-                        onResult(false)
-                    }
-                )
-            }
+        val loadingPhoto = arguments?.getBoolean(IS_LOAD, false) ?: false
+        photoView.load(photoUrl) {
+            placeholder(R.drawable.bg_photo_preview)
+            memoryCachePolicy(CachePolicy.ENABLED)
+            transformations(RoundedCornersTransformation(dpToPx(100f)))
+            listener(
+                onSuccess = { _, _ ->
+                    handleOnSuccess(loadingPhoto)
+                    onResult(true)
+                },
+                onError = { _, _ ->
+                    handleOnFailure()
+                    onResult(false)
+                }
+            )
+        }
+    }
+
+    private fun handleOnSuccess(loadingPhoto: Boolean) {
+        photoView.visibility = View.VISIBLE
+        errorView.visibility = View.GONE
+
+        if (loadingPhoto) {
+            progressOverlay.visibility = View.VISIBLE
+        } else {
+            progressOverlay.visibility = View.GONE
+        }
+    }
+
+    private fun handleOnFailure() {
+        photoView.visibility = View.GONE
+        errorView.visibility = View.VISIBLE
+        progressOverlay.visibility = View.GONE
     }
 
     fun errorUploadingPhoto() {
-        Log.e("PhotoView", "Showing error photo")
         if (::photoView.isInitialized) {
-            photoView.setImageResource(R.drawable.photo_example)
+            photoView.visibility = View.GONE
+            errorView.visibility = View.VISIBLE
             closeAction.visibility = View.VISIBLE
+            progressOverlay.visibility = View.GONE
         } else {
             Log.e("PhotoView", "PhotoView not initialized")
         }
     }
-
 
     private fun dpToPx(dp: Float): Float {
         return dp * Resources.getSystem().displayMetrics.density
@@ -115,6 +144,14 @@ class PhotoView : DialogFragment() {
         }
     }
 
+    fun hideProgress() {
+        progressOverlay.visibility = View.GONE
+    }
+
+    fun showProgress() {
+        progressOverlay.visibility = View.VISIBLE
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -123,13 +160,10 @@ class PhotoView : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("PhotoView", "onDestroyView called")
-        _binding = null  // Clear the binding reference
+        _binding = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("PhotoView", "onDestroy called")
     }
-
 }

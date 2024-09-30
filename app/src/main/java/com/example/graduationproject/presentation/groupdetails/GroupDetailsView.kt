@@ -291,17 +291,17 @@ class GroupDetailsView : Fragment() {
         onClickChallengesHistoryUpdateAction()
     }
 
-    private fun onClickChallengesHistoryUpdateAction() {
-        updateChallengesHistoryError.setOnClickListener {
-            challengesHistoryErrorView.visibility = View.GONE
-            setUpChallengesHistory()
-        }
-    }
-
     private fun onClickChallengesUpdateAction() {
         updateChallengesError.setOnClickListener {
             challengesErrorView.visibility = View.GONE
             setUpChallenges()
+        }
+    }
+
+    private fun onClickChallengesHistoryUpdateAction() {
+        updateChallengesHistoryError.setOnClickListener {
+            challengesHistoryErrorView.visibility = View.GONE
+            setUpChallengesHistory()
         }
     }
 }

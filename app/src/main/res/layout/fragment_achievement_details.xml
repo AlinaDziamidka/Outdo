@@ -17,19 +17,47 @@
         android:layout_marginBottom="30dp"
         android:orientation="vertical">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/achievementNameShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:shimmer_duration="1000">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:background="@drawable/bg_shimmer" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <TextView
             android:id="@+id/achievementNameView"
             style="@style/screen_header_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:visibility="gone"
             tools:text="Ачивка «12 мгновений весны»" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/achievementDescriptionShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:shimmer_duration="1000">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@drawable/bg_shimmer" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <TextView
             android:id="@+id/achievementDescriptionView"
             style="@style/description_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:text="И нет сомнений, что элементы политического процесса являются только методом политического участия и преданы социально-демократической анафеме." />
 
         <TextView
@@ -40,10 +68,35 @@
             android:layout_marginTop="20dp"
             android:text="@string/achievement_details_completed" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/completedShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_duration="1000">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/completed_achievement_card_shimmer" />
+
+                <include layout="@layout/completed_achievement_card_shimmer" />
+
+                <include layout="@layout/completed_achievement_card_shimmer" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <include
+            android:id="@+id/completedErrorView"
+            layout="@layout/error_card"
+            android:visibility="gone" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/completedRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:listitem="@layout/completed_achievement_card" />
 
         <TextView
@@ -54,10 +107,35 @@
             android:layout_marginTop="16dp"
             android:text="@string/achievement_details_uncompleted" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/uncompletedShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_duration="1000">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/uncompleted_achievement_card_shimmer" />
+
+                <include layout="@layout/uncompleted_achievement_card_shimmer" />
+
+                <include layout="@layout/uncompleted_achievement_card_shimmer" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <include
+            android:id="@+id/uncompletedErrorView"
+            layout="@layout/error_card"
+            android:visibility="gone" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/uncompletedRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:listitem="@layout/uncompleted_achievement_card" />
 
         <androidx.appcompat.widget.AppCompatButton

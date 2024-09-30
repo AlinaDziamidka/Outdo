@@ -186,7 +186,6 @@ class ChallengeDetailsView : Fragment() {
 
                         is ChallengeDetailsViewState.Loading -> {
                             startShimmer(achievementShimmerLayout, achievementView)
-                            delay(3000)
                         }
 
                         is ChallengeDetailsViewState.Failure -> {
