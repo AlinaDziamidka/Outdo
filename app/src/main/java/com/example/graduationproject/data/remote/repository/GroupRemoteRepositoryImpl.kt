@@ -4,8 +4,6 @@ import com.example.graduationproject.data.remote.api.request.GroupsRequest
 import com.example.graduationproject.data.remote.api.service.GroupApiService
 import com.example.graduationproject.data.remote.transormer.GroupTransformer
 import com.example.graduationproject.domain.entity.Group
-import com.example.graduationproject.domain.entity.Session
-import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall

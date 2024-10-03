@@ -36,11 +36,11 @@
     <string name="sign_up_exist_user_identity">Такой пользователь уже существует</string>
     <string name="sign_up_empty_field">Заполните поле</string>
     <string name="sign_up_sign_up_action">Зарегистрироваться</string>
+    <string name="sign_up_password_requirements">Пароль должен быть не менее 8 символов, включая цифры и буквы в верхнем и нижнем регистре</string>
+    <string name="sign_up_invalid_password">Пароль не совпадает</string>
     <string name="create_username_dialog_username_hint">Логин</string>
     <string name="create_username_dialog_confirm_action">Подтвердить</string>
     <string name="create_username_dialog_invalid_username">Такой логин уже существует</string>
-    <string name="sign_up_password_requirements">Пароль должен быть не менее 8 символов, включая цифры и буквы в верхнем и нижнем регистре</string>
-    <string name="sign_up_invalid_password">Пароль не совпадает</string>
     <string name="group_screen_header">Мои группы</string>
     <string name="group_screen_create_group_action">Создать группу</string>
     <string name="group_screen_search_hint">Поиск по группам</string>
@@ -90,6 +90,7 @@
     <string name="create_challenge_screen_save">Сохранить</string>
     <string name="create_challenge_delete_participant">Убрать</string>
     <string name="create_challenge_date_format">%1$02d/%2$02d/%3$04d</string>
+    <string name="create_challenge_enter_date">Укажите дату</string>
     <string name="achievement_details_title">Ачивка «%1$s»</string>
     <string name="achievement_details_completed">Выполнили</string>
     <string name="achievement_details_show_details">Подробнее</string>
@@ -107,7 +108,6 @@
     <string name="error_card_header">Ошибка</string>
     <string name="error_card_went_wrong">Что-то пошло не так, повторите попытку позже</string>
     <string name="error_card_update">Обновить</string>
-    <string name="create_challenge_enter_date">Укажите дату</string>
     <string name="error_loading_photo_header">Ошибка загрузки</string>
     <string name="error_loading_photo_description">Не удалось загрузить картинку, повторите попытку позже</string>
 </resources>

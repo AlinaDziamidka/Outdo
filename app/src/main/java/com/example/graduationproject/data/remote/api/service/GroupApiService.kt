@@ -1,9 +1,7 @@
 package com.example.graduationproject.data.remote.api.service
 
 import com.example.graduationproject.data.remote.api.request.GroupsRequest
-import com.example.graduationproject.data.remote.api.request.SignUpRequest
 import com.example.graduationproject.data.remote.api.response.GroupResponse
-import com.example.graduationproject.data.remote.api.response.SignUpResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

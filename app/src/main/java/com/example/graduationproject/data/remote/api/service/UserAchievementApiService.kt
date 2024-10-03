@@ -2,9 +2,7 @@ package com.example.graduationproject.data.remote.api.service
 
 import com.example.graduationproject.data.remote.api.request.UpdatePhotoRequest
 import com.example.graduationproject.data.remote.api.request.UserAchievementRequest
-import com.example.graduationproject.data.remote.api.response.AchievementResponse
 import com.example.graduationproject.data.remote.api.response.UserAchievementResponse
-import com.example.graduationproject.domain.entity.ChallengeAchievement
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

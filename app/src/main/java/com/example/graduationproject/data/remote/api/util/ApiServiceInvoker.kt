@@ -1,5 +1,3 @@
-
-
 import com.example.graduationproject.domain.util.Event
 import retrofit2.Response
 

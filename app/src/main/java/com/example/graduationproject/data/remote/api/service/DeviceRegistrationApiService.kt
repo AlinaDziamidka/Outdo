@@ -3,7 +3,6 @@ package com.example.graduationproject.data.remote.api.service
 import com.example.graduationproject.data.remote.api.request.DeviceRegistrationRequest
 import com.example.graduationproject.data.remote.api.response.DeviceIdResponse
 import com.example.graduationproject.data.remote.api.response.DeviceRegistrationResponse
-import com.example.graduationproject.data.remote.api.response.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

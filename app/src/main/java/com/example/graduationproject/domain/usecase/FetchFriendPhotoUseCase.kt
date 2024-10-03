@@ -25,8 +25,6 @@ class FetchFriendPhotoUseCase @Inject constructor(
         val userId = params.userId
         val achievementId = params.achievementId
 
-        Log.d("FetchFriendPhotoUseCase", "userId: $userId, achievementId: $achievementId")
-
         var friendPhotoUrl = withContext(Dispatchers.IO) {
             userAchievementLocalRepository.fetchByUserIdAndAchievementId(
                 achievementId,
@@ -34,23 +32,10 @@ class FetchFriendPhotoUseCase @Inject constructor(
             )?.photoUrl
         }
 
-        Log.d("FetchFriendPhotoUseCase", "photo local url: $friendPhotoUrl")
-
-        if (friendPhotoUrl == null){
-           friendPhotoUrl = getRemotePhotoUrl(achievementId, userId)
+        if (friendPhotoUrl == null) {
+            friendPhotoUrl = getRemotePhotoUrl(achievementId, userId)
         }
-
-        Log.d("FetchFriendPhotoUseCase", "photo remote url: $friendPhotoUrl")
-
-//        val friendPhotoUrl = withContext(Dispatchers.IO) {
-//            userAchievementLocalRepository.fetchByUserIdAndAchievementId(
-//                achievementId,
-//                userId
-//            ).photoUrl
-//        }
-//            .takeIf { it.isNullOrEmpty() }
-//            ?: getRemotePhotoUrl(achievementId, userId)
-            emit(friendPhotoUrl)
+        emit(friendPhotoUrl)
     }
 
     private suspend fun getRemotePhotoUrl(
@@ -71,10 +56,6 @@ class FetchFriendPhotoUseCase @Inject constructor(
             }
 
             is Event.Failure -> {
-                Log.e(
-                    "FetchFriendPhotoUseCase",
-                    "Failed to fetch userAchievement: ${event.exception}"
-                )
                 throw Exception(event.exception)
             }
         }

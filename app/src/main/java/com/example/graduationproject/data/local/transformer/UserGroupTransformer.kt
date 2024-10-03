@@ -1,8 +1,6 @@
 package com.example.graduationproject.data.local.transformer
 
-import com.example.graduationproject.data.local.database.model.GroupModel
 import com.example.graduationproject.data.local.database.model.UserGroupModel
-import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.UserGroup
 
 public class UserGroupTransformer {

@@ -1,6 +1,5 @@
 package com.example.graduationproject.domain.repository.local
 
-import com.example.graduationproject.data.local.database.model.AchievementModel
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.util.Event
 

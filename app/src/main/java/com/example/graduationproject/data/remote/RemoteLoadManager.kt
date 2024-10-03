@@ -9,8 +9,6 @@ import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupChallenge
-import com.example.graduationproject.domain.entity.UserAchievement
-import com.example.graduationproject.domain.entity.UserFriend
 import com.example.graduationproject.domain.entity.UserGroup
 import com.example.graduationproject.domain.entity.UserNotifications
 import com.example.graduationproject.domain.entity.UserProfile
@@ -69,7 +67,6 @@ class RemoteLoadManager @Inject constructor(
         val groups = mutableListOf<Group>()
 
         for (userGroup in userGroups) {
-            Log.d("RemoteLoadManager", "Fetching groups for group ${userGroup.groupId}")
             try {
                 val group = getGroup(userGroup.groupId)
                 groups.add(group)
@@ -85,7 +82,6 @@ class RemoteLoadManager @Inject constructor(
             val event = userGroupRemoteRepository.fetchAllGroupsByUserId(userId)
             when (event) {
                 is Event.Success -> {
-                    Log.d("RemoteLoadManager", "Received user groups: ${event.data}")
                     event.data.map {
                         writeToLocalDatabase(userGroupLocalRepository::insertOne, it)
                     }
@@ -93,7 +89,6 @@ class RemoteLoadManager @Inject constructor(
                 }
 
                 is Event.Failure -> {
-                    Log.e("RemoteLoadManager", "Failed to fetch user groups: ${event.exception}")
                     throw Exception(event.exception)
                 }
             }
@@ -103,13 +98,11 @@ class RemoteLoadManager @Inject constructor(
         val event = groupRemoteRepository.fetchGroupsByGroupId(groupId)
         when (event) {
             is Event.Success -> {
-                Log.d("RemoteLoadManager", "Received group: ${event.data}")
                 writeToLocalDatabase(groupLocalRepository::insertOne, event.data)
                 event.data
             }
 
             is Event.Failure -> {
-                Log.e("RemoteLoadManager", "Failed to fetch group: ${event.exception}")
                 throw Exception(event.exception)
             }
         }
@@ -120,7 +113,6 @@ class RemoteLoadManager @Inject constructor(
         val participants = mutableListOf<UserProfile>()
 
         for (groupUser in groupUsers) {
-            Log.d("RemoteLoadManager", "Received user groups ${groupUser.userId}")
             try {
                 val participant = getParticipants(groupUser.userId)
                 participants.add(participant)
@@ -136,7 +128,6 @@ class RemoteLoadManager @Inject constructor(
             val event = userGroupRemoteRepository.fetchAllUsersByGroupId(groupId)
             when (event) {
                 is Event.Success -> {
-                    Log.d("RemoteLoadManager", "Received user groups: ${event.data}")
                     event.data.map {
                         writeToLocalDatabase(userGroupLocalRepository::insertOne, it)
                     }
@@ -144,7 +135,6 @@ class RemoteLoadManager @Inject constructor(
                 }
 
                 is Event.Failure -> {
-                    Log.e("RemoteLoadManager", "Failed to fetch user groups: ${event.exception}")
                     throw Exception(event.exception)
                 }
             }
@@ -154,16 +144,13 @@ class RemoteLoadManager @Inject constructor(
         Dispatchers.IO
     ) {
         val event = userRemoteRepository.fetchUserById(userId)
-        Log.d("RemoteLoadManager", "Received user: ${event}")
         when (event) {
             is Event.Success -> {
-                Log.d("RemoteLoadManager", "Received user: ${event.data}")
                 writeToLocalDatabase(userLocalRepository::insertOne, event.data)
                 event.data
             }
 
             is Event.Failure -> {
-                Log.e("RemoteLoadManager", "Failed to fetch user: ${event.exception}")
                 throw Exception(event.exception)
             }
         }
@@ -174,47 +161,39 @@ class RemoteLoadManager @Inject constructor(
             Dispatchers.IO
         ) {
             val event = groupChallengeRemoteRepository.fetchAllChallengesByGroupId(groupId)
-            Log.d("RemoteLoadManager", "Received challenges: ${event}")
             when (event) {
                 is Event.Success -> {
-                    Log.d("RemoteLoadManager", "Received challenges: ${event.data}")
                     saveChallengesToLocalDatabase(event, groupId)
                     event.data
                 }
 
                 is Event.Failure -> {
-                    Log.e("RemoteLoadManager", "Failed to fetch challenges: ${event.exception}")
                     throw Exception(event.exception)
                 }
             }
         }
 
     override suspend fun fetchChallengesByStatusAndId(
-        groupId: String,
-        challengeStatus: ChallengeStatus
+        groupId: String, challengeStatus: ChallengeStatus
     ): List<Challenge> {
         val event = groupChallengeRemoteRepository.fetchChallengesByGroupIdANDStatus(
-            groupId,
-            challengeStatus.stringValue
+            groupId, challengeStatus.stringValue
         )
-        Log.d("RemoteLoadManager", "Received challenges: ${event}")
+
         return when (event) {
             is Event.Success -> {
-                Log.d("RemoteLoadManager", "Received challenges: ${event.data}")
                 saveChallengesToLocalDatabase(event, groupId)
                 event.data
             }
 
             is Event.Failure -> {
-                Log.e("RemoteLoadManager", "Failed to fetch challenges: ${event.exception}")
                 throw Exception(event.exception)
             }
         }
     }
 
     private suspend fun saveChallengesToLocalDatabase(
-        event: Event.Success<List<Challenge>>,
-        groupId: String
+        event: Event.Success<List<Challenge>>, groupId: String
     ) {
         event.data.map { challenge ->
             writeToLocalDatabase(challengeLocalRepository::insertOne, challenge)
@@ -231,24 +210,20 @@ class RemoteLoadManager @Inject constructor(
         ) {
             val event =
                 challengeAchievementRemoteRepository.fetchAllAchievementsByChallengeId(challengeId)
-            Log.d("RemoteLoadManager", "Received achievements: ${event}")
             when (event) {
                 is Event.Success -> {
-                    Log.d("RemoteLoadManager", "Received achievements: ${event.data}")
                     saveChallengeAchievementsToLocalDatabase(event, challengeId)
                     event.data
                 }
 
                 is Event.Failure -> {
-                    Log.e("RemoteLoadManager", "Failed to fetch achievements: ${event.exception}")
                     throw Exception(event.exception)
                 }
             }
         }
 
     private suspend fun saveChallengeAchievementsToLocalDatabase(
-        event: Event.Success<List<Achievement>>,
-        challengeId: String
+        event: Event.Success<List<Achievement>>, challengeId: String
     ) {
         event.data.map { achievement ->
             writeToLocalDatabase(achievementLocalRepository::insertOne, achievement)
@@ -296,73 +271,60 @@ class RemoteLoadManager @Inject constructor(
         withContext(Dispatchers.IO) {
             val friends = mutableListOf<UserProfile>()
             val event = userFriendRemoteRepository.fetchFriendsByUserId(userId)
-            Log.d("RemoteLoadManager", "Received friends: ${event}")
             when (event) {
                 is Event.Success -> {
-                    Log.d("RemoteLoadManager", "Received friends: ${event.data}")
                     event.data.map { userFriend ->
                         writeToLocalDatabase(userFriendLocalRepository::insertOne, userFriend)
                         val friendEvent = userRemoteRepository.fetchUserById(userFriend.friendId)
                         if (friendEvent is Event.Success) {
                             friends.add(friendEvent.data)
                             writeToLocalDatabase(
-                                userLocalRepository::insertOne,
-                                friendEvent.data
+                                userLocalRepository::insertOne, friendEvent.data
                             )
-                        } else Log.e(
-                            "RemoteLoadManager",
-                            "Failed to fetch friend with ID: ${userFriend.friendId}"
-                        )
-                        Event.Failure("Not found friend")
+                        } else {
+                            Event.Failure("Not found friend")
+                        }
                     }
                     friends
                 }
 
                 is Event.Failure -> {
-                    Log.e("RemoteLoadManager", "Failed to fetch friends: ${event.exception}")
                     throw Exception(event.exception)
                 }
             }
         }
 
-    override suspend fun fetchAchievementsByUserId(userId: String): List<Achievement> =
-        withContext(
-            Dispatchers.IO
-        ) {
-            val achievements = mutableListOf<Achievement>()
-            val event = userAchievementRemoteRepository.fetchUserAchievementByUserId(userId)
-            Log.d("RemoteLoadManager", "Received achievements: ${event}")
-            when (event) {
-                is Event.Success -> {
-                    Log.d("RemoteLoadManager", "Received achievements: ${event.data}")
-                    event.data.map { userAchievement ->
+    override suspend fun fetchAchievementsByUserId(userId: String): List<Achievement> = withContext(
+        Dispatchers.IO
+    ) {
+        val achievements = mutableListOf<Achievement>()
+        val event = userAchievementRemoteRepository.fetchUserAchievementByUserId(userId)
+
+        when (event) {
+            is Event.Success -> {
+                event.data.map { userAchievement ->
+                    writeToLocalDatabase(
+                        userAchievementLocalRepository::insertOne, userAchievement
+                    )
+                    val achievementEvent =
+                        achievementRemoteRepository.fetchAchievementById(userAchievement.achievementId)
+                    if (achievementEvent is Event.Success) {
+                        achievements.add(achievementEvent.data)
                         writeToLocalDatabase(
-                            userAchievementLocalRepository::insertOne,
-                            userAchievement
+                            achievementLocalRepository::insertOne, achievementEvent.data
                         )
-                        val achievementEvent =
-                            achievementRemoteRepository.fetchAchievementById(userAchievement.achievementId)
-                        if (achievementEvent is Event.Success) {
-                            achievements.add(achievementEvent.data)
-                            writeToLocalDatabase(
-                                achievementLocalRepository::insertOne,
-                                achievementEvent.data
-                            )
-                        } else Log.e(
-                            "RemoteLoadManager",
-                            "Failed to fetch achievement with ID: ${userAchievement.achievementId}"
-                        )
+                    } else {
                         Event.Failure("Not found achievements")
                     }
-                    achievements
                 }
+                achievements
+            }
 
-                is Event.Failure -> {
-                    Log.e("RemoteLoadManager", "Failed to fetch achievements: ${event.exception}")
-                    throw Exception(event.exception)
-                }
+            is Event.Failure -> {
+                throw Exception(event.exception)
             }
         }
+    }
 
     override suspend fun fetchNotificationsByUserId(userId: String): List<Pair<UserProfile, Group>> =
         withContext(Dispatchers.IO) {
@@ -381,7 +343,6 @@ class RemoteLoadManager @Inject constructor(
                 }
 
                 is Event.Failure -> {
-                    Log.e("RemoteLoadManager", "Failed to fetch notifications: ${event.exception}")
                     throw Exception(event.exception)
                 }
             }
@@ -391,7 +352,6 @@ class RemoteLoadManager @Inject constructor(
         val event = userNotificationsRemoteRepository.fetchNotificationsByUserId(userId)
         return when (event) {
             is Event.Success -> {
-                Log.d("RemoteLoadManager", "Received user notifications: ${event.data}")
                 event.data.map {
                     writeToLocalDatabase(usrUserNotificationsLocalRepository::insertOne, it)
                 }
@@ -399,7 +359,6 @@ class RemoteLoadManager @Inject constructor(
             }
 
             is Event.Failure -> {
-                Log.e("Failed to get user notifications", "Not found for user: $userId")
                 Event.Failure(event.exception)
             }
         }
@@ -417,8 +376,8 @@ class RemoteLoadManager @Inject constructor(
                 writeToLocalDatabase(userLocalRepository::insertOne, event.data)
                 event.data
             }
+
             is Event.Failure -> {
-                Log.e("CreatorProfile for Notification", "Not found this user: $creatorId")
                 throw Exception(event.exception)
             }
         }
@@ -436,8 +395,8 @@ class RemoteLoadManager @Inject constructor(
                 writeToLocalDatabase(groupLocalRepository::insertOne, event.data)
                 event.data
             }
+
             is Event.Failure -> {
-                Log.e("Group for Notification", "Not found this user: $groupId")
                 throw Exception(event.exception)
             }
         }

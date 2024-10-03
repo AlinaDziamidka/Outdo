@@ -1,6 +1,5 @@
 package com.example.graduationproject.di
 
-
 import com.example.graduationproject.data.remote.api.NetworkClientConfig
 import com.example.graduationproject.data.remote.api.service.AchievementApiService
 import com.example.graduationproject.data.remote.api.service.AuthApiService
@@ -40,7 +39,6 @@ object NetworkModule {
             .client(okHttpClient)
             .build()
     }
-
 
     @Provides
     fun provideHttpInterceptor(): HttpLoggingInterceptor {

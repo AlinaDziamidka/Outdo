@@ -20,11 +20,7 @@ class UserFriendLocalRepositoryImpl @Inject constructor(private val userFriendDa
     }
 
     override suspend fun fetchFriendsByUserId(userId: String): List<UserFriend> {
-        Log.d("UserFriendLocalRepositoryImpl", userId)
         val models = userFriendDao.fetchFriendsByUserId(userId)
-        models.forEach{
-        Log.d("UserFriendLocalRepositoryImpl", "${it.friendId}, ${it.userId} ")
-    }
         return models.map {
             userFriendTransformer.fromModel(it)
         }

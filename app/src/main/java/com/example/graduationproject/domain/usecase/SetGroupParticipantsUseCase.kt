@@ -2,7 +2,6 @@ package com.example.graduationproject.domain.usecase
 
 import android.util.Log
 import com.example.graduationproject.domain.entity.UserProfile
-import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
 import com.example.graduationproject.domain.util.Event

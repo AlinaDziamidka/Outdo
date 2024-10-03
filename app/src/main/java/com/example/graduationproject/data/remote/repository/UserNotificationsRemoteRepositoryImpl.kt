@@ -8,7 +8,6 @@ import com.example.graduationproject.domain.entity.UserNotifications
 import com.example.graduationproject.domain.repository.remote.UserNotificationsRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
-import java.net.URLEncoder
 import javax.inject.Inject
 
 class UserNotificationsRemoteRepositoryImpl @Inject constructor(

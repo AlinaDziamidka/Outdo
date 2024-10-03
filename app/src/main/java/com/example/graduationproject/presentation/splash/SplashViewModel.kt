@@ -3,9 +3,7 @@ package com.example.graduationproject.presentation.splash
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.graduationproject.domain.usecase.DeviceRegistrationUseCase
 import com.example.graduationproject.domain.usecase.FetchSessionUseCase
-import com.example.graduationproject.domain.usecase.SetGroupParticipantsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

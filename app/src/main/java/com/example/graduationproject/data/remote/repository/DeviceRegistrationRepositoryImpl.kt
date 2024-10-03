@@ -6,11 +6,9 @@ import com.example.graduationproject.data.remote.api.request.DeviceRegistrationR
 import com.example.graduationproject.data.remote.api.service.DeviceRegistrationApiService
 import com.example.graduationproject.data.remote.api.util.DeviceInfoUtil
 import com.example.graduationproject.data.remote.prefs.PrefsDataSource
-import com.example.graduationproject.domain.entity.UserDevice
 import com.example.graduationproject.domain.repository.remote.DeviceRegistrationRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
-import java.util.Date
 import javax.inject.Inject
 
 class DeviceRegistrationRepositoryImpl @Inject constructor(
@@ -25,11 +23,6 @@ class DeviceRegistrationRepositoryImpl @Inject constructor(
         val osVersion = Build.VERSION.RELEASE
         val channels = listOf("default")
         val userToken = prefsDataSource.fetchToken()
-
-        Log.d(
-            "DeviceRegistrationRepositoryImpl",
-            "Registering device with ID: $deviceId and token: $deviceToken"
-        )
 
         val event = doCall {
             val request = DeviceRegistrationRequest(
@@ -46,20 +39,18 @@ class DeviceRegistrationRepositoryImpl @Inject constructor(
             is Event.Success -> {
                 val response = event.data
                 saveRegistrationId(response.registrationId)
-                Log.d(
-                    "DeviceRegistration",
-                    "Device registered with registrationId: ${response.registrationId}"
-                )
             }
 
             is Event.Failure -> {
-                Log.e("DeviceRegistration", "Error register device: ${event.exception}")
+                Log.e(
+                    "DeviceRegistrationRepositoryImpl",
+                    "Error register device: ${event.exception}"
+                )
             }
         }
     }
 
     override suspend fun saveRegistrationId(registrationId: String) {
-        Log.d("DeviceRegistrationRepositoryImpl", "Saving registrationId: $registrationId")
         prefsDataSource.saveRegistrationId(registrationId)
 
     }

@@ -1,7 +1,5 @@
 package com.example.graduationproject.presentation.home.adapter
 
-import android.icu.util.Calendar
-import android.os.Build
 import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +11,6 @@ import com.example.graduationproject.databinding.ChallengeCardBinding
 import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
 import java.util.Locale
-
 
 class ChallengesAdapter(
     private var groupAndChallengesPairs: MutableList<Pair<Group, Challenge>>,

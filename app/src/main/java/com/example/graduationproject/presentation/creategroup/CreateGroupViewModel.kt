@@ -30,8 +30,6 @@ class CreateGroupViewModel @Inject constructor(
     val viewState: StateFlow<CreateGroupViewState<Group>> =
         _viewState
 
-    var avatarPath: String? = ""
-
     private val _addedFriends = MutableStateFlow<MutableList<UserProfile>>(mutableListOf())
     val addedFriends: StateFlow<MutableList<UserProfile>> get() = _addedFriends
 
@@ -71,7 +69,7 @@ class CreateGroupViewModel @Inject constructor(
             runCatching {
                 setGroupParticipantsUseCase(SetGroupParticipantsUseCase.Params(groupId, friends))
             }.onSuccess {
-                Log.d("CreateGroupViewModel", "User groups added successfully")
+                Log.e("CreateGroupViewModel", "User groups added successfully")
             }.onFailure { e ->
                 Log.e("CreateGroupViewModel", "Error adding user groups: ${e.message}")
             }
@@ -83,7 +81,7 @@ class CreateGroupViewModel @Inject constructor(
             runCatching {
                 notificationUseCase(NotificationUseCase.Params(friends, message, group, creatorId))
             }.onSuccess {
-                Log.d("CreateGroupViewModel", "Notification sent successfully")
+                Log.e("CreateGroupViewModel", "Notification sent successfully")
             }.onFailure { e ->
                 Log.e("CreateGroupViewModel", "Error sending notification: ${e.message}")
             }

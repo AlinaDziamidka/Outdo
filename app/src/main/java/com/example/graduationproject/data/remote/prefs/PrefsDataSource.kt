@@ -45,7 +45,6 @@ class PrefsDataSourceImpl @Inject constructor(private val context: Context) : Pr
         )
 
         with(prefs.edit()) {
-            Log.d("PrefsDataSourceImpl", "Saving registrationId: $registrationId")
             putString(userDeviceId, registrationId)
             apply()
         }
@@ -56,7 +55,6 @@ class PrefsDataSourceImpl @Inject constructor(private val context: Context) : Pr
             sessionPrefs, Context.MODE_PRIVATE
         )
         val registrationId = prefs.getString(userDeviceId, null)
-        Log.d("PrefsDataSourceImpl", "Fetched registrationId: $registrationId")
         return registrationId
     }
 

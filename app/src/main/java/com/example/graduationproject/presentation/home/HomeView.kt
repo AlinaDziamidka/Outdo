@@ -1,21 +1,12 @@
 package com.example.graduationproject.presentation.home
 
-import android.Manifest
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.ActivityHomeBinding
-import com.example.graduationproject.presentation.achievementdetails.DialogAddPhoto
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

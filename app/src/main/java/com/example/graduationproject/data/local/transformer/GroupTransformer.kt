@@ -1,6 +1,5 @@
 package com.example.graduationproject.data.local.transformer
 
-import com.example.graduationproject.data.local.database.model.ChallengeModel
 import com.example.graduationproject.data.local.database.model.GroupModel
 import com.example.graduationproject.domain.entity.Group
 

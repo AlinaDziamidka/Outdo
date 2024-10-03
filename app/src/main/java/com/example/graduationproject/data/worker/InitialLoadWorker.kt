@@ -22,7 +22,6 @@ class InitialLoadWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         return try {
             val userId = inputData.getString("USER_ID")!!
-            Log.d("InitialLoadWorker", "UserID: $userId")
             val groups = remoteLoadManager.fetchGroupsByUserId(userId)
             var challenges = listOf<Challenge>()
             groups.map { group ->
@@ -40,7 +39,7 @@ class InitialLoadWorker @AssistedInject constructor(
             delay(SMALL_DELAY_MILLIS)
             remoteLoadManager.fetchFriendsByUserId(userId)
             delay(LARGE_DELAY_MILLIS)
-            Log.d("InitialLoadWorker", "Work completed successfully")
+            Log.e("InitialLoadWorker", "Work completed successfully")
             Result.success()
         } catch (e: Exception) {
             Log.e("InitialLoadWorker", "Error in doWork", e)

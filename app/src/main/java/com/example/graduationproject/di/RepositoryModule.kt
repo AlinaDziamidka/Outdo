@@ -80,7 +80,6 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
@@ -235,7 +234,6 @@ object RepositoryModule {
     ): PhotoUploadRemoteRepository {
         return PhotoUploadRemoteRepositoryImpl(photoApiService)
     }
-
 }
 
 @Module

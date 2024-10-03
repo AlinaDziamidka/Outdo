@@ -1,17 +1,10 @@
 package com.example.graduationproject.data.remote.repository
 
 import android.util.Log
-import com.example.graduationproject.data.remote.api.request.ChallengeAchievementRequest
 import com.example.graduationproject.data.remote.api.request.UpdatePhotoRequest
 import com.example.graduationproject.data.remote.api.request.UserAchievementRequest
-import com.example.graduationproject.data.remote.api.response.AchievementResponse
-import com.example.graduationproject.data.remote.api.response.UserAchievementResponse
-import com.example.graduationproject.data.remote.api.service.AchievementApiService
 import com.example.graduationproject.data.remote.api.service.UserAchievementApiService
-import com.example.graduationproject.data.remote.transormer.AchievementTransformer
-import com.example.graduationproject.data.remote.transormer.ChallengeAchievementTransformer
 import com.example.graduationproject.data.remote.transormer.UserAchievementTransformer
-import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementStatus
 import com.example.graduationproject.domain.entity.AchievementType
 import com.example.graduationproject.domain.entity.UserAchievement
@@ -86,15 +79,10 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
             is Event.Success -> {
                 val response = event.data.first()
                 val userAchievement = userAchievementTransformer.fromResponse(response)
-                Log.d("UserAchievementRemoteRepository", "Fetch user achievement: $response")
                 Event.Success(userAchievement)
             }
 
             is Event.Failure -> {
-                Log.d(
-                    "UserAchievementRemoteRepository",
-                    "Failed to fetch user achievement: ${event.exception}"
-                )
                 val error = event.exception
                 Event.Failure(error)
             }
@@ -139,7 +127,6 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
 
         val event = doCall {
             val request = UpdatePhotoRequest(photoUrl, AchievementStatus.COMPLETED.stringValue)
-            Log.d("UserAchievementRemoteRepository", "UpdatePhotoRequest: $request")
             return@doCall userAchievementApiService.updatePhoto(
                 query,
                 request
@@ -149,15 +136,10 @@ class UserAchievementRemoteRepositoryImpl @Inject constructor(
         return when (event) {
             is Event.Success -> {
                 val response = event.data
-                Log.d("UserAchievementRemoteRepository", "Update photo success: $response")
                 Event.Success(response)
             }
 
             is Event.Failure -> {
-                Log.d(
-                    "UserAchievementRemoteRepository",
-                    "Failed to update photo: ${event.exception}"
-                )
                 val error = event.exception
                 Event.Failure(error)
             }

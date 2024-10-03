@@ -12,7 +12,6 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.Group
 import java.util.Locale
 
-
 class AllChallengesAdapter(
     private var groupAndChallengesPairs: MutableList<Pair<Group, Challenge>>,
     private val onChallengeClickListener: (Challenge) -> Unit

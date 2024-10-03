@@ -355,9 +355,11 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
             requireContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
                 startCameraActivity()
             }
+
             !shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
                 showCameraPermissionRationale()
             }
+
             else -> {
                 requestSystemPermission()
             }
@@ -504,7 +506,6 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         }
     }
 
-
     private suspend fun uriToFile(uri: Uri): File = withContext(Dispatchers.IO) {
         val contentResolver = requireContext().applicationContext.contentResolver
         val file = File(requireContext().cacheDir, "temp_${System.currentTimeMillis()}.tmp")
@@ -568,7 +569,6 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         addPhotoHintView.visibility = View.GONE
         completeActionView.visibility = View.GONE
     }
-
 
 
     private fun setUpErrorUpdateAction() {

@@ -4,7 +4,6 @@ import com.example.graduationproject.data.remote.api.response.AchievementRespons
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.AchievementStatus
 import com.example.graduationproject.domain.entity.AchievementType
-import com.example.graduationproject.domain.entity.ChallengeType
 
 class AchievementTransformer {
 

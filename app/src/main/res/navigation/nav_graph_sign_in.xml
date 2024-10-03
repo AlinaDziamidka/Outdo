@@ -41,6 +41,9 @@
             app:destination="@id/homeActivity"
             app:launchSingleTop="true">
         </action>
+        <action
+            android:id="@+id/action_signUpViewFragment_to_signInViewFragment"
+            app:destination="@id/signInViewFragment" />
     </fragment>
     <activity
         android:id="@+id/homeActivity"

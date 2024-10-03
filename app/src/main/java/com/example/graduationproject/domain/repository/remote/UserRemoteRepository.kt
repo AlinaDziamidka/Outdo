@@ -1,8 +1,7 @@
 package com.example.graduationproject.domain.repository.remote
+
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.util.Event
-import retrofit2.Response
-
 
 interface UserRemoteRepository {
     suspend fun fetchUsersByUsername(usernameQuery: String): List<UserProfile>

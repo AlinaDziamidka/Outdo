@@ -1,6 +1,5 @@
 package com.example.graduationproject.data.remote.api.request
 
-import com.example.graduationproject.domain.entity.AchievementStatus
 import com.google.gson.annotations.SerializedName
 
 data class AchievementRequest(

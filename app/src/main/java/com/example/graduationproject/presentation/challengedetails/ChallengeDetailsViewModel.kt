@@ -22,8 +22,7 @@ class ChallengeDetailsViewModel @Inject constructor(
     context: Application,
     private val fetchChallengeAchievementUseCase: FetchChallengeAchievementUseCase,
     private val fetchChallengeDescriptionUseCase: FetchChallengeDescriptionUseCase
-) :
-    AndroidViewModel(context) {
+) : AndroidViewModel(context) {
 
     private val _viewStateAchievements =
         MutableStateFlow<ChallengeDetailsViewState<MutableList<Achievement>>>(
@@ -43,8 +42,7 @@ class ChallengeDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             fetchChallengeDescriptionUseCase(
                 FetchChallengeDescriptionUseCase.Params(challengeId)
-            )
-                .onStart {
+            ).onStart {
                     _viewStateCurrentChallenge.value = ChallengeDetailsViewState.Loading
                 }.catch {
                     _viewStateCurrentChallenge.value =
@@ -61,8 +59,7 @@ class ChallengeDetailsViewModel @Inject constructor(
                 FetchChallengeAchievementUseCase.Params(
                     challengeId
                 )
-            )
-                .onStart {
+            ).onStart {
                     _viewStateAchievements.value = ChallengeDetailsViewState.Loading
                 }.catch {
                     _viewStateAchievements.value =

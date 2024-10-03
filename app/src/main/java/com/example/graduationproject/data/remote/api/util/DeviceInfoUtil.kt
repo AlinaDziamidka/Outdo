@@ -1,6 +1,5 @@
 package com.example.graduationproject.data.remote.api.util
 
-import android.content.SharedPreferences
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await

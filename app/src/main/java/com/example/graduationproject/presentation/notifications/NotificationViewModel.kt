@@ -55,7 +55,7 @@ class NotificationViewModel @Inject constructor(
                     DeleteUserGroupUseCase.Params(userId, groupId)
                 )
             }.onSuccess {
-                Log.d("NotificationViewModel", "User groups deleted successfully")
+                Log.e("NotificationViewModel", "User groups deleted successfully")
             }.onFailure { e ->
                 Log.e("NotificationViewModel", "Error deleting user groups: ${e.message}")
             }
@@ -69,7 +69,7 @@ class NotificationViewModel @Inject constructor(
                     DeleteNotificationUseCase.Params(userId, groupId)
                 )
             }.onSuccess {
-                Log.d("NotificationViewModel", "Notification deleted successfully")
+                Log.e("NotificationViewModel", "Notification deleted successfully")
             }.onFailure { e ->
                 Log.e("NotificationViewModel", "Error deleting notification: ${e.message}")
             }

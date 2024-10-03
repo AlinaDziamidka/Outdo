@@ -3,7 +3,6 @@ package com.example.graduationproject.data.local.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 
 @Entity("challenges")
 data class ChallengeModel(

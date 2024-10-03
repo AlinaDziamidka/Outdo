@@ -17,7 +17,6 @@ class PushNotificationRepositoryImpl @Inject constructor(
         message: String
     ): Event<String> {
 
-        Log.d("PushNotificationRepositoryImpl", "Starting sendPushNotification")
         val event = doCall {
             val request = PushNotificationRequest(
                 message = message,
@@ -28,26 +27,17 @@ class PushNotificationRepositoryImpl @Inject constructor(
                     "android-content-text" to message
                 )
             )
-            Log.d("PushNotificationRepositoryImpl", "Request: $request")
             return@doCall pushNotificationApiService.sendPushNotification("default", request)
         }
 
         return when (event) {
             is Event.Success -> {
                 val response = event.data
-                Log.d(
-                    "PushNotificationRepositoryImpl",
-                    "Notification sent with message: ${response.messageId} and status ${response.status}"
-                )
                 Event.Success(response.status)
             }
 
             is Event.Failure -> {
                 val error = event.exception
-                Log.e(
-                    "PushNotificationRepositoryImpl",
-                    "Error notification sent with message: ${error}"
-                )
                 Event.Failure(error)
             }
         }

@@ -6,8 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.graduationproject.data.local.database.model.AchievementModel
-import com.example.graduationproject.data.local.database.model.ChallengeModel
-import com.example.graduationproject.domain.util.Event
 
 @Dao
 interface AchievementDao {
@@ -29,5 +27,4 @@ interface AchievementDao {
 
     @Update
     fun updateOne(achievementModel: AchievementModel)
-
 }

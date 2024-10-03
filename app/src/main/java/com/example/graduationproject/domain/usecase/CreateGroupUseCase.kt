@@ -1,7 +1,6 @@
 package com.example.graduationproject.domain.usecase
 
 import android.util.Log
-import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
@@ -39,7 +38,6 @@ class CreateGroupUseCase @Inject constructor(
             when (event) {
                 is Event.Success -> {
                     val group = event.data
-                    Log.d("CreateGroupUseCase", "Insert group ${group}")
                     withContext(Dispatchers.IO) {
                         writeToLocalDatabase(groupLocalRepository::insertOne, group)
                     }
@@ -48,11 +46,9 @@ class CreateGroupUseCase @Inject constructor(
                 }
 
                 is Event.Failure -> {
-                    Log.e("CreateGroupUseCase", "Failed to insert group: ${event.exception}")
                     throw Exception(event.exception)
                 }
             }
-
         }
 
     private suspend fun insertUserGroup(
@@ -64,17 +60,12 @@ class CreateGroupUseCase @Inject constructor(
         when (userGroupEvent) {
             is Event.Success -> {
                 val userGroup = userGroupEvent.data
-                Log.d("CreateGroupUseCase", "Insert userGroup ${userGroup}")
                 withContext(Dispatchers.IO) {
                     writeToLocalDatabase(userGroupLocalRepository::insertOne, userGroup)
                 }
             }
 
             is Event.Failure -> {
-                Log.e(
-                    "CreateGroupUseCase",
-                    "Failed to insert userGroup: ${userGroupEvent.exception}"
-                )
                 throw Exception(userGroupEvent.exception)
             }
         }

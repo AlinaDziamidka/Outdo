@@ -12,8 +12,7 @@ import com.example.graduationproject.domain.entity.UserProfile
 
 class AddFriendsAdapter(
     private var friendsList: MutableList<UserProfile>
-) :
-    RecyclerView.Adapter<AddFriendsAdapter.AddFriendsViewHolder>() {
+) : RecyclerView.Adapter<AddFriendsAdapter.AddFriendsViewHolder>() {
 
     private val selectedFriends = mutableSetOf<UserProfile>()
 
@@ -41,12 +40,10 @@ class AddFriendsAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): AddFriendsAdapter.AddFriendsViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.friends_checklist, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.friends_checklist, parent, false)
         return AddFriendsAdapter.AddFriendsViewHolder(
             itemView
         )
@@ -55,8 +52,7 @@ class AddFriendsAdapter(
     override fun getItemCount(): Int = friendsList.size
 
     override fun onBindViewHolder(
-        holder: AddFriendsAdapter.AddFriendsViewHolder,
-        position: Int
+        holder: AddFriendsAdapter.AddFriendsViewHolder, position: Int
     ) {
         val friend = friendsList[position]
         val isSelected = selectedFriends.contains(friend)

@@ -1,7 +1,6 @@
 package com.example.graduationproject.data.remote.api.response
 
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDateTime
 
 data class ChallengeResponse(
     @SerializedName("objectId")

@@ -12,8 +12,7 @@ import com.example.graduationproject.domain.entity.UserProfile
 
 class UncompletedAdapter(
     private var uncompletedFriends: MutableList<UserProfile>
-) :
-    RecyclerView.Adapter<UncompletedAdapter.UncompletedAdapterViewHolder>() {
+) : RecyclerView.Adapter<UncompletedAdapter.UncompletedAdapterViewHolder>() {
 
     class UncompletedAdapterViewHolder(
         itemView: View,
@@ -31,18 +30,15 @@ class UncompletedAdapter(
         }
 
         fun onBind(friend: UserProfile) {
-            Log.d("UncompletedAdapter", "Binding data: ${friend.username}")
             friendNameView.text = friend.username
         }
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): UncompletedAdapter.UncompletedAdapterViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.uncompleted_achievement_card, parent, false)
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.uncompleted_achievement_card, parent, false)
         return UncompletedAdapter.UncompletedAdapterViewHolder(
             itemView
         )
@@ -51,8 +47,7 @@ class UncompletedAdapter(
     override fun getItemCount(): Int = uncompletedFriends.size
 
     override fun onBindViewHolder(
-        holder: UncompletedAdapter.UncompletedAdapterViewHolder,
-        position: Int
+        holder: UncompletedAdapter.UncompletedAdapterViewHolder, position: Int
     ) {
         val friend = uncompletedFriends[position]
         holder.onBind(friend)

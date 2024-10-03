@@ -57,9 +57,7 @@ class ChallengeDetailsView : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
         _binding = FragmentChallengeDetailsBinding.inflate(inflater, container, false)
@@ -132,8 +130,7 @@ class ChallengeDetailsView : Fragment() {
 
     private fun setChallengeDescription(challengeDetails: Pair<Challenge, UserProfile?>) {
         challengeDescriptionView.updateChallengeDescription(
-            challengeDetails.first,
-            challengeDetails.second
+            challengeDetails.first, challengeDetails.second
         )
     }
 

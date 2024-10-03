@@ -1,13 +1,11 @@
 package com.example.graduationproject.data.remote.repository
 
 import com.example.graduationproject.data.remote.api.service.UserApiService
-import com.example.graduationproject.data.remote.transormer.GroupTransformer
 import com.example.graduationproject.data.remote.transormer.UserTransformer
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.remote.UserRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import doCall
-import retrofit2.Response
 import javax.inject.Inject
 
 class UserRemoteRepositoryImpl @Inject constructor(private val userApiService: UserApiService) :

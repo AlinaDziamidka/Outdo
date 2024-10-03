@@ -3,12 +3,7 @@ package com.example.graduationproject.presentation.signin
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.graduationproject.App
-import com.example.graduationproject.data.remote.repository.SessionRepositoryImpl
 import com.example.graduationproject.domain.usecase.DeviceRegistrationUseCase
 import com.example.graduationproject.domain.usecase.SignInUseCase
 import com.example.graduationproject.domain.util.NonReturningUseCase
@@ -50,7 +45,7 @@ class SignInViewModel @Inject constructor(
             runCatching {
                 deviceRegistrationUseCase(NonReturningUseCase.None)
             }.onSuccess {
-                Log.d("SignInViewModel", "Device register successfully")
+                Log.e("SignInViewModel", "Device register successfully")
             }.onFailure { e ->
                 Log.e("SignInViewModel", "Error register device: ${e.message}")
             }

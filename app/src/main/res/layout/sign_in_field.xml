@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingStart="16dp"
+    android:layout_gravity="center"
     android:paddingEnd="16dp">
 
     <ImageView
@@ -66,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/bg_edit_text"
-        android:drawableEnd="@drawable/ic_eye_visible"
+        android:drawableEnd="@drawable/ic_eye_invisible"
         android:hint="@string/sign_in_password_hint"
         android:inputType="textPassword"
         android:paddingStart="16dp"

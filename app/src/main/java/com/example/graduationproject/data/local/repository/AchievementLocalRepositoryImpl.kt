@@ -5,7 +5,6 @@ import com.example.graduationproject.data.local.transformer.AchievementTransform
 import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.util.Event
-import org.jetbrains.annotations.NotNull
 import javax.inject.Inject
 
 class AchievementLocalRepositoryImpl @Inject constructor(private val achievementDao: AchievementDao) :

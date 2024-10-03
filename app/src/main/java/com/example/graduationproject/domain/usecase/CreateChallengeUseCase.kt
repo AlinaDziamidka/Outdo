@@ -2,26 +2,19 @@ package com.example.graduationproject.domain.usecase
 
 import android.util.Log
 import com.example.graduationproject.domain.entity.Achievement
-import com.example.graduationproject.domain.entity.AchievementStatus
 import com.example.graduationproject.domain.entity.Challenge
-import com.example.graduationproject.domain.entity.ChallengeAchievement
-import com.example.graduationproject.domain.entity.Group
 import com.example.graduationproject.domain.entity.GroupChallenge
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeAchievementsLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeLocalRepository
 import com.example.graduationproject.domain.repository.local.GroupChallengeLocalRepository
-import com.example.graduationproject.domain.repository.local.GroupLocalRepository
 import com.example.graduationproject.domain.repository.local.UserAchievementLocalRepository
-import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository
 import com.example.graduationproject.domain.repository.remote.AchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.ChallengeAchievementRemoteRepository
 import com.example.graduationproject.domain.repository.remote.ChallengeRemoteRepository
 import com.example.graduationproject.domain.repository.remote.GroupChallengeRemoteRepository
-import com.example.graduationproject.domain.repository.remote.GroupRemoteRepository
 import com.example.graduationproject.domain.repository.remote.UserAchievementRemoteRepository
-import com.example.graduationproject.domain.repository.remote.UserGroupRemoteRepository
 import com.example.graduationproject.domain.util.Event
 import com.example.graduationproject.domain.util.UseCase
 import com.example.graduationproject.domain.util.writeToLocalDatabase
@@ -77,7 +70,6 @@ class CreateChallengeUseCase @Inject constructor(
             when (event) {
                 is Event.Success -> {
                     val challenge = event.data
-                    Log.d("CreateChallengeUseCase", "Insert challenge ${challenge}")
                     withContext(Dispatchers.IO) {
                         writeToLocalDatabase(challengeLocalRepository::insertOne, challenge)
                     }
@@ -88,16 +80,11 @@ class CreateChallengeUseCase @Inject constructor(
                         }
                         emit(challenge)
                     } else {
-                        Log.e(
-                            "CreateGroupUseCase",
-                            "Failed to insert challenge: ${insertedGroupChallengeEvent}"
-                        )
                         throw Exception(insertedGroupChallengeEvent.toString())
                     }
                 }
 
                 is Event.Failure -> {
-                    Log.e("CreateGroupUseCase", "Failed to insert challenge: ${event.exception}")
                     throw Exception(event.exception)
                 }
             }
@@ -119,7 +106,6 @@ class CreateChallengeUseCase @Inject constructor(
         return when (achievementEvent) {
             is Event.Success -> {
                 val response = achievementEvent.data
-                Log.d("CreateChallengeUseCase", "Insert achievement ${response}")
                 withContext(Dispatchers.IO) {
                     writeToLocalDatabase(achievementsLocalRepository::insertOne, response)
                 }
@@ -129,10 +115,6 @@ class CreateChallengeUseCase @Inject constructor(
             }
 
             is Event.Failure -> {
-                Log.e(
-                    "CreateChallengeUseCase",
-                    "Failed to insert achievement: ${achievementEvent.exception}"
-                )
                 throw Exception(achievementEvent.exception)
             }
         }
@@ -154,10 +136,6 @@ class CreateChallengeUseCase @Inject constructor(
                 }
 
                 is Event.Failure -> {
-                    Log.e(
-                        "CreateChallengeUseCase",
-                        "Failed to insert userAchievement: ${userAchievementEvent.exception}"
-                    )
                     throw Exception(userAchievementEvent.exception)
                 }
             }
@@ -182,15 +160,10 @@ class CreateChallengeUseCase @Inject constructor(
             }
 
             is Event.Failure -> {
-                Log.e(
-                    "CreateChallengeUseCase",
-                    "Failed to insert challengeAchievement: ${challengeAchievementEvent.exception}"
-                )
                 throw Exception(challengeAchievementEvent.exception)
             }
         }
     }
-
 
     private suspend fun insertGroupChallenge(
         groupId: String,
@@ -201,7 +174,6 @@ class CreateChallengeUseCase @Inject constructor(
         return when (groupChallengeEvent) {
             is Event.Success -> {
                 val groupChallenge = groupChallengeEvent.data
-                Log.d("CreateChallengeUseCase", "Insert groupChallenge ${groupChallenge}")
                 withContext(Dispatchers.IO) {
                     writeToLocalDatabase(groupChallengeLocalRepository::insertOne, groupChallenge)
                 }
@@ -209,10 +181,6 @@ class CreateChallengeUseCase @Inject constructor(
             }
 
             is Event.Failure -> {
-                Log.e(
-                    "CreateChallengeUseCase",
-                    "Failed to insert groupChallenge: ${groupChallengeEvent.exception}"
-                )
                 throw Exception(groupChallengeEvent.exception)
             }
         }

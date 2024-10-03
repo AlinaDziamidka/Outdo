@@ -7,8 +7,6 @@ import com.example.graduationproject.domain.entity.Challenge
 import com.example.graduationproject.domain.entity.ChallengeStatus
 import com.example.graduationproject.domain.entity.ChallengeType
 import com.example.graduationproject.domain.entity.Group
-import com.example.graduationproject.domain.entity.UserFriend
-import com.example.graduationproject.domain.entity.UserNotifications
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.repository.local.AchievementLocalRepository
 import com.example.graduationproject.domain.repository.local.ChallengeAchievementsLocalRepository
@@ -45,7 +43,6 @@ class LocalLoadManager @Inject constructor(
             val groups = mutableListOf<Group>()
 
             for (userGroup in userGroups) {
-                Log.d("LocalLoadManager", "Fetching groups for group ${userGroup.groupId}")
                 try {
                     val group = groupLocalRepository.fetchById(userGroup.groupId)
                     groups.add(group)
@@ -62,7 +59,6 @@ class LocalLoadManager @Inject constructor(
             val participants = mutableListOf<UserProfile>()
 
             for (groupUser in groupUsers) {
-                Log.d("LocalLoadManager", "Received group users ${groupUser.userId}")
                 try {
                     val participant = userLocalRepository.fetchById(groupUser.userId)
                     participants.add(participant)
@@ -104,7 +100,6 @@ class LocalLoadManager @Inject constructor(
             val challenges = mutableListOf<Challenge>()
 
             for (groupChallenge in groupChallenges) {
-                Log.d("LocalLoadManager", "Received group challenges ${groupChallenges}")
                 try {
                     val event = challengeLocalRepository.fetchChallengeSByStatusAndId(
                         groupChallenge.challengeId,

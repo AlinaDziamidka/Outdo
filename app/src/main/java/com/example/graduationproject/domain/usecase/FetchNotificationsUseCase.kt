@@ -3,7 +3,6 @@ package com.example.graduationproject.domain.usecase
 import com.example.graduationproject.di.qualifiers.Local
 import com.example.graduationproject.di.qualifiers.Remote
 import com.example.graduationproject.domain.entity.Group
-import com.example.graduationproject.domain.entity.UserNotifications
 import com.example.graduationproject.domain.entity.UserProfile
 import com.example.graduationproject.domain.util.LoadManager
 import com.example.graduationproject.domain.util.UseCase

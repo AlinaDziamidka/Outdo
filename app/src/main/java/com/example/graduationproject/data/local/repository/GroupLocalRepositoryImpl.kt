@@ -9,7 +9,6 @@ import javax.inject.Inject
 class GroupLocalRepositoryImpl @Inject constructor(private val groupDao: GroupDao) :
     GroupLocalRepository {
 
-
     private val groupTransformer = GroupTransformer()
     override suspend fun fetchAll(): List<Group> {
         val model = groupDao.fetchAll()

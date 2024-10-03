@@ -40,14 +40,11 @@ class SignUpViewModel @Inject constructor(
             signUpUseCase(SignUpUseCase.Params(identityValue, password, username, confirmPassword))
                 .onStart { _viewState.value = SignUpViewState.Loading }
                 .catch { exception ->
-
-                    Log.d("SignUpViewModel", "Exception $exception")
                     _viewState.value = SignUpViewState.Failure(
                         exception.localizedMessage ?: "Something went wrong"
                     )
                 }
                 .collect { event ->
-                    Log.d("SignUpViewModel", "Event: $event")
                     when (event) {
                         is EventDomain.Success -> {
                             signIn(identityValue, password)
@@ -73,7 +70,6 @@ class SignUpViewModel @Inject constructor(
                 }
                 .collect { _ ->
                     _viewState.value = SignUpViewState.Success
-                    Log.d("SignUpViewModel", "SignIn $viewState.value")
                 }
         }
     }
@@ -83,7 +79,7 @@ class SignUpViewModel @Inject constructor(
             runCatching {
                 deviceRegistrationUseCase(NonReturningUseCase.None)
             }.onSuccess {
-                Log.d("SignInViewModel", "Device register successfully")
+                Log.e("SignInViewModel", "Device register successfully")
             }.onFailure { e ->
                 Log.e("SignInViewModel", "Error register device: ${e.message}")
             }

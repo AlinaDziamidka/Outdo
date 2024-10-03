@@ -12,8 +12,7 @@ import com.example.graduationproject.domain.entity.UserProfile
 class CompletedAdapter(
     private var completedFriends: MutableList<UserProfile>,
     private val onDetailsClick: (UserProfile) -> Unit
-) :
-    RecyclerView.Adapter<CompletedAdapter.CompletedAdapterViewHolder>() {
+) : RecyclerView.Adapter<CompletedAdapter.CompletedAdapterViewHolder>() {
 
     class CompletedAdapterViewHolder(
         itemView: View,
@@ -41,12 +40,10 @@ class CompletedAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): CompletedAdapter.CompletedAdapterViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.completed_achievement_card, parent, false)
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.completed_achievement_card, parent, false)
         return CompletedAdapter.CompletedAdapterViewHolder(
             itemView
         )
@@ -55,8 +52,7 @@ class CompletedAdapter(
     override fun getItemCount(): Int = completedFriends.size
 
     override fun onBindViewHolder(
-        holder: CompletedAdapter.CompletedAdapterViewHolder,
-        position: Int
+        holder: CompletedAdapter.CompletedAdapterViewHolder, position: Int
     ) {
         val friend = completedFriends[position]
         holder.onBind(friend, onDetailsClick)

@@ -9,7 +9,6 @@ import coil.decode.SvgDecoder
 import coil.load
 import com.example.graduationproject.R
 import com.example.graduationproject.databinding.WeeklyChallengeCardBinding
-import com.example.graduationproject.domain.entity.Achievement
 import com.example.graduationproject.domain.entity.Challenge
 import com.facebook.shimmer.ShimmerFrameLayout
 import java.util.Locale
@@ -53,7 +52,6 @@ class WeekView(rootView: WeeklyChallengeCardBinding) {
                 }
 
                 override fun onFinish() {
-
                 }
             }
         countdownTimer.start()

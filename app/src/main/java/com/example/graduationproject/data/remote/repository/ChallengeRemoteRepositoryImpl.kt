@@ -2,7 +2,6 @@ package com.example.graduationproject.data.remote.repository
 
 import android.util.Log
 import com.example.graduationproject.data.remote.api.request.ChallengeRequest
-import com.example.graduationproject.data.remote.api.request.GroupsRequest
 import com.example.graduationproject.data.remote.api.service.ChallengeApiService
 import com.example.graduationproject.data.remote.transormer.ChallengeTransformer
 import com.example.graduationproject.domain.entity.Challenge
@@ -20,22 +19,18 @@ class ChallengeRemoteRepositoryImpl @Inject constructor(private val challengeApi
 
     override suspend fun fetchChallengesById(challengeIdQuery: String): Event<Challenge> {
         val idQuery = "objectId=\'$challengeIdQuery\'"
-        Log.d("ChallengeRepositoryImpl", "Fetching challenge with query: $idQuery")
         val event = doCall {
             return@doCall challengeApiService.fetchChallengesById(idQuery)
         }
 
         return when (event) {
             is Event.Success -> {
-                Log.d("ChallengeRepositoryImpl", "Received response: ${event.data}")
                 val response = event.data.first()
                 val challenge = challengeTransformer.fromResponse(response)
-                Log.d("ChallengeRepositoryImpl", "Transformed response to challenge: $challenge")
                 Event.Success(challenge)
             }
 
             is Event.Failure -> {
-                Log.e("ChallengeRepositoryImpl", "Failed to fetch challenges: ${event.exception}")
                 val error = event.exception
                 Event.Failure(error)
             }
@@ -73,21 +68,12 @@ class ChallengeRemoteRepositoryImpl @Inject constructor(private val challengeApi
 
         return when (event) {
             is Event.Success -> {
-                Log.d("ChallengeRepositoryImpl", "Received response with STATUS: ${event.data}")
                 val response = event.data.first()
                 val challenge = challengeTransformer.fromResponse(response)
-                Log.d(
-                    "ChallengeRepositoryImpl",
-                    "Transformed response to challenge with STATUS: $challenge"
-                )
                 Event.Success(challenge)
             }
 
             is Event.Failure -> {
-                Log.e(
-                    "ChallengeRepositoryImpl",
-                    "Failed to fetch challenges with STATUS: ${event.exception}"
-                )
                 val error = event.exception
                 Event.Failure(error)
             }

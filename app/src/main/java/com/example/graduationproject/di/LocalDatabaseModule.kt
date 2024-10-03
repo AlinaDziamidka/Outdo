@@ -35,7 +35,6 @@ object LocalDatabaseModule {
         ).build()
     }
 
-
     @Provides
     fun provideUserDao(database: UserDatabase): UserDao {
         return database.userDao()

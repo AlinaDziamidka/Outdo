@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.graduationproject.data.local.database.model.UserAchievementModel
-import com.example.graduationproject.domain.entity.AchievementStatus
 
 @Dao
 interface UserAchievementDao {

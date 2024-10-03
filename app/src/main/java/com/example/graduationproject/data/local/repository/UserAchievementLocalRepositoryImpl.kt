@@ -39,8 +39,7 @@ class UserAchievementLocalRepositoryImpl @Inject constructor(private val userAch
         userId: String
     ): UserAchievement? {
         val model = userAchievementDao.fetchByUserIdAndAchievementId(achievementId, userId)
-        Log.d("UserAchievementLocalRepository", "model: $model")
-        return model?.let { userAchievementTransformer.fromModel(it)}
+        return model?.let { userAchievementTransformer.fromModel(it) }
     }
 
     override suspend fun insertOne(userAchievement: UserAchievement) {

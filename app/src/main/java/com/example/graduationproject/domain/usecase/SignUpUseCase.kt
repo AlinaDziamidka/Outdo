@@ -15,8 +15,7 @@ typealias SignUpUseCaseEvent = EventDomain<Session, SignUpUseCase.SignUpFailure>
 class SignUpUseCase @Inject constructor(
     private val sessionRepository: SessionRepository,
     private val userRemoteRepository: UserRemoteRepository
-) :
-    UseCase<SignUpUseCase.Params, SignUpUseCaseEvent> {
+) : UseCase<SignUpUseCase.Params, SignUpUseCaseEvent> {
 
     data class Params(
         val userEmail: String,
@@ -47,9 +46,7 @@ class SignUpUseCase @Inject constructor(
             is SignUpFailure -> emit(EventDomain.Failure(error))
             null -> {
                 val event = sessionRepository.signUp(
-                    userIdentity = userIdentity,
-                    password = password,
-                    username = username
+                    userIdentity = userIdentity, password = password, username = username
                 )
 
                 when (event) {
@@ -93,10 +90,9 @@ class SignUpUseCase @Inject constructor(
         val lowerCaseRegex = Regex("[a-z]")
         val upperCaseRegex = Regex("[A-Z]")
 
-        return password.length >= 8 &&
-                digitRegex.containsMatchIn(password) &&
-                lowerCaseRegex.containsMatchIn(password) &&
-                upperCaseRegex.containsMatchIn(password)
+        return password.length >= 8 && digitRegex.containsMatchIn(password) && lowerCaseRegex.containsMatchIn(
+            password
+        ) && upperCaseRegex.containsMatchIn(password)
     }
 
     fun isValidEmail(email: String): Boolean {

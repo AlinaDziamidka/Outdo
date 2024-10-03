@@ -24,7 +24,6 @@ class FetchFriendsUseCase @Inject constructor(
             val userId = params.userId
             val friends = localLoadManager.fetchFriendsByUserId(userId)
                 .takeIf {
-                    Log.d("FetchingFriendsUseCase", "$it")
                     it.isNotEmpty() }
                 ?: remoteLoadManager.fetchFriendsByUserId(userId)
             emit(friends.toMutableList())

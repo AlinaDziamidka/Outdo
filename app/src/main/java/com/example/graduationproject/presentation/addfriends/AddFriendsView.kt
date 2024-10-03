@@ -63,9 +63,7 @@ class AddFriendsView : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
         _binding = FragmentAddFriendsBinding.inflate(inflater, container, false)
@@ -103,12 +101,10 @@ class AddFriendsView : Fragment() {
 
     private fun getSelectedFriends() {
         parentFragmentManager.setFragmentResultListener(
-            CreateGroupView.ADDED_FRIENDS_TO_GROUP_REQUEST_KEY,
-            this
+            CreateGroupView.ADDED_FRIENDS_TO_GROUP_REQUEST_KEY, this
         ) { _, bundle ->
             val friendsArrayList = bundle.getSerializableCompat(
-                CreateGroupView.ADDED_FRIENDS_TO_GROUP_LIST_KEY,
-                ArrayList::class.java
+                CreateGroupView.ADDED_FRIENDS_TO_GROUP_LIST_KEY, ArrayList::class.java
             ) as? ArrayList<UserProfile>
             friendsArrayList?.let {
                 viewModel.addFriends(it)
@@ -117,12 +113,10 @@ class AddFriendsView : Fragment() {
         }
 
         parentFragmentManager.setFragmentResultListener(
-            CreateChallengeView.ADDED_FRIENDS_TO_CHALLENGE_REQUEST_KEY,
-            this
+            CreateChallengeView.ADDED_FRIENDS_TO_CHALLENGE_REQUEST_KEY, this
         ) { _, bundle ->
             val friendsArrayList = bundle.getSerializableCompat(
-                CreateChallengeView.ADDED_FRIENDS_TO_CHALLENGE_LIST_KEY,
-                ArrayList::class.java
+                CreateChallengeView.ADDED_FRIENDS_TO_CHALLENGE_LIST_KEY, ArrayList::class.java
             ) as? ArrayList<UserProfile>
             friendsArrayList?.let {
                 viewModel.addFriends(it)
@@ -159,7 +153,6 @@ class AddFriendsView : Fragment() {
             Log.e("CreateGroupView", "Group ID is null. Cannot set up group friends.")
         }
     }
-
 
     private fun observeFriends() {
         lifecycleScope.launch {

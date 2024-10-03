@@ -1,8 +1,6 @@
 package com.example.graduationproject.data.local.repository
 
-
 import com.example.graduationproject.data.local.database.dao.UserGroupDao
-import com.example.graduationproject.data.local.database.model.UserGroupModel
 import com.example.graduationproject.data.local.transformer.UserGroupTransformer
 import com.example.graduationproject.domain.entity.UserGroup
 import com.example.graduationproject.domain.repository.local.UserGroupLocalRepository

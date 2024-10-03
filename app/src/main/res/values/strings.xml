@@ -7,6 +7,8 @@
     <string name="sign_in_password_hint">Password</string>
     <string name="sign_in_action">Sign in</string>
     <string name="sign_in_forgot_password">Forgot password</string>
+    <string name="sign_in_or_text">- or -</string>
+    <string name="sign_in_with_google_action">Sign in with Google</string>
     <string name="home_hello_title">Hello </string>
     <string name="home_current_challenges_title">Current challenges</string>
     <string name="home_show_all_action">All</string>
@@ -21,8 +23,6 @@
     <string name="home_competitions_header">Competitions</string>
     <string name="home_friends_header">Friends</string>
     <string name="home_account_header">Account</string>
-    <string name="sign_in_or_text">- or -</string>
-    <string name="sign_in_with_google_action">Sign in with Google</string>
     <string name="sign_up_sign_up_header">Sign up</string>
     <string name="sign_up_had_account">Have you had an account?</string>
     <string name="sign_up_enter_registration_data_hint">Enter phone or e-mail</string>
@@ -31,14 +31,14 @@
     <string name="sign_up_confirm_the_password_hint">Confirm the password</string>
     <string name="sign_in_invalid_username_or_password">Invalid login or password</string>
     <string name="sign_up_sign_up_action">Sign up</string>
-    <string name="create_username_dialog_username_hint">Username</string>
-    <string name="create_username_dialog_confirm_action">Confirm</string>
-    <string name="create_username_dialog_invalid_username">This username already exists</string>
     <string name="sign_up_password_requirements">The password must be at least 8 characters, including numbers and upper and lower case letters</string>
     <string name="sign_up_invalid_password">Password does not match</string>
     <string name="sign_up_invalid_user_identity">Invalid user data format</string>
     <string name="sign_up_exist_user_identity">This user identity already exists</string>
     <string name="sign_up_empty_field">Fill the field</string>
+    <string name="create_username_dialog_username_hint">Username</string>
+    <string name="create_username_dialog_confirm_action">Confirm</string>
+    <string name="create_username_dialog_invalid_username">This username already exists</string>
     <string name="group_screen_header">My groups</string>
     <string name="group_screen_create_group_action">Create new group</string>
     <string name="group_screen_search_hint">Search in groups</string>
@@ -88,6 +88,7 @@
     <string name="create_challenge_screen_save">Save</string>
     <string name="create_challenge_delete_participant">Delete</string>
     <string name="create_challenge_date_format">%1$02d/%2$02d/%3$04d</string>
+    <string name="create_challenge_enter_date">Enter date</string>
     <string name="achievement_details_title">Achievement «%1$s»</string>
     <string name="achievement_details_completed">Completed</string>
     <string name="achievement_details_uncompleted">Uncompleted</string>
@@ -105,7 +106,6 @@
     <string name="error_card_header">Error</string>
     <string name="error_card_went_wrong">Something went wrong, please try again later</string>
     <string name="error_card_update">Update</string>
-    <string name="create_challenge_enter_date">Enter date</string>
     <string name="error_loading_photo_header">Error loading</string>
     <string name="error_loading_photo_description">Failed to load image, please try again later</string>
 </resources>

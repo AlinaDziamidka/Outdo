@@ -10,7 +10,6 @@ import com.example.graduationproject.R
 import com.example.graduationproject.databinding.GroupCardBinding
 import com.example.graduationproject.domain.entity.GroupParticipants
 
-
 class GroupAdapter(
     private var groupParticipantsList: MutableList<GroupParticipants>,
     private val onGroupClickListener: (GroupParticipants) -> Unit
@@ -69,7 +68,6 @@ class GroupAdapter(
     fun setGroupParticipants(groupParticipants: MutableList<GroupParticipants>) {
         this.groupParticipantsList = groupParticipants
         originalList = groupParticipants.toMutableList()
-        Log.d("GroupAdapter", "setList $originalList")
         notifyDataSetChanged()
     }
 
@@ -84,8 +82,6 @@ class GroupAdapter(
     }
 
     fun filterGroupParticipants(query: String?) {
-        Log.d("GroupAdapter", "filterGroupParticipants: Filtering group participants with query - $query")
-        Log.d("GroupAdapter", "query = $query")
          if (query.isNullOrEmpty()) {
              notifyDataSetChanged()
         } else {
@@ -98,7 +94,6 @@ class GroupAdapter(
     }
 
     fun updateGroupParticipants(){
-        Log.d("GroupAdapter", "updateGroupParticipants: Updating group participants")
         groupParticipantsList = originalList.toMutableList()
     }
 

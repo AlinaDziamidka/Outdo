@@ -2,7 +2,6 @@ package com.example.graduationproject.presentation.home
 
 import android.app.Application
 import android.util.Log
-
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.graduationproject.domain.entity.Achievement

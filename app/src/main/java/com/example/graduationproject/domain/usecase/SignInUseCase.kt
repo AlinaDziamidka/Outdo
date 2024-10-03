@@ -21,8 +21,7 @@ class SignInUseCase @Inject constructor(private val sessionRepository: SessionRe
         val userIdentity = params.userIdentity
         val password = params.password
         if (userIdentity.isNotEmpty() && password.isNotEmpty()) {
-            val event =
-                sessionRepository.signIn(userIdentity = userIdentity, password = password)
+            val event = sessionRepository.signIn(userIdentity = userIdentity, password = password)
             when (event) {
                 is Event.Success -> {
                     val session = event.data

@@ -1,7 +1,5 @@
 package com.example.graduationproject.domain.repository.local
 
-import androidx.room.Insert
-import com.example.graduationproject.data.local.database.model.GroupModel
 import com.example.graduationproject.domain.entity.Group
 
 interface GroupLocalRepository {

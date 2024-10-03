@@ -33,24 +33,20 @@ class SplashView : AppCompatActivity(R.layout.activity_splash) {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.viewState.collect {
-                    Log.d("SplashView", "Received view state: $it")
                     when (it) {
                         SplashViewState.Success -> {
-                            Log.d("SplashView", "Navigating to HomeView")
-//                            runWorker()
+                            runWorker()
                             val intent = Intent(this@SplashView, HomeView::class.java)
                             startActivity(intent)
                             finish()
                         }
 
                         SplashViewState.Failure -> {
-                            Log.d("SplashView", "Navigation to SignInView due to failure")
                             startActivity(Intent(this@SplashView, SignInView::class.java))
                             finish()
                         }
 
                         SplashViewState.Loading -> {
-                            Log.d("SplashView", "SplashViewState is Loading")
                         }
                     }
                 }
@@ -61,14 +57,12 @@ class SplashView : AppCompatActivity(R.layout.activity_splash) {
     private fun runWorker() {
         val sharedPreferences = getSharedPreferences("session_prefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("current_user_id", "") ?: ""
-        Log.d("SplashView", userId)
         val inputData = workDataOf("USER_ID" to userId)
 
         val workRequest = OneTimeWorkRequestBuilder<InitialLoadWorker>()
             .setInputData(inputData)
             .build()
 
-        Log.d("SplashView", "Starting WorkManager")
         WorkManager.getInstance(this).enqueue(workRequest)
     }
 }

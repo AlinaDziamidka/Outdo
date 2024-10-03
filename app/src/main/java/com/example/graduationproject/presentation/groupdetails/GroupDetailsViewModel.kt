@@ -101,7 +101,7 @@ class GroupDetailsViewModel @Inject constructor(
                     DeleteUserGroupUseCase.Params(userId, groupId)
                 )
             }.onSuccess {
-                Log.d("GroupDetailsViewModel", "User groups deleted successfully")
+                Log.e("GroupDetailsViewModel", "User groups deleted successfully")
             }.onFailure { e ->
                 Log.e("GroupDetailsViewModel", "Error deleting user groups: ${e.message}")
             }

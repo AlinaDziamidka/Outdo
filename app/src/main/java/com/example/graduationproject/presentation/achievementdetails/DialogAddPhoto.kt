@@ -14,7 +14,6 @@ import com.example.graduationproject.databinding.DialogFragmentAddPhotoBinding
 
 class DialogAddPhoto : DialogFragment() {
 
-
     interface DialogAddPhotoListener {
         fun onOpenCamera()
         fun onChooseFromGallery()
@@ -40,9 +39,7 @@ class DialogAddPhoto : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
         _binding = DialogFragmentAddPhotoBinding.inflate(inflater, container, false)
@@ -80,20 +77,17 @@ class DialogAddPhoto : DialogFragment() {
         }
     }
 
-
-override fun onStart() {
-    super.onStart()
-
-    dialog?.window?.setLayout(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT,
-    )
-    dialog?.window?.setBackgroundDrawableResource(R.drawable.bg_dialog_fragment)
-}
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        )
+        dialog?.window?.setBackgroundDrawableResource(R.drawable.bg_dialog_fragment)
+    }
 
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
-
 }
