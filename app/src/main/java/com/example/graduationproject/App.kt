@@ -1,6 +1,7 @@
 package com.example.graduationproject
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.example.graduationproject.utils.NotificationUtils
@@ -21,6 +22,7 @@ class App : Application(), Configuration.Provider {
         super.onCreate()
         instance = this
         NotificationUtils.createNotificationChannel(this)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     override val workManagerConfiguration: Configuration
