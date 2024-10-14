@@ -102,9 +102,7 @@ class PhotoView : DialogFragment() {
         resetViewBeforeLoading()  // Reset the UI before loading a new photo
         photoView.load(photoUrl) {
             placeholder(R.drawable.bg_photo_preview)
-//            memoryCachePolicy(CachePolicy.ENABLED)
-            memoryCachePolicy(CachePolicy.DISABLED)  // Disable memory cache to force reload
-            diskCachePolicy(CachePolicy.DISABLED)
+            memoryCachePolicy(CachePolicy.ENABLED)
             transformations(RoundedCornersTransformation(dpToPx(100f)))
             listener(
                 onSuccess = { _, _ ->
