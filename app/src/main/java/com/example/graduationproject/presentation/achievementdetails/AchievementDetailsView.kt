@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -48,7 +49,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-
 
 @AndroidEntryPoint
 class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener {
@@ -218,19 +218,21 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
         lifecycleScope.launch {
             viewModel.getPhoto(friendId, achievementId)
 
-            viewModel.viewStateDownload.collect { viewState ->
-                when (viewState) {
-                    is AchievementDetailsViewState.Success -> {
-                        showFriendPhoto(viewState.data, false)
-                        cancel()
-                    }
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewStateDownload.collect { viewState ->
+                    when (viewState) {
+                        is AchievementDetailsViewState.Success -> {
+                            showFriendPhoto(viewState.data, false)
+                            cancel()
+                        }
 
-                    is AchievementDetailsViewState.Loading -> {
-                    }
+                        is AchievementDetailsViewState.Loading -> {
+                        }
 
-                    is AchievementDetailsViewState.Failure -> {
-                        showErrorUploadingPhoto()
-                        cancel()
+                        is AchievementDetailsViewState.Failure -> {
+                            showErrorUploadingPhoto()
+                            cancel()
+                        }
                     }
                 }
             }
@@ -239,9 +241,14 @@ class AchievementDetailsView : Fragment(), DialogAddPhoto.DialogAddPhotoListener
 
     private fun showFriendPhoto(photoUrl: String, isLoad: Boolean) {
         val transaction = childFragmentManager.beginTransaction()
+        val existingDialog = childFragmentManager.findFragmentByTag("PhotoDialog")
+        if (existingDialog != null && existingDialog is DialogFragment) {
+            transaction.remove(existingDialog)
+        }
+
         val photoViewDialog = PhotoView.newInstance(photoUrl, isLoad)
         transaction.add(photoViewDialog, "PhotoDialog")
-        transaction.commitNow()
+        transaction.commitAllowingStateLoss()
     }
 
     private fun showErrorUploadingPhoto() {

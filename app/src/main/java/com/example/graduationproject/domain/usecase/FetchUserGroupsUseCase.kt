@@ -1,5 +1,6 @@
 package com.example.graduationproject.domain.usecase
 
+import android.util.Log
 import com.example.graduationproject.di.qualifiers.Local
 import com.example.graduationproject.di.qualifiers.Remote
 import com.example.graduationproject.domain.entity.GroupParticipants
@@ -21,12 +22,16 @@ class FetchUserGroupsUseCase @Inject constructor(
         flow {
             val userId = params.userId
             val groups = localLoadManager.fetchGroupsByUserId(userId)
+                .takeIf {
+                    it.isNotEmpty()
+                }
+                ?: remoteLoadManager.fetchGroupsByUserId(userId)
 
             val groupParticipants = groups.map { group ->
-                var participants = localLoadManager.fetchUsersByGroupId(group.groupId)
-                if (participants.isEmpty()){
-                    participants = remoteLoadManager.fetchUsersByGroupId(group.groupId)
-                }
+                val participants = localLoadManager.fetchUsersByGroupId(group.groupId)
+                    .takeIf {
+                        it.isNotEmpty() }
+                    ?: remoteLoadManager.fetchUsersByGroupId(group.groupId)
                 GroupParticipants(group, participants)
             }.toMutableList()
             emit(groupParticipants)

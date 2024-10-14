@@ -56,14 +56,14 @@ class LocalLoadManager @Inject constructor(
     override suspend fun fetchUsersByGroupId(groupId: String): List<UserProfile> =
         withContext(Dispatchers.IO) {
             val groupUsers = userGroupLocalRepository.fetchUsersByGroupId(groupId)
-            val participants = mutableListOf<UserProfile>()
-
+            var participants = mutableListOf<UserProfile>()
             for (groupUser in groupUsers) {
                 try {
                     val participant = userLocalRepository.fetchById(groupUser.userId)
                     participants.add(participant)
                 } catch (e: Exception) {
                     Log.e("LocalLoadManager", "Error fetching user: ${groupUser.userId}", e)
+                    participants = mutableListOf<UserProfile>()
                 }
             }
             return@withContext participants

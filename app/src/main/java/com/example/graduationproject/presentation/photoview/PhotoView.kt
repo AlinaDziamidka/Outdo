@@ -86,19 +86,34 @@ class PhotoView : DialogFragment() {
         errorView = binding.errorView.errorRootContainer
     }
 
+    private fun resetViewBeforeLoading() {
+        photoView.setImageDrawable(null)  // Clear the image before loading the new one
+        photoView.visibility = View.GONE
+        progressOverlay.visibility = View.VISIBLE
+        errorView.visibility = View.GONE
+    }
+
     private fun getPhotoUrl(onResult: (Boolean) -> Unit) {
+
         val photoUrl = arguments?.getString(PHOTO_URL)
         val loadingPhoto = arguments?.getBoolean(IS_LOAD, false) ?: false
+        Log.d("PhotoView", "Attempting to load photo: $photoUrl with loading flag: $loadingPhoto")
+
+        resetViewBeforeLoading()  // Reset the UI before loading a new photo
         photoView.load(photoUrl) {
             placeholder(R.drawable.bg_photo_preview)
-            memoryCachePolicy(CachePolicy.ENABLED)
+//            memoryCachePolicy(CachePolicy.ENABLED)
+            memoryCachePolicy(CachePolicy.DISABLED)  // Disable memory cache to force reload
+            diskCachePolicy(CachePolicy.DISABLED)
             transformations(RoundedCornersTransformation(dpToPx(100f)))
             listener(
                 onSuccess = { _, _ ->
+                    Log.d("PhotoView", "Successfully loaded photo: $photoUrl")
                     handleOnSuccess(loadingPhoto)
                     onResult(true)
                 },
                 onError = { _, _ ->
+                    Log.e("PhotoView", "Failed to load photo: $photoUrl")
                     handleOnFailure()
                     onResult(false)
                 }
